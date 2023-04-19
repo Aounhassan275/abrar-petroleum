@@ -1,0 +1,124 @@
+<?php
+
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+/******************ADMIN PANELS ROUTES****************/
+Route::group(['prefix' => 'admin', 'as'=>'admin.','namespace' => 'Admin',], function () {
+ 
+  /*******************LOGIN ROUTES*************/
+  Route::view('login', 'admin.auth.index')->name('login');
+  Route::post('login','AuthController@login');
+  /******************MESSAGE ROUTES****************/
+  Route::resource('message', 'MessageController');
+  Route::group(['middleware' => 'auth:admin'], function () { 
+    /*******************Logout ROUTES*************/       
+    Route::get('logout','AuthController@logout')->name('logout'); 
+    /*******************Dashoard ROUTES*************/
+    Route::view('dashboard', 'admin.dashboard.index')->name('dashboard.index');
+    /******************ADMIN ROUTES****************/
+      Route::resource('admin', 'AdminController');    
+    /******************Product ROUTES****************/
+      Route::resource('product', 'ProductController');   
+    /******************Expense Type ROUTES****************/
+      Route::resource('expense_type', 'ExpenseTypeController');    
+    /*******************Profile ROUTES*************/
+    Route::view('profile', 'admin.profile.index')->name('profile.index');
+    Route::view('messages', 'admin.message.index')->name('messages.index');
+    /******************Information ROUTES****************/
+    Route::resource('information', 'InformationController');
+    /******************USER PROFILE  ROUTES****************/
+    Route::resource('user', 'UserController');  
+    /******************BANK ROUTES****************/
+    Route::resource('bank', 'BankController');  
+  });
+});
+
+/******************USER PANELS ROUTES****************/
+Route::group(['prefix' => 'user', 'as'=>'user.','namespace' => 'User'], function () {
+ 
+  /*******************LOGIN ROUTES*************/
+  Route::view('login', 'user.auth.index')->name('login');
+  Route::post('login','AuthController@login');
+   /******************REGISTERED ROUTES****************/
+  Route::view('register', 'user.auth.register')->name('register');
+  Route::post('register','AuthController@register')->name('register');
+  Route::group(['middleware' => 'auth:user'], function () { 
+    /*******************Logout ROUTES*************/       
+    Route::get('logout','AuthController@logout')->name('logout');
+    /*******************Dashoard ROUTES*************/
+    Route::view('dashboard', 'user.dashboard.index')->name('dashboard.index');
+    /******************USER PROFILE  ROUTES****************/
+    Route::resource('user', 'UserController');  
+    /******************Vendor ROUTES****************/
+    Route::post('vendor/get_vendor_terminals','VendorController@getVendorTerminal')->name('vendor.get_vendor_terminals');
+    Route::resource('vendor', 'VendorController');  
+    /******************Vendor Terminal ROUTES****************/
+    Route::resource('vendor_terminal', 'VendorTerminalController');  
+    /******************Vendor Account ROUTES****************/
+    Route::resource('vendor_account', 'VendorAccountController');  
+    /******************PURCHASE ROUTES****************/
+    Route::resource('purchase', 'PurchaseController');  
+    /******************PURCHASE PAYMENTS ROUTES****************/
+    Route::resource('purchase_payment', 'PurchasePaymentController');  
+    /******************Product ROUTES****************/
+    Route::post('product/get_price','ProductController@getPrice')->name('product.get_price');
+    Route::resource('product', 'ProductController');  
+    /******************OWN BANK ACCOUNTS ROUTES****************/
+    Route::resource('bank_account', 'BankAccountController');  
+    /******************MACHINE ROUTES****************/
+    Route::post('machine/get_meter_reading','MachineController@getMeterReading')->name('machine.get_meter_reading');
+    Route::resource('machine', 'MachineController');  
+    /******************CUSTOMER ROUTES****************/
+    Route::post('customer/get_customer_vehicle','CustomerController@getCustomerVehicle')->name('customer.get_customer_vehicle');
+    Route::resource('customer', 'CustomerController');  
+    /******************CUSTOMER VEHICLE ROUTES****************/
+    Route::resource('customer_vehicle', 'CustomerVehicleController');  
+    /******************CUSTOMER TRANSCATION ROUTES****************/
+    Route::resource('customer_transcation', 'CustomerTranscationController');  
+    /******************SALE ROUTES****************/
+    Route::post('sale/get_sale_details', 'SaleController@getSaleDetails')->name('sale.getSaleDetails');  
+    Route::post('sale/delete_sale', 'SaleController@deleteSale')->name('sale.delete_sale');  
+    Route::resource('sale', 'SaleController');  
+    /******************EXPENSE ROUTES****************/
+    Route::resource('expense', 'ExpenseController');  
+    //
+    Route::post('debit_credit/get_credit_fields', 'DebitCreditController@getCreditFields')->name('debit_credit.get_credit_fields');  
+    Route::post('debit_credit/calculate_debit_credit_values', 'DebitCreditController@calculateDebitCreditValues')->name('debit_credit.calculate_debit_credit_values');  
+    Route::resource('debit_credit', 'DebitCreditController');  
+  });
+});
+
+
+/******************FRONTEND ROUTES****************/
+Route::view('/', 'front.home.index')->name('home.index');
+/******************FUNCTIONALITY ROUTES****************/
+Route::get('/migrate/install', function() {
+  Artisan::call('config:cache');
+  Artisan::call('migrate:refresh');
+  Artisan::call('db:seed', [ '--class' => DatabaseSeeder::class]);
+  Artisan::call('view:clear');
+  return 'DONE';
+});
+Route::get('/migrate', function() {
+  Artisan::call('migrate');
+  return 'Migration done';
+});
+Route::get('/cache_clear', function() {
+  Artisan::call('config:cache');
+  Artisan::call('view:clear');
+  Artisan::call('cache:clear');
+  return 'Cache Clear DOne';
+});
+
