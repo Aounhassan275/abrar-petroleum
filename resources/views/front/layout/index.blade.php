@@ -33,7 +33,7 @@
 				<section id="banner" class="major">
 					<div class="inner">
 						<header class="major">
-							<h1>Welcome To Petroleum Accounts Software</h1>
+							<h1>Welcome To {{App\Models\Information::name()}}</h1>
 							{{-- <p>a scholarly journal of the AGBRP</p> --}}
 						</header>
 						<div class="content">
