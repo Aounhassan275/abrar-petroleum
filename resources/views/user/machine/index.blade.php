@@ -17,7 +17,7 @@
             </div>
         </div>
     </div>
-    <table class="table datatable-save-state">
+    <table class="table datatable-button-html5-basic">
         <thead>
             <tr>
                 <th>#</th>

@@ -43,7 +43,7 @@
 
 <div class="card">
 
-    <table class="table datatable-save-state">
+    <table class="table datatable-button-html5-basic">
         <thead>
             <tr>
                 <th>#</th>

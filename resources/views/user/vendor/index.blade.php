@@ -1,7 +1,7 @@
 <div class="card-header header-elements-inline text-right">
     <a href="{{route('user.vendor.create')}}" class="btn btn-primary btn-sm text-right">Add New Supplier</a>
 </div>
-<table class="table datatable-save-state">
+<table class="table datatable-button-html5-basic">
     <thead>
         <tr>
             <th>#</th>

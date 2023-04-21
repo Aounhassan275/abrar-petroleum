@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\AccountCategory;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class AccountCategoryController extends Controller
@@ -15,8 +16,18 @@ class AccountCategoryController extends Controller
      */
     public function index(Request $request)
     {
+        
+        if($request->start_date)
+        {
+            $start_date = Carbon::parse($request->start_date);
+            $end_date = Carbon::parse($request->end_date);
+        }else{
+            $start_date = Carbon::now()->startOfMonth();
+            $end_date = Carbon::today();
+        }
         $active_tab = $request->active_tab?$request->active_tab:1;
-        return view('user.account_category.index',compact('active_tab'));
+        $sub_account = $request->sub_account?$request->sub_account:'';
+        return view('user.account_category.index',compact('active_tab','start_date','end_date','sub_account'));
     }
 
     /**

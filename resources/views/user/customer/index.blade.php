@@ -1,6 +1,6 @@
 
 <a href="{{route('user.customer.create')}}" class="btn btn-primary btn-sm text-right">Add New Customer</a>
-<table class="table datatable-save-state">
+<table class="table datatable-button-html5-basic">
     <thead>
         <tr>
             <th>#</th>

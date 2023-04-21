@@ -33,21 +33,48 @@
                     @foreach(App\Models\AccountCategory::all() as $index => $account_category)
                     <div @if($active_tab == $account_category->id)  class="tab-pane fade show active" @else class="tab-pane fade" @endif id="top-tab{{$index}}">
                         <div class="card-body">
-                            @if($account_category->name == "Primary Accounts")
-                                {{-- @include('user.sale.partials.petrol_sale') --}}
-                            @elseif($account_category->name == "Customer Accounts")
+                            <form method="GET" id="searchForm">
+                                <div class="row">
+                                    <div class="form-group col-3">
+                                        <label>
+                                            Start Date
+                                            <input type="text" name="start_date" class="daterange-single form-control pull-right dates" style="height: 35px; "
+                                                value="{{ date('m/d/Y', strtotime(@$start_date))}}">
+                                        </label>   
+                                    </div>
+                                    <div class="form-group col-3">
+                                        <label>
+                                            End Date
+
+                                            <input type="text" name="end_date" class="daterange-single form-control pull-right dates" style="height: 35px; "
+                                                value="{{ date('m/d/Y', strtotime(@$end_date))}}">
+                                        </label>   
+                                    </div>
+                                    <div class="form-group col-3">
+                                        <label>Choose Sub Account</label> 
+                                        <select name="sub_account" class="form-control select-search">
+                                            <option value="">Select</option>  
+                                            @foreach($account_category->debitCreditAccount as $debitSubAccount)
+                                            <option @if($sub_account == $debitSubAccount->id) selected @endif value="{{$debitSubAccount->id}}">{{$debitSubAccount->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-3">
+                                        <br>
+                                        <button type="button" id="search-form-btn" class="btn btn-primary">Search</button>
+                                    </div>
+                                </div>
+                            </form>
+                            @include('user.account_category.partials.debit_credits')
+                            @if($account_category->name == "Customer Accounts")
                                 @include('user.customer.index')
                             @elseif($account_category->name == "Supplier")
                                 @include('user.vendor.index')
-                            @elseif($account_category->name == "Investors / Partners")
-
                             @elseif($account_category->name == "Expenses & Income")
                                 @include('user.expense.index')
                             @elseif($account_category->name == "Products")
                                 @include('user.product.index')
                             @endif
-                            
-                            {{-- @include('user.sale.partials.petrol_sale') --}}
                         </div>
 
                     </div>
@@ -81,6 +108,14 @@
             $('#amount').val(amount);
             $('#expense_type_id').val(expense_type_id);
             $('#updateForm').attr('action','{{route('user.expense.update','')}}' +'/'+id);
+        });
+    });
+    
+    jQuery(document).ready(function ($) {
+        $('#search-form-btn').on('click', function (event) {
+            event.preventDefault();
+            $('#search-form-btn').attr('disabled',true).text('Please wait...');
+            $('#searchForm').submit();
         });
     });
 </script>
