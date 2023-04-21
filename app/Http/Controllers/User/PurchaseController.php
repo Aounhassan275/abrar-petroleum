@@ -47,7 +47,6 @@ class PurchaseController extends Controller
                     'supplier_id' => Supplier::first()->id
                 ]);
             }
-            dd($request);
             $purchase = Purchase::create($request->all());
             if($request->amount)
             {
