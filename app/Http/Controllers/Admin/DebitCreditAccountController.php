@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\AccountCategory;
 use App\Models\DebitCreditAccount;
-use App\Models\ExpenseType;
 use Illuminate\Http\Request;
 
-class ExpenseTypeController extends Controller
+class DebitCreditAccountController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +15,7 @@ class ExpenseTypeController extends Controller
      */
     public function index()
     {
-        return view('admin.expense_type.index');
+        return view('admin.debit_credit_account.index');
     }
 
     /**
@@ -38,24 +36,19 @@ class ExpenseTypeController extends Controller
      */
     public function store(Request $request)
     {
-        $type = ExpenseType::create($request->all());
-        $account = AccountCategory::where('name','Expenses & Income')->first();
-        DebitCreditAccount::create([
-            'name' => $type->name,
-            'expense_type_id' => $type->id,
-            'account_category_id' => @$account->id,
-        ]);  
-        toastr()->success('Expense Type is Created Successfully');
+        
+        DebitCreditAccount::create($request->all());
+        toastr()->success('Debit Credit Account is Created Successfully');
         return redirect()->back();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ExpenseType  $expenseType
+     * @param  \App\Models\DebitCreditAccount  $debitCreditAccount
      * @return \Illuminate\Http\Response
      */
-    public function show(ExpenseType $expenseType)
+    public function show(DebitCreditAccount $debitCreditAccount)
     {
         //
     }
@@ -63,10 +56,10 @@ class ExpenseTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ExpenseType  $expenseType
+     * @param  \App\Models\DebitCreditAccount  $debitCreditAccount
      * @return \Illuminate\Http\Response
      */
-    public function edit(ExpenseType $expenseType)
+    public function edit(DebitCreditAccount $debitCreditAccount)
     {
         //
     }
@@ -75,28 +68,28 @@ class ExpenseTypeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ExpenseType  $expenseType
+     * @param  \App\Models\DebitCreditAccount  $debitCreditAccount
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $expenseType = ExpenseType::find($id);
-        $expenseType->update($request->all());
-        toastr()->success('Expense Type Informations Updated successfully');
+        $debitCreditAccount = DebitCreditAccount::find($id);
+        $debitCreditAccount->update($request->all());
+        toastr()->success('Debit Credit Account Informations Updated successfully');
         return redirect()->back();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ExpenseType  $expenseType
+     * @param  \App\Models\DebitCreditAccount  $debitCreditAccount
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $expenseType = ExpenseType::find($id);
-        $expenseType->delete();
-        toastr()->success('Expense Type Deleted Successfully');
+        $debitCreditAccount = DebitCreditAccount::find($id);
+        $debitCreditAccount->delete();
+        toastr()->success('Debit Credit Account Deleted Successfully');
         return redirect()->back();
     }
 }

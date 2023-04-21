@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Purchase;
 use App\Models\PurchasePayment;
+use App\Models\Supplier;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -40,6 +41,13 @@ class PurchaseController extends Controller
     {
         
         try{
+            if(!$request->vendor_id)
+            {
+                $request->merge([
+                    'supplier_id' => Supplier::first()->id
+                ]);
+            }
+            dd($request);
             $purchase = Purchase::create($request->all());
             if($request->amount)
             {

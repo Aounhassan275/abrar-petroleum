@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\AccountCategory;
 use App\Models\DebitCreditAccount;
 use App\Models\Expense;
 use Exception;
@@ -42,11 +43,13 @@ class ExpenseController extends Controller
         try{
             $expense = Expense::create($request->all());
             toastr()->success('Expense is Created Successfully');
-            return redirect()->back();
+            $account = AccountCategory::where('name','Expenses & Income')->first();
+            return redirect()->to(route('user.account_category.index').'?active_tab='.$account->id);
         }catch(Exception $e)
         {
             toastr()->error($e->getMessage());
-            return back()->withInput($request->all());
+            $account = AccountCategory::where('name','Expenses & Income')->first();
+            return redirect()->to(route('user.account_category.index').'?active_tab='.$account->id);
         }
     }
 
@@ -84,7 +87,8 @@ class ExpenseController extends Controller
         $expense = Expense::find($id);
         $expense->update($request->all());
         toastr()->success('Expense Informations Updated successfully');
-        return redirect()->back();
+        $account = AccountCategory::where('name','Expenses & Income')->first();
+        return redirect()->to(route('user.account_category.index').'?active_tab='.$account->id);
     }
 
     /**
@@ -98,6 +102,7 @@ class ExpenseController extends Controller
         $expense = Expense::find($id);
         $expense->delete();
         toastr()->success('Expense Deleted successfully');
-        return redirect()->back();
+        $account = AccountCategory::where('name','Expenses & Income')->first();
+        return redirect()->to(route('user.account_category.index').'?active_tab='.$account->id);
     }
 }

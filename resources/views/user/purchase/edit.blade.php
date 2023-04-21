@@ -35,6 +35,7 @@
                             <label>Product Total Amount</label>
                             <input name="total_amount" id="total_amount" type="text" value="{{$purchase->total_amount}}" class="form-control" placeholder="Enter Product Total Amount" required readonly>
                         </div>
+                        @if($purchase->vendor)
                         <div class="form-group col-md-6">
                             <label>Vendor</label>
                             <select class="form-control select-search" name="vendor_id" id="vendor_id" required data-fouc>
@@ -47,11 +48,23 @@
                         <div class="form-group col-md-6">
                             <label>Vendor Terminal</label>
                             <select class="form-control select-search" name="vendor_terminal_id" id="vendor_terminal_id" required data-fouc>
+                                @if($purchase->vendor)
                                 @foreach($purchase->vendor->terminals as $terminal)    
                                 <option @if($purchase->vendor_terminal_id == $terminal->id) selected @endif value="{{$terminal->id}}">{{$terminal->name}}</option>
                                 @endforeach
+                                @endif
                             </select>
                         </div>
+                        @else 
+                        <div class="form-group col-md-6" id="supplier_field">
+                            <label>Supplier</label>
+                            <select class="form-control select-search" name="supplier_id"readonly>
+                                <option selected value="{{App\Models\Supplier::first()->id}}">{{App\Models\Supplier::first()->name}}</option>
+                                
+                            </select>
+                        </div>
+
+                        @endif
                     </div>
                     <div class="text-right">
                         <button type="submit" class="btn btn-primary">Edit <i class="icon-paperplane ml-2"></i></button>
@@ -64,7 +77,7 @@
 
     </div>
 </div>
-
+@if($purchase->vendor)
 <div class="card">
     
     <div class="card-header header-elements-inline">
@@ -115,7 +128,7 @@
     </table>
 </div>
 @include('user.purchase.partials.add-payment-modal')
-
+@endif
 @endsection
 @section('scripts')
 @include('user.purchase.partials.js')

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\AccountCategory;
 use App\Models\Customer;
 use App\Models\CustomerVehicle;
 use App\Models\DebitCreditAccount;
@@ -51,18 +52,20 @@ class CustomerController extends Controller
                     'customer_id' => $customer->id,
                 ]);
             }
+            $customerAccount = AccountCategory::where('name','Customer Accounts')->first();
             DebitCreditAccount::create([
                 'name' => $customer->name,
                 'customer_id' => $customer->id,
                 'user_id' => Auth::user()->id,
+                'account_category_id' => @$customerAccount->id,
             ]);       
             toastr()->success('Customer is Created Successfully');
-            return redirect()->to(route('user.customer.index'));
+            return redirect()->to(route('user.account_category.index').'?active_tab='.$customerAccount->id);
         }catch(Exception $e)
         {
             toastr()->error($e->getMessage());
-            return back()->withInput($request->all());
-
+            $account = AccountCategory::where('name','Customer Accounts')->first();
+            return redirect()->to(route('user.account_category.index').'?active_tab='.$account->id);
         }
     }
 
@@ -115,7 +118,8 @@ class CustomerController extends Controller
         $customer = Customer::find($id);
         $customer->delete();
         toastr()->success('Customer Deleted successfully');
-        return redirect()->back();
+        $account = AccountCategory::where('name','Customer Accounts')->first();
+        return redirect()->to(route('user.account_category.index').'?active_tab='.$account->id);
     }
     public function getCustomerVehicle(Request $request)
     {

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 class DebitCreditAccount extends Model
 {
     protected $fillable = [
-        'customer_id','vendor_id','supplier_id','user_id','expense_id','name'
+        'customer_id','vendor_id','supplier_id','user_id','expense_id','name','account_category_id'
     ];
     public function customer()
     {
@@ -23,10 +23,14 @@ class DebitCreditAccount extends Model
     }
     public function supplier()
     {
-        return $this->belongsTo(User::class,'supplier_id');
+        return $this->belongsTo(Supplier::class,'supplier_id');
     }
     public function expense()
     {
         return $this->belongsTo(Expense::class,'expense_id');
+    }
+    public function accountCategory()
+    {
+        return $this->belongsTo(AccountCategory::class,'account_category_id');
     }
 }

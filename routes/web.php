@@ -29,6 +29,8 @@ Route::group(['prefix' => 'admin', 'as'=>'admin.','namespace' => 'Admin',], func
     Route::view('dashboard', 'admin.dashboard.index')->name('dashboard.index');
     /******************ADMIN ROUTES****************/
       Route::resource('admin', 'AdminController');    
+      /******************Supplier ROUTES****************/
+      Route::resource('supplier', 'SupplierController');    
     /******************Product ROUTES****************/
       Route::resource('product', 'ProductController');   
     /******************Expense Type ROUTES****************/
@@ -42,6 +44,10 @@ Route::group(['prefix' => 'admin', 'as'=>'admin.','namespace' => 'Admin',], func
     Route::resource('user', 'UserController');  
     /******************BANK ROUTES****************/
     Route::resource('bank', 'BankController');  
+    /******************Account Category ROUTES****************/
+    Route::resource('account_category', 'AccountCategoryController');  
+    /******************Debit Credit Account ROUTES****************/
+    Route::resource('debit_credit_account', 'DebitCreditAccountController');  
   });
 });
 
@@ -97,6 +103,8 @@ Route::group(['prefix' => 'user', 'as'=>'user.','namespace' => 'User'], function
     Route::post('debit_credit/get_credit_fields', 'DebitCreditController@getCreditFields')->name('debit_credit.get_credit_fields');  
     Route::post('debit_credit/calculate_debit_credit_values', 'DebitCreditController@calculateDebitCreditValues')->name('debit_credit.calculate_debit_credit_values');  
     Route::resource('debit_credit', 'DebitCreditController');  
+    /******************Account Category ROUTES****************/
+    Route::resource('account_category', 'AccountCategoryController');  
   });
 });
 

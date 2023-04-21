@@ -20,8 +20,8 @@ class SaleController extends Controller
      */
     public function index(Request $request)
     {
-        $petrol = Product::find(1);
-        $diesel = Product::find(2);
+        $petrol = Product::where('name','HSD')->first();
+        $diesel = Product::where('name','PMG')->first();
         if($request->date)
         {
             $date = Carbon::parse($request->date);
@@ -42,8 +42,8 @@ class SaleController extends Controller
      */
     public function create()
     {
-        $petrol = Product::find(1);
-        $diesel = Product::find(2);
+        $petrol = Product::where('name','HSD')->first();
+        $diesel = Product::where('name','PMG')->first();
         $date = Carbon::today();
         return view('user.sale.create',compact('petrol','diesel','date'));
     }
@@ -446,8 +446,8 @@ class SaleController extends Controller
     }
     public function getSaleDetails(Request $request)
     {
-        $petrol = Product::find(1);
-        $diesel = Product::find(2);
+        $petrol = Product::where('name','HSD')->first();
+        $diesel = Product::where('name','PMG')->first();
         $date = Carbon::parse($request->date);
         $html = view('user.sale.partials.sale_detail', compact('petrol','diesel','date'))->render();;
         return response([

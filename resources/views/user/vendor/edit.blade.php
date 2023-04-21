@@ -1,7 +1,7 @@
 @extends('user.layout.index')
 
 @section('title')
-    Edit {{$vendor->name}} Vendor
+    Edit {{$vendor->name}} Supplier
 @endsection
 @section('content')
 <div class="row">
@@ -15,24 +15,24 @@
                     @csrf
                     <div class="row">
                         <div class="form-group col-md-6">
-                            <label>Vendor Name</label>
-                            <input name="name" type="text" class="form-control" value="{{$vendor->name}}" placeholder="Enter Vendor Name" required>
+                            <label>Supplier Name</label>
+                            <input name="name" type="text" class="form-control" value="{{$vendor->name}}" placeholder="Enter Supplier Name" required>
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Vendor Email</label>
-                            <input name="email" type="text" value="{{$vendor->email}}" class="form-control" placeholder="Enter Vendor Email">
+                            <label>Supplier Email</label>
+                            <input name="email" type="text" value="{{$vendor->email}}" class="form-control" placeholder="Enter Supplier Email">
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Vendor Phone</label>
-                            <input name="phone" type="text" value="{{$vendor->phone}}" class="form-control" placeholder="Enter Vendor Phone">
+                            <label>Supplier Phone</label>
+                            <input name="phone" type="text" value="{{$vendor->phone}}" class="form-control" placeholder="Enter Supplier Phone">
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Vendor Fax</label>
-                            <input name="fax" type="text" value="{{$vendor->fax}}" class="form-control" placeholder="Enter Vendor Fax">
+                            <label>Supplier Fax</label>
+                            <input name="fax" type="text" value="{{$vendor->fax}}" class="form-control" placeholder="Enter Supplier Fax">
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Vendor Address</label>
-                            <input name="address" type="text" value="{{$vendor->address}}" class="form-control" placeholder="Enter Vendor Address">
+                            <label>Supplier Address</label>
+                            <input name="address" type="text" value="{{$vendor->address}}" class="form-control" placeholder="Enter Supplier Address">
                         </div>
                     </div>
                     <div class="text-right">

@@ -1,12 +1,4 @@
-@extends('user.layout.index')
 
-@section('title')
-    Manage Expenses
-@endsection
-@section('content')
-
-<div class="card">
-    
     <div class="card-header header-elements-inline">
         <h5 class="card-title">Expenses</h5>
         <div class="header-elements">
@@ -30,9 +22,9 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (Auth::user()->expenses as $key => $expense)
+            @foreach (Auth::user()->expenses as $expense_key => $expense)
             <tr>
-                <td>{{$key+1}}</td>
+                <td>{{$expense_key+1}}</td>
                 <td>PKR {{$expense->amount}}</td>
                 <td>{{@$expense->type->name}}</td>
                 <td>{{@$expense->user->username}}</td>
@@ -54,20 +46,5 @@
             @endforeach
         </tbody>
     </table>
-</div>
-@include('user.expense.partials.add-expense-modal')
-@include('user.expense.partials.edit-expense-modal')
-
-@endsection
-@section('scripts')
-<script>
-    $('.edit-expense-btn').click(function(){
-            let id = $(this).attr('id');
-            let amount = $(this).attr('amount');
-            let expense_type_id = $(this).attr('expense_type_id');
-            $('#amount').val(amount);
-            $('#expense_type_id').val(expense_type_id);
-            $('#updateForm').attr('action','{{route('user.expense.update','')}}' +'/'+id);
-        });
-</script>
-@endsection
+    @include('user.expense.partials.add-expense-modal')
+    @include('user.expense.partials.edit-expense-modal')

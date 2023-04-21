@@ -1,10 +1,3 @@
-@extends('user.layout.index')
-
-@section('title')
-    Add Product
-@endsection
-
-@section('content')
 
 <div class="row">
     <div class="col-md-12">
@@ -49,7 +42,6 @@
 
     </div>
 </div>
-
 <div class="card">
 
     <table class="table datatable-save-state">
@@ -86,7 +78,6 @@
         </tbody>
     </table>
 </div>
-
 <div id="edit_modal" class="modal fade">
     <div class="modal-dialog">
         <form id="updateForm" method="POST" enctype="multipart/form-data">
@@ -119,22 +110,3 @@
         </form>
     </div>
 </div>
-@endsection
-
-@section('scripts')
-<script>
-    $(document).ready(function(){
-        $('.edit-btn').click(function(){
-            let id = $(this).attr('id');
-            let name = $(this).attr('name');
-            let purchasing_price = $(this).attr('purchasing_price');
-            let selling_price = $(this).attr('selling_price');
-            $('#purchasing_price').val(purchasing_price);
-            $('#selling_price').val(selling_price);
-            $('#name').val(name);
-            $('#id').val(id);
-            $('#updateForm').attr('action','{{route('user.product.update','')}}' +'/'+id);
-        });
-    });
-</script>
-@endsection

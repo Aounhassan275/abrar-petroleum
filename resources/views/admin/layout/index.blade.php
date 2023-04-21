@@ -170,7 +170,13 @@
 						<li class="nav-item">
 							<a href="{{route('admin.user.index')}}" class="nav-link {{Request::is('admin/user')?'active':''}}">
 								<i class="icon-search4"></i>
-								<span>User</span>
+								<span>Site</span>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="{{route('admin.supplier.index')}}" class="nav-link {{Request::is('admin/supplier')?'active':''}}">
+								<i class="icon-search4"></i>
+								<span>Supplier</span>
 							</a>
 						</li> 
 						<li class="nav-item">
@@ -183,6 +189,18 @@
 							<a href="{{route('admin.expense_type.index')}}" class="nav-link {{Request::is('admin/expense_type')?'active':''}}">
 								<i class="icon-search4"></i>
 								<span>Expense Type</span>
+							</a>
+						</li> 
+						<li class="nav-item">
+							<a href="{{route('admin.account_category.index')}}" class="nav-link {{Request::is('admin/account_category')?'active':''}}">
+								<i class="icon-search4"></i>
+								<span>Account Category</span>
+							</a>
+						</li> 
+						<li class="nav-item">
+							<a href="{{route('admin.debit_credit_account.index')}}" class="nav-link {{Request::is('admin/debit_credit_account')?'active':''}}">
+								<i class="icon-search4"></i>
+								<span>Debit Credit Account</span>
 							</a>
 						</li> 
 						<li class="nav-item">

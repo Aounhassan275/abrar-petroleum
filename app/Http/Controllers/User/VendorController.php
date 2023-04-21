@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\AccountCategory;
 use App\Models\DebitCreditAccount;
 use App\Models\Vendor;
 use App\Models\VendorAccount;
@@ -61,18 +62,20 @@ class VendorController extends Controller
                     'vendor_id' => $vendor->id,
                 ]);
             }
+            $account = AccountCategory::where('name','Supplier')->first();
             DebitCreditAccount::create([
                 'name' => $vendor->name,
                 'vendor_id' => $vendor->id,
                 'user_id' => Auth::user()->id,
+                'account_category_id' => @$account->id,
             ]);
             toastr()->success('Vendor is Created Successfully');
-            return redirect()->to(route('user.vendor.index'));
+            return redirect()->to(route('user.account_category.index').'?active_tab='.$account->id);
         }catch(Exception $e)
         {
             toastr()->error($e->getMessage());
-            return back()->withInput($request->all());
-
+            $account = AccountCategory::where('name','Supplier')->first();
+            return redirect()->to(route('user.account_category.index').'?active_tab='.$account->id);
         }
     }
 
@@ -111,7 +114,8 @@ class VendorController extends Controller
         $vendor = Vendor::find($id);
         $vendor->update($request->all());
         toastr()->success('Vendor Informations Updated successfully');
-        return redirect()->back();
+        $account = AccountCategory::where('name','Supplier')->first();
+        return redirect()->to(route('user.account_category.index').'?active_tab='.$account->id);
     }
 
     /**
@@ -125,7 +129,8 @@ class VendorController extends Controller
         $vendor = Vendor::find($id);
         $vendor->delete();
         toastr()->success('Vendor Deleted successfully');
-        return redirect()->back();
+        $account = AccountCategory::where('name','Supplier')->first();
+        return redirect()->to(route('user.account_category.index').'?active_tab='.$account->id);
     }
     
     public function getVendorTerminal(Request $request)

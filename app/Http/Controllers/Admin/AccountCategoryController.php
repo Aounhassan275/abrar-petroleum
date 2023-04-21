@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AccountCategory;
-use App\Models\DebitCreditAccount;
-use App\Models\ExpenseType;
 use Illuminate\Http\Request;
 
-class ExpenseTypeController extends Controller
+class AccountCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +15,7 @@ class ExpenseTypeController extends Controller
      */
     public function index()
     {
-        return view('admin.expense_type.index');
+        return view('admin.account_category.index');
     }
 
     /**
@@ -38,24 +36,18 @@ class ExpenseTypeController extends Controller
      */
     public function store(Request $request)
     {
-        $type = ExpenseType::create($request->all());
-        $account = AccountCategory::where('name','Expenses & Income')->first();
-        DebitCreditAccount::create([
-            'name' => $type->name,
-            'expense_type_id' => $type->id,
-            'account_category_id' => @$account->id,
-        ]);  
-        toastr()->success('Expense Type is Created Successfully');
+        AccountCategory::create($request->all());
+        toastr()->success('Account Category is Created Successfully');
         return redirect()->back();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ExpenseType  $expenseType
+     * @param  \App\Models\AccountCategory  $accountCategory
      * @return \Illuminate\Http\Response
      */
-    public function show(ExpenseType $expenseType)
+    public function show(AccountCategory $accountCategory)
     {
         //
     }
@@ -63,10 +55,10 @@ class ExpenseTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ExpenseType  $expenseType
+     * @param  \App\Models\AccountCategory  $accountCategory
      * @return \Illuminate\Http\Response
      */
-    public function edit(ExpenseType $expenseType)
+    public function edit(AccountCategory $accountCategory)
     {
         //
     }
@@ -75,28 +67,27 @@ class ExpenseTypeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ExpenseType  $expenseType
+     * @param  \App\Models\AccountCategory  $accountCategory
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $expenseType = ExpenseType::find($id);
-        $expenseType->update($request->all());
-        toastr()->success('Expense Type Informations Updated successfully');
+        $accountCategory = AccountCategory::find($id);
+        $accountCategory->update($request->all());
+        toastr()->success('Account Category Informations Updated successfully');
         return redirect()->back();
     }
-
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ExpenseType  $expenseType
+     * @param  \App\Models\AccountCategory  $accountCategory
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $expenseType = ExpenseType::find($id);
-        $expenseType->delete();
-        toastr()->success('Expense Type Deleted Successfully');
+        $accountCategory = AccountCategory::find($id);
+        $accountCategory->delete();
+        toastr()->success('Account Category Deleted Successfully');
         return redirect()->back();
     }
 }

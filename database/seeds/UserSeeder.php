@@ -21,9 +21,25 @@ class UserSeeder extends Seeder
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()],
         ]);  
+        DB::table('suppliers')->insert([
+            [ 'name' => 'Ali Traders',
+            'email' => 'alitraders@mail.com',
+            'password' => Hash::make('1234'),
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()],
+        ]);  
         DB::table('debit_credit_accounts')->insert([
             [ 'name' => 'Sale'],
             [ 'name' => 'Cash'],
+        ]);  
+        DB::table('account_categories')->insert([
+            [ 'name' => 'Primary Accounts'],
+            [ 'name' => 'Customer Accounts'],
+            [ 'name' => 'Supplier'],
+            [ 'name' => 'Employees'],
+            [ 'name' => 'Investors / Partners'],
+            [ 'name' => 'Expenses & Income'],
+            [ 'name' => 'Products'],
         ]);  
         DB::table('banks')->insert([
             [ 'name' => 'Al Baraka Bank (Pakistan) Limited'],
@@ -55,25 +71,20 @@ class UserSeeder extends Seeder
             [ 'name' => 'Zarai Taraqiati Bank Limited'],
         ]);  
         DB::table('users')->insert([
-            [ 'username' => 'abrar',
+            [ 'username' => 'Shahzain PS',
             'type' => 'Site',
-            'password' => Hash::make('1234'),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()],
-            [ 'username' => 'loomba',
-            'type' => 'Site',
-            'password' => Hash::make('1234'),
+            'password' => Hash::make('shahzain'),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()],
         ]);  
         DB::table('products')->insert([
             [ 
-                'name' => 'Petrol',
+                'name' => 'HSD',
                 'purchasing_price' => '252',
                 'selling_price' => '270',
             ],
             [ 
-                'name' => 'Diesel',
+                'name' => 'PMG',
                 'purchasing_price' => '252',
                 'selling_price' => '270',
             ],

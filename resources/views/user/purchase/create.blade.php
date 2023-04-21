@@ -37,7 +37,30 @@
                             <label>Product Total Amount</label>
                             <input name="total_amount" id="total_amount" type="text" value="{{old('total_amount')}}" class="form-control" placeholder="Enter Product Total Amount" required readonly>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="form-group col-md-6">
+                            <div class="checkbox">
+                                <label>
+                                    <input
+                                            name="local_vendor"
+                                            type="checkbox"
+                                            id="local_vendor"
+                                    > Local Vendor 
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6" id="supplier_field">
+                            <label>Supplier</label>
+                            <select class="form-control select-search" name="supplier_id"readonly>
+                                <option selected value="{{App\Models\Supplier::first()->id}}">{{App\Models\Supplier::first()->name}}</option>
+                                
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6 local_vendor_fields" style="display:none;">
                             <label>Vendor</label>
                             <select class="form-control select-search" name="vendor_id" id="vendor_id" data-fouc>
                                 <option value="">Choose Vendor</option>
@@ -46,14 +69,14 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-6 local_vendor_fields" style="display:none;">
                             <label>Vendor Terminal</label>
                             <select class="form-control select-search" name="vendor_terminal_id" id="vendor_terminal_id" data-fouc>
                                 <option value="">Choose Vendor Terminal</option>
                             </select>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row local_vendor_fields" style="display:none;">
                         <p><b>Vendor Payments :</b></p>
                         <div class="col-md-12 text-right">
                             <button type="button" id="show_payments" class="btn btn-success btn-sm text-right">Add Payment History</button>
@@ -108,6 +131,15 @@
             $('#amount').attr('required',false);
             $('#amount').val('');
             $('#vendor_account_id').attr('required',false);
+        });
+        $('#local_vendor').change(function(){
+            if (this.checked) {
+                $('#supplier_field').hide();
+                $('.local_vendor_fields').show();
+            }else{
+                $('.local_vendor_fields').hide();
+                $('#supplier_field').show();
+            }
         });
     });
 </script>

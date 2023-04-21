@@ -1,7 +1,7 @@
 @extends('user.layout.index')
 
 @section('title')
-    Add New Vendors
+    Add New Supplier
 @endsection
 @section('css')
 <script src="{{asset('admin/global_assets/js/plugins/forms/tags/tagsinput.min.js')}}"></script>
@@ -20,45 +20,45 @@
                     <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
                     <div class="row">
                         <div class="form-group col-md-6">
-                            <label>Vendor Name</label>
-                            <input name="name" type="text" class="form-control" value="{{old('name')}}" placeholder="Enter Vendor Name" required>
+                            <label>Supplier Name</label>
+                            <input name="name" type="text" class="form-control" value="{{old('name')}}" placeholder="Enter Supplier Name" required>
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Vendor Email</label>
-                            <input name="email" type="text" value="{{old('email')}}" class="form-control" placeholder="Enter Vendor Email">
+                            <label>Supplier Email</label>
+                            <input name="email" type="text" value="{{old('email')}}" class="form-control" placeholder="Enter Supplier Email">
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Vendor Phone</label>
-                            <input name="phone" type="text" value="{{old('phone')}}" class="form-control" placeholder="Enter Vendor Phone">
+                            <label>Supplier Phone</label>
+                            <input name="phone" type="text" value="{{old('phone')}}" class="form-control" placeholder="Enter Supplier Phone">
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Vendor Fax</label>
-                            <input name="fax" type="text" value="{{old('fax')}}" class="form-control" placeholder="Enter Vendor Fax">
+                            <label>Supplier Fax</label>
+                            <input name="fax" type="text" value="{{old('fax')}}" class="form-control" placeholder="Enter Supplier Fax">
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Vendor Address</label>
-                            <input name="address" type="text" value="{{old('address')}}" class="form-control" placeholder="Enter Vendor Address">
+                            <label>Supplier Address</label>
+                            <input name="address" type="text" value="{{old('address')}}" class="form-control" placeholder="Enter Supplier Address">
                         </div>
                         <div class="form-group col-md-6">
                             <label>
-                                Vendor Terminal <a href="#" id="add-more-terminals"><i class="icon-plus-circle2 ml-2"></i></a>
+                                Supplier Terminal <a href="#" id="add-more-terminals"><i class="icon-plus-circle2 ml-2"></i></a>
                             </label>
                             <input type="text" name="names[]" class="form-control" value="">
                         </div>
                     </div>
                     <div id="terminal_fields"></div>
                     <div class="row">
-                        <p><b>Vendor Accounts :</b></p>
+                        <p><b>Supplier Accounts :</b></p>
                         <div class="col-md-12 text-right">
                             <button type="button" id="add-more-accounts" class="btn btn-success btn-sm text-right">Add More Accounts</button>
                             <button type="button" id="remove-fields" style="display:none;" class="btn btn-danger btn-sm text-right">Remove Extra Accounts</button>
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Vendor Account Title</label>
-                            <input name="title[]" type="text" value="" class="form-control" placeholder="Enter Vendor Account Title">
+                            <label>Supplier Account Title</label>
+                            <input name="title[]" type="text" value="" class="form-control" placeholder="Enter Supplier Account Title">
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Vendor Account Bank</label>
+                            <label>Supplier Account Bank</label>
                             <select data-placeholder="Enter 'as'" name="bank_id[]"  class="form-control select-minimum " data-fouc>
                                 <option></option>
                                 <optgroup label="Banks">
@@ -69,12 +69,12 @@
                             </select>
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Vendor Account Number</label>
-                            <input name="number[]" type="text" value="" class="form-control" placeholder="Enter Vendor Account Number">
+                            <label>Supplier Account Number</label>
+                            <input name="number[]" type="text" value="" class="form-control" placeholder="Enter Supplier Account Number">
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Vendor Account Bank Location</label>
-                            <input name="location[]" type="text" value="" class="form-control" placeholder="Enter Vendor Bank Location">
+                            <label>Supplier Account Bank Location</label>
+                            <input name="location[]" type="text" value="" class="form-control" placeholder="Enter Supplier Bank Location">
                         </div>
                     </div>
                     <div id="accounts_fields"></div>
@@ -92,11 +92,11 @@
 <div id="vendor_fields" style="display:none;">
     <div class="row">
         <div class="form-group col-md-6">
-            <label>Vendor Account Title</label>
-            <input name="title[]" type="text" value="" class="form-control" placeholder="Enter Vendor Account Title">
+            <label>Supplier Account Title</label>
+            <input name="title[]" type="text" value="" class="form-control" placeholder="Enter Supplier Account Title">
         </div>
         <div class="form-group col-md-6">
-            <label>Vendor Account Bank</label>
+            <label>Supplier Account Bank</label>
             <select name="bank_id[]"  class="form-control">
                 <option>Select Bank</option>
                 @foreach(App\Models\Bank::all() as $bank)
@@ -105,12 +105,12 @@
             </select>
         </div>
         <div class="form-group col-md-6">
-            <label>Vendor Account Number</label>
-            <input name="number[]" type="text" value="" class="form-control" placeholder="Enter Vendor Account Number">
+            <label>Supplier Account Number</label>
+            <input name="number[]" type="text" value="" class="form-control" placeholder="Enter Supplier Account Number">
         </div>
         <div class="form-group col-md-6">
-            <label>Vendor Account Bank Location</label>
-            <input name="location[]" type="text" value="" class="form-control" placeholder="Enter Vendor Bank Location">
+            <label>Supplier Account Bank Location</label>
+            <input name="location[]" type="text" value="" class="form-control" placeholder="Enter Supplier Bank Location">
         </div>
     </div>
 </div>

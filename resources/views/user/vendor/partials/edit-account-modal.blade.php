@@ -10,11 +10,11 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Vendor Account Title</label>
-                        <input name="title" type="text" id="title" value="" class="form-control" placeholder="Enter Vendor Account Title">
+                        <label>Supplier Account Title</label>
+                        <input name="title" type="text" id="title" value="" class="form-control" placeholder="Enter Supplier Account Title">
                     </div>
                     <div class="form-group">
-                        <label>Vendor Account Bank</label>
+                        <label>Supplier Account Bank</label>
                         <select  name="bank_id" id="bank_id"  class="form-control" >
                             <option value="">Choose Bank</option>
                             {{-- <optgroup label="Banks"> --}}
@@ -25,12 +25,12 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Vendor Account Number</label>
-                        <input name="number" id="number" type="text" value="" class="form-control" placeholder="Enter Vendor Account Number">
+                        <label>Supplier Account Number</label>
+                        <input name="number" id="number" type="text" value="" class="form-control" placeholder="Enter Supplier Account Number">
                     </div>
                     <div class="form-group">
-                        <label>Vendor Account Bank Location</label>
-                        <input name="location" id="location" type="text" value="" class="form-control" placeholder="Enter Vendor Bank Location">
+                        <label>Supplier Account Bank Location</label>
+                        <input name="location" id="location" type="text" value="" class="form-control" placeholder="Enter Supplier Bank Location">
                     </div>
                 </div>
                 <div class="modal-footer">

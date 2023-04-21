@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\AccountCategory;
-use App\Models\DebitCreditAccount;
-use App\Models\ExpenseType;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 
-class ExpenseTypeController extends Controller
+class SupplierController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +15,7 @@ class ExpenseTypeController extends Controller
      */
     public function index()
     {
-        return view('admin.expense_type.index');
+        return view('admin.supplier.index');
     }
 
     /**
@@ -38,24 +36,18 @@ class ExpenseTypeController extends Controller
      */
     public function store(Request $request)
     {
-        $type = ExpenseType::create($request->all());
-        $account = AccountCategory::where('name','Expenses & Income')->first();
-        DebitCreditAccount::create([
-            'name' => $type->name,
-            'expense_type_id' => $type->id,
-            'account_category_id' => @$account->id,
-        ]);  
-        toastr()->success('Expense Type is Created Successfully');
+        Supplier::create($request->all()); 
+        toastr()->success('Supplier is Created Successfully');
         return redirect()->back();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ExpenseType  $expenseType
+     * @param  \App\Models\Supplier  $supplier
      * @return \Illuminate\Http\Response
      */
-    public function show(ExpenseType $expenseType)
+    public function show(Supplier $supplier)
     {
         //
     }
@@ -63,10 +55,10 @@ class ExpenseTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ExpenseType  $expenseType
+     * @param  \App\Models\Supplier  $supplier
      * @return \Illuminate\Http\Response
      */
-    public function edit(ExpenseType $expenseType)
+    public function edit(Supplier $supplier)
     {
         //
     }
@@ -75,28 +67,31 @@ class ExpenseTypeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ExpenseType  $expenseType
+     * @param  \App\Models\Supplier  $supplier
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $expenseType = ExpenseType::find($id);
-        $expenseType->update($request->all());
-        toastr()->success('Expense Type Informations Updated successfully');
+        $supplier = Supplier::find($id);
+        if($request->password)
+            $supplier->update($request->all());
+        else
+            $supplier->update($request->except('password'));
+        toastr()->success('Supplier Informations Updated successfully');
         return redirect()->back();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ExpenseType  $expenseType
+     * @param  \App\Models\Supplier  $supplier
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $expenseType = ExpenseType::find($id);
-        $expenseType->delete();
-        toastr()->success('Expense Type Deleted Successfully');
+        $supplier = Supplier::find($id);
+        $supplier->delete();
+        toastr()->success('Supplier Deleted Successfully');
         return redirect()->back();
     }
 }

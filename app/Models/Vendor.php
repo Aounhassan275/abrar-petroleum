@@ -15,7 +15,7 @@ class Vendor extends Model
     }
     public function supplier()
     {
-        return $this->belongsTo('App\Models\User','supplier_id');
+        return $this->belongsTo('App\Models\Suppliers','supplier_id');
     }
     public function accounts()
     {

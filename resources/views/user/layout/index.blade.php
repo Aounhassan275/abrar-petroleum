@@ -176,9 +176,9 @@
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="{{route('user.product.index')}}" class="nav-link {{Request::is('user/product') ?'active':''}}">
+							<a href="{{route('user.account_category.index')}}" class="nav-link {{Request::is('user/account_category') ?'active':''}}">
 								<i class="icon-home4"></i>
-								<span>Products</span>
+								<span>Accounts</span>
 							</a>
 						</li>
 						<li class="nav-item">
@@ -187,30 +187,30 @@
 								<span>Machines</span>
 							</a>
 						</li>
-						<li class="nav-item">
+						{{-- <li class="nav-item">
 							<a href="{{route('user.vendor.index')}}" class="nav-link {{Request::is('user/vendor') || Request::is('user/vendor/*') ?'active':''}}">
 								<i class="icon-home4"></i>
-								<span>Vendor</span>
+								<span>Supplier</span>
 							</a>
-						</li>
-						<li class="nav-item">
+						</li> --}}
+						{{-- <li class="nav-item">
 							<a href="{{route('user.purchase.index')}}" class="nav-link {{Request::is('user/purchase') || Request::is('user/purchase/*')?'active':''}}">
 								<i class="icon-home4"></i>
 								<span>Purchase</span>
 							</a>
-						</li>
-						<li class="nav-item">
+						</li> --}}
+						{{-- <li class="nav-item">
 							<a href="{{route('user.customer.index')}}" class="nav-link {{Request::is('user/customer') || Request::is('user/customer/*')?'active':''}}">
 								<i class="icon-home4"></i>
 								<span>Customer</span>
 							</a>
-						</li>
-						<li class="nav-item">
+						</li> --}}
+						{{-- <li class="nav-item">
 							<a href="{{route('user.expense.index')}}" class="nav-link {{Request::is('user/expense') || Request::is('user/expense/*')?'active':''}}">
 								<i class="icon-home4"></i>
 								<span>Expense</span>
 							</a>
-						</li>
+						</li> --}}
 					</ul>
 				</div>
 				<!-- /main navigation -->

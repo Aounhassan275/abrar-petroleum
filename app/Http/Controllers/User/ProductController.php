@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\AccountCategory;
 use App\Models\Product;
 use Exception;
 use Illuminate\Http\Request;
@@ -49,11 +50,14 @@ class ProductController extends Controller
 			);
             Product::create($request->all());
             toastr()->success('Product is Created Successfully');
-            return redirect()->back();
+            $account = AccountCategory::where('name','Products')->first();
+            return redirect()->to(route('user.account_category.index').'?active_tab='.$account->id);
         }catch(Exception $e)
         {
-            toastr()->error($e->getMessage());
-            return back()->withInput($request->all());
+            toastr()->error($e->getMessage());       
+            $account = AccountCategory::where('name','Products')->first();
+            return redirect()->to(route('user.account_category.index').'?active_tab='.$account->id);
+      
         }
     }
 
@@ -91,8 +95,9 @@ class ProductController extends Controller
         $product = Product::find($id);
         $product->update($request->all());
         toastr()->success('Product Informations Updated successfully');
-        return redirect()->back();
-    }
+        $account = AccountCategory::where('name','Products')->first();
+        return redirect()->to(route('user.account_category.index').'?active_tab='.$account->id);
+      }
     /**
      * Remove the specified resource from storage.
      *
@@ -104,8 +109,9 @@ class ProductController extends Controller
         $product = Product::find($id);
         $product->delete();
         toastr()->success('Product Deleted Successfully');
-        return redirect()->back();
-    }
+        $account = AccountCategory::where('name','Products')->first();
+        return redirect()->to(route('user.account_category.index').'?active_tab='.$account->id);
+      }
     public function getPrice(Request $request)
     {
         $product = Product::find($request->id);
