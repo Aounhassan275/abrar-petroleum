@@ -66,6 +66,7 @@
                                 </div>
                             </form>
                             @include('user.account_category.partials.debit_credits')
+                           
                             @if($account_category->name == "Customer Accounts")
                                 @include('user.customer.index')
                             @elseif($account_category->name == "Supplier")
@@ -74,6 +75,8 @@
                                 @include('user.expense.index')
                             @elseif($account_category->name == "Products")
                                 @include('user.product.index')
+                                @include('user.account_category.partials.ledgers')
+
                             @endif
                         </div>
 

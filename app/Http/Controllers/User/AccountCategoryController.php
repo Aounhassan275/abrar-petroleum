@@ -4,7 +4,9 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\AccountCategory;
+use App\Models\Product;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 
 class AccountCategoryController extends Controller
@@ -25,9 +27,12 @@ class AccountCategoryController extends Controller
             $start_date = Carbon::now()->startOfMonth();
             $end_date = Carbon::today();
         }
+        $dateRange = CarbonPeriod::create($start_date, $end_date);
+        $dates = array_map(fn ($date) => $date->format('Y-m-d'), iterator_to_array($dateRange));
+        $petrol = Product::where('name','HSD')->first();
         $active_tab = $request->active_tab?$request->active_tab:1;
         $sub_account = $request->sub_account?$request->sub_account:'';
-        return view('user.account_category.index',compact('active_tab','start_date','end_date','sub_account'));
+        return view('user.account_category.index',compact('active_tab','start_date','end_date','sub_account','dates','petrol'));
     }
 
     /**
