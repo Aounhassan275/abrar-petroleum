@@ -76,7 +76,6 @@
                             @elseif($account_category->name == "Products")
                                 @include('user.product.index')
                                 @include('user.account_category.partials.ledgers')
-
                             @endif
                         </div>
 

@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\DebitCredit;
+use App\Models\DebitCreditAccount;
 use App\Models\Purchase;
 use App\Models\PurchasePayment;
 use App\Models\Supplier;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PurchaseController extends Controller
 {
@@ -59,6 +62,20 @@ class PurchaseController extends Controller
                     'image' => @$request->image,
                 ]);
             }
+            if($purchase->access > 0)
+            {
+                $account_id  = DebitCreditAccount::where('name','Product Excess')->first()->id;
+                $creditAmount = $purchase->access * $purchase->price;
+                DebitCredit::create([
+                    'user_id' => Auth::user()->id,
+                    'product_id' => @$purchase->product_id,
+                    'qty' => @$purchase->access,
+                    'credit' => @$creditAmount,
+                    'account_id' => $account_id,
+                    'sale_date' => date('Y-m-d'),
+                ]);
+            }
+                
             
             toastr()->success('Purchase is Created Successfully');
             return redirect()->back();

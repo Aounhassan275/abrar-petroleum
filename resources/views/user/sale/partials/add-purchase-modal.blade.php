@@ -28,6 +28,10 @@
                             <input name="total_amount" id="purchase_total_amount" type="text" value="{{old('total_amount')}}" class="form-control" placeholder="Enter Product Total Amount" required readonly>
                         </div>
                         <div class="form-group col-md-6">
+                            <label>Product Access</label>
+                            <input name="access" type="text" value="{{old('access')?old('access'):0}}" class="form-control" placeholder="Enter Product Access" required>
+                        </div>
+                        <div class="form-group col-md-6">
                             <label>Vendor</label>
                             <select class="form-control select-search" name="vendor_id" id="vendor_id" data-fouc>
                                 <option value="">Choose Vendor</option>

@@ -18,7 +18,6 @@ class AccountCategoryController extends Controller
      */
     public function index(Request $request)
     {
-        
         if($request->start_date)
         {
             $start_date = Carbon::parse($request->start_date);

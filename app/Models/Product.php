@@ -30,19 +30,28 @@ class Product extends Model
         $product = Product::where('name','PMG')->first();
         return $product->selling_price;
     }
-    public function totalStocks()
+    public function totalStocks($user_id = null)
     {
-        $total_stock = $this->purchases->where('user_id',Auth::user()->id)->sum('qty');
-        return $total_stock;
+        if(!$user_id)
+            $user_id = Auth::user()->id;
+        $total_stock = $this->purchases->where('user_id',$user_id)->sum('qty');
+        $total_access_stock = $this->purchases->where('user_id',$user_id)->sum('access');
+        return $total_stock + $total_access_stock;
     }
-    public function totalSales()
+    public function totalSales($user_id = null)
     {
-        $total_sale = $this->sales->where('user_id',Auth::user()->id)->sum('qty');
+        if(!$user_id)
+            $user_id = Auth::user()->id;
+        $total_sale = Sale::where('user_id',$user_id)
+                        ->where('type','!=','test')
+                        ->sum('qty'); 
         return $total_sale;
     }
-    public function availableStock()
+    public function availableStock($user_id = null)
     {
-        $available_stock = $this->totalStocks() - $this->totalSales();
+        if(!$user_id)
+            $user_id = Auth::user()->id;
+        $available_stock = $this->totalStocks($user_id) - $this->totalSales($user_id);
         return $available_stock;
     }
     public function totalSale($date)
@@ -79,6 +88,19 @@ class Product extends Model
                         ->where('type','!=','test')
                         ->sum('total_amount'); 
         return $total_amount;
+    }
+    public function totalDrAmount($start_date,$end_date)
+    {
+        $total_sales = Sale::where('user_id',Auth::user()->id)
+                        ->where('product_id',$this->id)
+                        ->whereBetween('sale_date', [$start_date,$end_date])
+                        ->where('type','!=','test')
+                        ->sum('total_amount'); 
+        $total_purchases = Purchase::where('user_id',Auth::user()->id)
+                        ->where('product_id',$this->id)
+                        ->whereBetween('created_at', [$start_date,$end_date])
+                        ->sum('total_amount'); 
+        return $total_sales - $total_purchases;
     }
     public function getSaleRate($date)
     {

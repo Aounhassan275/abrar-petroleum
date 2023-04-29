@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\LossGainHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Exception;
@@ -90,7 +91,17 @@ class ProductController extends Controller
     public function update(Request $request,$id)
     {
         $product = Product::find($id);
+        
+        $old_amount = 0;
+        if($request->purchasing_price != $product->purchasing_price)
+        {
+            $old_amount = $product->purchasing_price;
+        }
         $product->update($request->all());
+        if($old_amount > 0)
+        {
+            LossGainHelper::procceed($old_amount,$product);
+        }
         toastr()->success('Product Informations Updated successfully');
         return redirect()->back();
     }

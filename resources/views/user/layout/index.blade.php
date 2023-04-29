@@ -193,6 +193,12 @@
 								<span>Machines</span>
 							</a>
 						</li>
+						<li class="nav-item">
+							<a href="{{route('user.reports.index')}}" class="nav-link {{Request::is('user/reports') ?'active':''}}">
+								<i class="icon-home4"></i>
+								<span>Reports</span>
+							</a>
+						</li>
 						{{-- <li class="nav-item">
 							<a href="{{route('user.vendor.index')}}" class="nav-link {{Request::is('user/vendor') || Request::is('user/vendor/*') ?'active':''}}">
 								<i class="icon-home4"></i>

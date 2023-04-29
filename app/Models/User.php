@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
@@ -96,9 +97,13 @@ class User extends Authenticatable
     public function getPetrolOpeningBalance($date)
     {
         $product = Product::where('name','HSD')->first();
-        $totalStock = Purchase::where('user_id',$this->id)->where('product_id',$product->id)
+        $totalQtyStock = Purchase::where('user_id',$this->id)->where('product_id',$product->id)
                             ->whereDate('created_at','!=',$date)
                             ->sum('qty');
+        $totalAccessStock = Purchase::where('user_id',$this->id)->where('product_id',$product->id)
+                            ->whereDate('created_at','!=',$date)
+                            ->sum('access');
+        $totalStock = $totalQtyStock + $totalAccessStock;
         $totalSale = Sale::where('user_id',$this->id)
                         ->where('product_id',$product->id)
                         ->where('type','!=','test')
@@ -128,16 +133,67 @@ class User extends Authenticatable
                         ->sum('qty');
         return $todaySale - $testSale;
     }
+    public function getTodayPetrolSaleTotalAmount($date)
+    {
+        $product = Product::where('name','HSD')->first();
+        $todaySale = Sale::where('user_id',$this->id)
+                        ->where('product_id',$product->id)
+                        ->where('type','retail_sale')
+                        ->whereDate('sale_date',$date)
+                        ->sum('total_amount');
+        return $todaySale;
+    }
+    public function getTodayPetrolSalePrice($date)
+    {
+        $product = Product::where('name','HSD')->first();
+        $todaySale = Sale::where('user_id',$this->id)
+                        ->where('product_id',$product->id)
+                        ->where('type','retail_sale')
+                        ->whereDate('sale_date',$date)
+                        ->first();
+        return $todaySale?$todaySale->price:0;
+    }
     public function getTodayPetrolPurchase($date)
     {
         $product = Product::where('name','HSD')->first();
         $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('created_at',$date)->sum('qty');
+        $todayAccessPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('created_at',$date)->sum('access');
+        return $todayPurchase + $todayAccessPurchase;
+    }
+    public function getTodayPetrolPurchaseTotalAmount($date)
+    {
+        $product = Product::where('name','HSD')->first();
+        $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('created_at',$date)->sum('total_amount');
         return $todayPurchase;
+    }
+    public function getTodayPetrolPurchasePrice($date)
+    {
+        $product = Product::where('name','HSD')->first();
+        $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('created_at',$date)->first();
+        return $todayPurchase ? $todayPurchase->price : 0;
+    }
+    public function totalExpense($start_date,$end_date)
+    {
+        $category_id = AccountCategory::where('name','Expenses & Income')->first()->id;
+        $credit = DebitCredit::select('debit_credits.*','debit_credit_accounts.account_category_id as account_category_id')
+            ->join('debit_credit_accounts', 'debit_credits.account_id', 'debit_credit_accounts.id')
+            ->where('debit_credits.user_id',Auth::user()->id)
+            ->where('debit_credit_accounts.account_category_id',$category_id)
+            ->whereBetween('debit_credits.sale_date', [$start_date,$end_date])->sum('credit');
+        $debit = DebitCredit::select('debit_credits.*','debit_credit_accounts.account_category_id as account_category_id')
+            ->join('debit_credit_accounts', 'debit_credits.account_id', 'debit_credit_accounts.id')
+            ->where('debit_credits.user_id',Auth::user()->id)
+            ->where('debit_credit_accounts.account_category_id',$category_id)
+            ->whereBetween('debit_credits.sale_date', [$start_date,$end_date])
+            ->sum('debit');
+        return $credit - $debit;
     }
     public function getDieselOpeningBalance($date)
     {
         $product = Product::where('name','PMG')->first();
-        $totalStock = $this->purchases->where('product_id',$product->id)->sum('qty');
+        $totalQtyStock = $this->purchases->where('product_id',$product->id)->sum('qty');
+        $totalAccessStock = $this->purchases->where('product_id',$product->id)->sum('access');
+        $totalStock = $totalAccessStock + $totalQtyStock;
         $totalSale = Sale::where('user_id',$this->id)
                         ->where('product_id',$product->id)
                         ->where('type','!=','test')
@@ -160,7 +216,8 @@ class User extends Authenticatable
     {
         $product = Product::where('name','PMG')->first();
         $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('created_at',$date)->sum('qty');
-        return $todayPurchase;
+        $todayAccessPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('created_at',$date)->sum('access');
+        return $todayPurchase + $todayAccessPurchase;
     }
     public function haveSale($date,$product = null)
     {   

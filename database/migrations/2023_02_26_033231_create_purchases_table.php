@@ -17,6 +17,7 @@ class CreatePurchasesTable extends Migration
             $table->id();
             $table->string('price');
             $table->string('qty');
+            $table->string('access')->default(0);
             $table->string('total_amount');
             $table->string('status')->default('In Process');
             $table->unsignedBigInteger('product_id');

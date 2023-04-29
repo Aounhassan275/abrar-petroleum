@@ -33,7 +33,8 @@
                 ({{abs($balance)}}) Cr 
                 @else
                 ({{abs($balance)}}) Dr 
-                @endif</td>
+                @endif
+            </td>
             <td>{{$debitCredit->description}}</td>
         </tr>
         @endforeach
