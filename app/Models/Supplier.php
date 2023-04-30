@@ -35,4 +35,24 @@ class Supplier extends Authenticatable
     public static function employee(){
         return (new static)::where('type','2')->get();
     }
+    public function purchases()
+    {
+        return $this->hasMany(SupplierPurchase::class);
+    }
+    public function sales()
+    {
+        return $this->hasMany(Purchase::class);
+    }
+    public function terminals()
+    {
+        return $this->hasMany(SupplierTerminal::class);
+    }
+    public function vehicles()
+    {
+        return $this->hasMany(SupplierVehicle::class);
+    }
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

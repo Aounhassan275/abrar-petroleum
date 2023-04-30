@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class Product extends Model
 {
     protected $fillable = [
-        'name','purchasing_price','selling_price','user_id'
+        'name','purchasing_price','selling_price','user_id','supplier_purchasing_price','supplier_id'
     ];
     
     public function purchases()
@@ -113,5 +113,36 @@ class Product extends Model
     {
         $sale = Sale::where('product_id',$this->id)->whereDate('sale_date',$date)->first();
         return $sale;
+    }
+    //Supplier Functions 
+    public function supplierPurchases()
+    {
+        return $this->hasMany(SupplierPurchase::class);
+    }
+    public function suppliersales()
+    {
+        return $this->hasMany(Purchase::class);
+    }
+    public function supplierTotalStocks($supplier_id = null)
+    {
+        if(!$supplier_id)
+            $supplier_id = Auth::user()->id;
+        $total_stock = $this->supplierPurchases->where('supplier_id',$supplier_id)->sum('qty');
+        $total_access_stock = $this->supplierPurchases->where('supplier_id',$supplier_id)->sum('access');
+        return $total_stock + $total_access_stock;
+    }
+    public function supplierTotalSales($supplier_id = null)
+    {
+        if(!$supplier_id)
+            $supplier_id = Auth::user()->id;
+        $total_sale = Purchase::where('supplier_id',$supplier_id)->sum('qty'); 
+        return $total_sale;
+    }
+    public function supplierAvailableStock($supplier_id = null)
+    {
+        if(!$supplier_id)
+            $supplier_id = Auth::user()->id;
+        $available_stock = $this->supplierTotalStocks($supplier_id) - $this->supplierTotalSales($supplier_id);
+        return $available_stock;
     }
 }

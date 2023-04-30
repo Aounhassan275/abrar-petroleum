@@ -110,6 +110,39 @@ Route::group(['prefix' => 'user', 'as'=>'user.','namespace' => 'User'], function
   });
 });
 
+/******************SUPPLIER PANELS ROUTES****************/
+Route::group(['prefix' => 'supplier', 'as'=>'supplier.','namespace' => 'Supplier'], function () {
+ 
+  /*******************LOGIN ROUTES*************/
+  Route::view('login', 'supplier.auth.index')->name('login');
+  Route::post('login','AuthController@login');
+  Route::group(['middleware' => 'auth:supplier'], function () { 
+    /*******************Logout ROUTES*************/       
+    Route::get('logout','AuthController@logout')->name('logout');
+    /*******************Dashoard ROUTES*************/
+    Route::view('dashboard', 'supplier.dashboard.index')->name('dashboard.index');
+    /******************OWN BANK ACCOUNTS ROUTES****************/
+    Route::resource('bank_account', 'BankAccountController');  
+    /******************Vendor Terminal ROUTES****************/
+    Route::resource('vendor_terminal', 'VendorTerminalController');  
+    /******************Vendor Account ROUTES****************/
+    Route::resource('vendor_account', 'VendorAccountController');  
+    /******************SALES ROUTES****************/
+    Route::resource('sale', 'PurchaseController');  
+    /******************PURCHASE PAYMENTS ROUTES****************/
+    Route::resource('purchase_payment', 'PurchasePaymentController');  
+    /******************Product ROUTES****************/
+    Route::post('product/get_price','ProductController@getPrice')->name('product.get_price');
+    Route::resource('product', 'ProductController');
+    /******************SUPPLIER TERMINAL ROUTES****************/
+    Route::resource('terminal', 'SupplierTerminalController'); 
+    /******************SUPPLIER Vehicle ROUTES****************/
+    Route::resource('vehicle', 'SupplierVehicleController'); 
+    /******************SUPPLIER Purchase ROUTES****************/
+    Route::resource('purchase', 'SupplierPurchaseController'); 
+  });
+});
+
 
 /******************FRONTEND ROUTES****************/
 Route::view('/', 'front.home.index')->name('home.index');
