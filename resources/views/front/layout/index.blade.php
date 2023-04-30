@@ -27,6 +27,7 @@
 					<ul class="links">
 		                <li class="active"> <a href="{{route('home.index')}}">HOME </a> </li>
 		                <li> <a href="{{route('admin.login')}}">ADMIN LOGIN</a> </li>
+		                <li> <a href="{{route('supplier.login')}}">Supplier LOGIN</a> </li>
             		</ul>
 				</nav>
 				<!-- Banner -->
