@@ -22,12 +22,12 @@ class Product extends Model
     }
     public static function petrolSellingPrice()
     {
-        $product = Product::where('name','HSD')->first();
+        $product = Product::where('name','PMG')->first();
         return $product->selling_price;
     }
     public static function dieselSellingPrice()
     {
-        $product = Product::where('name','PMG')->first();
+        $product = Product::where('name','HSD')->first();
         return $product->selling_price;
     }
     public function totalStocks($user_id = null)

@@ -28,7 +28,7 @@ class AccountCategoryController extends Controller
         }
         $dateRange = CarbonPeriod::create($start_date, $end_date);
         $dates = array_map(fn ($date) => $date->format('Y-m-d'), iterator_to_array($dateRange));
-        $petrol = Product::where('name','HSD')->first();
+        $petrol = Product::where('name','PMG')->first();
         $active_tab = $request->active_tab?$request->active_tab:1;
         $sub_account = $request->sub_account?$request->sub_account:'';
         return view('user.account_category.index',compact('active_tab','start_date','end_date','sub_account','dates','petrol'));

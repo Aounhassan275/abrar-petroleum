@@ -8,7 +8,7 @@
                     <i class="icon-unlink2 icon-3x opacity-75"></i>
                 </div>
                 <div class="media-body text-right">
-                <h3 class="mb-0">{{App\Models\Product::where('name','HSD')->first()->availableStock()}}</h3>
+                <h3 class="mb-0">{{App\Models\Product::where('name','PMG')->first()->availableStock()}}</h3>
                     <span class="text-uppercase font-size-xs">Petrol Available Stock</span>
                 </div>
             </div>
@@ -49,7 +49,7 @@
                     <i class="icon-stack-picture icon-3x opacity-75"></i>
                 </div>
                 <div class="media-body text-right">
-                    <h3 class="mb-0">{{App\Models\Product::where('name','PMG')->first()->totalSales()}}</h3>
+                    <h3 class="mb-0">{{App\Models\Product::where('name','HSD')->first()->totalSales()}}</h3>
                     <span class="text-uppercase font-size-xs">Diesel Total Sales</span>
                 </div>
             </div>

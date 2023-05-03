@@ -104,7 +104,7 @@ class User extends Authenticatable
     }
     public function getPetrolOpeningBalance($date)
     {
-        $product = Product::where('name','HSD')->first();
+        $product = Product::where('name','PMG')->first();
         $totalQtyStock = Purchase::where('user_id',$this->id)->where('product_id',$product->id)
                             ->whereDate('created_at','!=',$date)
                             ->sum('qty');
@@ -128,7 +128,7 @@ class User extends Authenticatable
     }
     public function getTodayPetrolSale($date)
     {
-        $product = Product::where('name','HSD')->first();
+        $product = Product::where('name','PMG')->first();
         $todaySale = Sale::where('user_id',$this->id)
                         ->where('product_id',$product->id)
                         ->where('type','retail_sale')
@@ -143,7 +143,7 @@ class User extends Authenticatable
     }
     public function getTodayPetrolSaleTotalAmount($date)
     {
-        $product = Product::where('name','HSD')->first();
+        $product = Product::where('name','PMG')->first();
         $todaySale = Sale::where('user_id',$this->id)
                         ->where('product_id',$product->id)
                         ->where('type','retail_sale')
@@ -153,7 +153,7 @@ class User extends Authenticatable
     }
     public function getTodayPetrolSalePrice($date)
     {
-        $product = Product::where('name','HSD')->first();
+        $product = Product::where('name','PMG')->first();
         $todaySale = Sale::where('user_id',$this->id)
                         ->where('product_id',$product->id)
                         ->where('type','retail_sale')
@@ -163,20 +163,20 @@ class User extends Authenticatable
     }
     public function getTodayPetrolPurchase($date)
     {
-        $product = Product::where('name','HSD')->first();
+        $product = Product::where('name','PMG')->first();
         $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('created_at',$date)->sum('qty');
         $todayAccessPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('created_at',$date)->sum('access');
         return $todayPurchase + $todayAccessPurchase;
     }
     public function getTodayPetrolPurchaseTotalAmount($date)
     {
-        $product = Product::where('name','HSD')->first();
+        $product = Product::where('name','PMG')->first();
         $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('created_at',$date)->sum('total_amount');
         return $todayPurchase;
     }
     public function getTodayPetrolPurchasePrice($date)
     {
-        $product = Product::where('name','HSD')->first();
+        $product = Product::where('name','PMG')->first();
         $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('created_at',$date)->first();
         return $todayPurchase ? $todayPurchase->price : 0;
     }
@@ -198,7 +198,7 @@ class User extends Authenticatable
     }
     public function getDieselOpeningBalance($date)
     {
-        $product = Product::where('name','PMG')->first();
+        $product = Product::where('name','HSD')->first();
         $totalQtyStock = $this->purchases->where('product_id',$product->id)->sum('qty');
         $totalAccessStock = $this->purchases->where('product_id',$product->id)->sum('access');
         $totalStock = $totalAccessStock + $totalQtyStock;
@@ -222,7 +222,7 @@ class User extends Authenticatable
     }
     public function getTodayDieselPurchase($date)
     {
-        $product = Product::where('name','PMG')->first();
+        $product = Product::where('name','HSD')->first();
         $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('created_at',$date)->sum('qty');
         $todayAccessPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('created_at',$date)->sum('access');
         return $todayPurchase + $todayAccessPurchase;
