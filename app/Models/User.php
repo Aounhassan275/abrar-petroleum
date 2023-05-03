@@ -84,6 +84,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(DebitCredit::class,'user_id');
     }
+    public function debitCreditAccounts()
+    {
+        return $this->hasMany(DebitCreditAccount::class,'user_id');
+    }
     public function employees()
     {
         return $this->hasMany(Employee::class,'user_id');

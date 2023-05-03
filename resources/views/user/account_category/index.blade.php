@@ -66,17 +66,48 @@
                                 </div>
                             </form>
                             @include('user.account_category.partials.debit_credits')
-                            @if($account_category->name == "Customer Accounts")
-                                @include('user.customer.index')
-                            @elseif($account_category->name == "Supplier")
-                                @include('user.vendor.index')
-                            @elseif($account_category->name == "Employees")
-                                @include('user.employee.index')
-                            @elseif($account_category->name == "Expenses & Income")
-                                @include('user.expense.index')
-                            @elseif($account_category->name == "Products")
-                                @include('user.product.index')
+                            @if($account_category->name == "Products")
                                 @include('user.account_category.partials.ledgers')
+                                @include('user.product.index')
+                            @else
+                            <div class="row" style="margin-top:20px!important;">
+                                <div class="col-md-12">
+                                    <a href="{{route('user.debit_credit_account.create')}}" class="btn btn-primary btn-sm text-right">Add New Account</a>
+                                    <table class="table datatable-button-html5-basic">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Phone</th>
+                                                <th>Address</th>
+                                                <th>Designation</th>
+                                                <th>Action</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (Auth::user()->debitCreditAccounts->where('account_category_id',$account_category->id) as  $account)
+                                            <tr>
+                                                <td>{{$account->name}}</td>
+                                                <td>{{$account->phone}}</td>
+                                                <td>{{$account->address}}</td>
+                                                <td>{{@$account->designation}}</td>
+                                                <td>
+                                                    <a href="{{route('user.debit_credit_account.edit',$account->id)}}" class="btn btn-primary btn-sm">Edit</a>
+                                                </td>
+                                                <td>
+                                                    <form action="{{route('user.debit_credit_account.destroy',$account->id)}}" method="POST">
+                                                        @method('DELETE')
+                                                        @csrf
+                                                    <button class="btn btn-danger btn-sm">Delete</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
                             @endif
                         </div>
 
