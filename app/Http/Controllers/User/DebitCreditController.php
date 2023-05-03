@@ -179,7 +179,7 @@ class DebitCreditController extends Controller
             //     }
             // }
             toastr()->success('Debit Credit Entry is Created Successfully');
-            return redirect()->to(route('user.sale.index').'?active_tab=debit_credit');
+            return redirect()->to(route('user.sale.index').'?active_tab=debit_credit&date='.$request->sale_date);
         }catch(Exception $e)
         {
             toastr()->error($e->getMessage());
