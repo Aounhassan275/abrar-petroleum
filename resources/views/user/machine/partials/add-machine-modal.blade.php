@@ -21,7 +21,7 @@
                         <label>Type</label>
                         <select class="form-control select-search" name="product_id" required>
                             <option value="">Choose Type</option>
-                            @foreach(App\Models\Product::whereIn('name',['Petrol','Diesel'])->get() as $product)    
+                            @foreach(App\Models\Product::whereIn('name',['HSD','PMG'])->get() as $product)    
                             <option value="{{$product->id}}">{{$product->name}}</option>
                             @endforeach
                         </select>
