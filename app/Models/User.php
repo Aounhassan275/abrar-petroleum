@@ -84,6 +84,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(DebitCredit::class,'user_id');
     }
+    public function employees()
+    {
+        return $this->hasMany(Employee::class,'user_id');
+    }
     public function getPetrolMachine()
     {
         $productMachines = Machine::where('user_id',$this->id)->where('product_id',1)->get();

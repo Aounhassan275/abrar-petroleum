@@ -73,7 +73,7 @@ class DebitCreditController extends Controller
             // if($totalDebit > 0 || $totalCredit > 0)
             // {
             //     $differenceProduct = $totalCredit - $totalDebit;
-            //     $cash_account_id = DebitCreditAccount::where('name','Cash')->first()->id;
+            //     $cash_account_id = DebitCreditAccount::where('name','Cash in Hand')->first()->id;
             //     DebitCredit::create([
             //         'user_id' => Auth::user()->id,
             //         'debit' => $differenceProduct,
@@ -159,7 +159,7 @@ class DebitCreditController extends Controller
             }
             // if($totalDebit > 0 || $totalCredit > 0)
             // {
-            //     $cash_account_id = DebitCreditAccount::where('name','Cash')->first()->id;
+            //     $cash_account_id = DebitCreditAccount::where('name','Cash in Hand')->first()->id;
             //     $cash_detail = DebitCredit::where('account_id',$cash_account_id)->whereDate('sale_date',$request->sale_date)->first();
             //     $differenceProduct = $totalCredit - $totalDebit;
             //     if($cash_detail)

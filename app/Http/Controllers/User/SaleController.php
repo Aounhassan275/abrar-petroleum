@@ -29,8 +29,8 @@ class SaleController extends Controller
             $date = Carbon::today();
         }
         $active_tab = $request->active_tab?$request->active_tab:'petrol';
-        $accounts = DebitCreditAccount::where('user_id',Auth::user()->id)->orWhereNull('user_id')->where('name','!=','Cash')->where('name','!=','Sale')->get();
-        $cash_account_id = DebitCreditAccount::where('name','Cash')->first()->id;
+        $accounts = DebitCreditAccount::where('user_id',Auth::user()->id)->orWhereNull('user_id')->where('name','!=','Cash in Hand')->where('name','!=','Sale')->get();
+        $cash_account_id = DebitCreditAccount::where('name','Cash in Hand')->first()->id;
         $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
         return view('user.sale.create',compact('petrol','diesel','date','active_tab','accounts','products','cash_account_id'));
     }

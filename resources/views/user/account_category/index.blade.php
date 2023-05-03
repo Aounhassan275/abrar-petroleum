@@ -66,11 +66,12 @@
                                 </div>
                             </form>
                             @include('user.account_category.partials.debit_credits')
-                           
                             @if($account_category->name == "Customer Accounts")
                                 @include('user.customer.index')
                             @elseif($account_category->name == "Supplier")
                                 @include('user.vendor.index')
+                            @elseif($account_category->name == "Employees")
+                                @include('user.employee.index')
                             @elseif($account_category->name == "Expenses & Income")
                                 @include('user.expense.index')
                             @elseif($account_category->name == "Products")

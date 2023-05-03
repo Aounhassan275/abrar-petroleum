@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Auth;
 class DebitCreditAccount extends Model
 {
     protected $fillable = [
-        'customer_id','vendor_id','supplier_id','user_id','expense_id','name','account_category_id'
+        'customer_id','vendor_id','supplier_id','user_id','expense_id','name','account_category_id',
+        'employee_id'
     ];
     public function customer()
     {

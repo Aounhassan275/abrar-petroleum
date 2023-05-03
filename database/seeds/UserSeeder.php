@@ -30,7 +30,7 @@ class UserSeeder extends Seeder
         ]);  
         DB::table('debit_credit_accounts')->insert([
             [ 'name' => 'Sale'],
-            [ 'name' => 'Cash'],
+            [ 'name' => 'Cash in Hand'],
         ]);  
         DB::table('account_categories')->insert([
             [ 'name' => 'Primary Accounts'],

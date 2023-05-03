@@ -47,7 +47,7 @@
                 @if($debit_credit->account_id == 1)
                     <option selected value="1">Sale</option>
                 @elseif($debit_credit->account_id == $cash_account_id)
-                    <option selected value="{{$cash_account_id}}">Cash</option>
+                    <option selected value="{{$cash_account_id}}">Cash in Hand</option>
                 @else
                     @foreach($accounts as $account)
                     <option @if($debit_credit->account_id == $account->id) selected @endif value="{{$account->id}}">{{$account->name}}</option>

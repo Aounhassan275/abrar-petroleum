@@ -63,7 +63,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (App\Models\Product::all() as $key => $product)
+            @foreach (App\Models\Product::whereNull('user_id')->get() as $key => $product)
             <tr>
                 <td>{{$key+1}}</td>
                 <td>{{$product->name}}</td>

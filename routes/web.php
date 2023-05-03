@@ -105,6 +105,8 @@ Route::group(['prefix' => 'user', 'as'=>'user.','namespace' => 'User'], function
     Route::resource('debit_credit', 'DebitCreditController');  
     /******************Account Category ROUTES****************/
     Route::resource('account_category', 'AccountCategoryController');  
+    /******************Employee ROUTES****************/
+    Route::resource('employee', 'EmployeeController');  
     /******************Reports ROUTES****************/
     Route::get('reports', 'ReportsController@index')->name('reports.index');  
   });
