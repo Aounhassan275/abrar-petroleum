@@ -63,13 +63,13 @@
         </div>
     </div>  
     @endif  
-    @if(Auth::user()->haveDebitCredit($date)->where('account_id',1)->count() == 0)
+    @if(Auth::user()->haveDebitCredit($date)->where('account_id',42)->count() == 0)
     <div class="row">
         <div class="form-group col-md-1"></div>
         <div class="form-group col-md-2">
             <input type="hidden" name="debit_credit_id[]" value="">
             <select name="account_id[]" class="form-control" readonly>
-                <option selected value="1">Sale</option>
+                <option selected value="42">Sale</option>
             </select>
         </div>
         <div class="form-group col-md-2">
@@ -95,9 +95,9 @@
         <input type="hidden" name="debit_credit_id[]" value="{{$debit_credit->id}}">
         <div class="form-group col-md-1"></div>
         <div class="form-group col-md-2">
-            <select name="account_id[]" class="form-control" @if($debit_credit->account_id == 1 || $debit_credit->account_id == $cash_account_id) readonly @endif>
-                @if($debit_credit->account_id == 1)
-                    <option selected value="1">Sale</option>
+            <select name="account_id[]" class="form-control" @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly @endif>
+                @if($debit_credit->account_id == 42)
+                    <option selected value="42">Sale</option>
                 @elseif($debit_credit->account_id == $cash_account_id)
                     <option selected value="{{$cash_account_id}}">Cash in Hand</option>
                 @else
@@ -108,7 +108,7 @@
             </select>
         </div>
         <div class="form-group col-md-2">
-            @if($debit_credit->account_id == 1 || $debit_credit->account_id == $cash_account_id)
+            @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id)
             <input type="text" name="product_id[]" class="form-control"  readonly >
             @else
             <select name="product_id[]" id="credit_debit_product_{{$key}}" class="form-control select-search">
@@ -121,14 +121,14 @@
             @endif
         </div>
         <div class="form-group col-md-1">
-            <input type="text" name="qty[]" value="{{@$debit_credit->qty}}" class="form-control" id="credit_debit_qty_{{$key}}" onchange="debitQuantity('{{ @$key }}')" @if($debit_credit->account_id == 1 || $debit_credit->account_id == $cash_account_id) readonly @endif>
+            <input type="text" name="qty[]" value="{{@$debit_credit->qty}}" class="form-control" id="credit_debit_qty_{{$key}}" onchange="debitQuantity('{{ @$key }}')" @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly @endif>
         </div>
         <div class="form-group col-md-2">
-            <input type="text" name="debit[]" value="{{@$debit_credit->debit}}"  id="credit_debit_debit_{{$key}}" class="form-control {{$debit_credit->account_id == $cash_account_id ? 'cash_debit_values' : ''}}" @if($debit_credit->account_id == 1 || $debit_credit->account_id == $cash_account_id) readonly  @endif>
+            <input type="text" name="debit[]" value="{{@$debit_credit->debit}}"  id="credit_debit_debit_{{$key}}" class="form-control {{$debit_credit->account_id == $cash_account_id ? 'cash_debit_values' : ''}}" @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly  @endif>
 
         </div>
         <div class="form-group col-md-2">
-            <input type="text" name="credit[]" value="{{@$debit_credit->credit}}" id="credit_debit_credit_{{$key}}" class="form-control {{$debit_credit->account_id == $cash_account_id ? 'cash_credit_values' : ''}}"  @if($debit_credit->account_id == 1 || $debit_credit->account_id == $cash_account_id) readonly @endif>
+            <input type="text" name="credit[]" value="{{@$debit_credit->credit}}" id="credit_debit_credit_{{$key}}" class="form-control {{$debit_credit->account_id == $cash_account_id ? 'cash_credit_values' : ''}}"  @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly @endif>
         </div>
         <div class="form-group col-md-2">
             <input type="text" name="description[]" value="{{@$debit_credit->description}}"  class="form-control" readonly value="">

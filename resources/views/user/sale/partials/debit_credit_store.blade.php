@@ -66,7 +66,7 @@
         <div class="form-group col-md-1"></div>
         <div class="form-group col-md-2">
             <select name="account_id[]" class="form-control" readonly>
-                <option selected value="1">Sale</option>
+                <option selected value="42">Sale</option>
                 {{-- @foreach($accounts as $account)
                 <option value="{{$account->id}}">{{$account->name}}</option>
                 @endforeach --}}
