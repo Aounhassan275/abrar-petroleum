@@ -20,7 +20,7 @@
         <div class="card card-body bg-success-400 has-bg-image">
             <div class="media">
                 <div class="media-body align-self-center ">
-                    <h3 class="mb-0">{{App\Models\Product::where('name','PMG')->first()->availableStock()}}</h3>
+                    <h3 class="mb-0">{{App\Models\Product::where('name','HSD')->first()->availableStock()}}</h3>
                     <span class="text-uppercase font-size-xs">Diesel Available Stock</span>
                 </div>
                 <div class="ml-3 text-right">
@@ -33,7 +33,7 @@
         <div class="card card-body bg-violet-400 has-bg-image">
             <div class="media">
                 <div class="media-body align-self-center ">
-                    <h3 class="mb-0">{{App\Models\Product::where('name','HSD')->first()->totalSales()}}</h3>
+                    <h3 class="mb-0">{{App\Models\Product::where('name','PMG')->first()->totalSales()}}</h3>
                     <span class="text-uppercase font-size-xs">Petrol Total Sales </span>
                 </div>
                 <div class="ml-3 text-right">

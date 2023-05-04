@@ -94,12 +94,12 @@ class User extends Authenticatable
     }
     public function getPetrolMachine()
     {
-        $productMachines = Machine::where('user_id',$this->id)->where('product_id',1)->get();
+        $productMachines = Machine::where('user_id',$this->id)->where('product_id',2)->get();
         return $productMachines;
     }
     public function getDieselMachine()
     {
-        $productMachines = Machine::where('user_id',$this->id)->where('product_id',2)->get();
+        $productMachines = Machine::where('user_id',$this->id)->where('product_id',1)->get();
         return $productMachines;
     }
     public function getPetrolOpeningBalance($date)

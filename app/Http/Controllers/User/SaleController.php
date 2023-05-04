@@ -28,7 +28,7 @@ class SaleController extends Controller
         }else{
             $date = Carbon::today();
         }
-        $active_tab = $request->active_tab?$request->active_tab:'petrol';
+        $active_tab = $request->active_tab?$request->active_tab:'diesel';
         $accounts = DebitCreditAccount::where('user_id',Auth::user()->id)->orWhereNull('user_id')->where('name','!=','Cash in Hand')->where('name','!=','Sale')->get();
         $cash_account_id = DebitCreditAccount::where('name','Cash in Hand')->first()->id;
         $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();

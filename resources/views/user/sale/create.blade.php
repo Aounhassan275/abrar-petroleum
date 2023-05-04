@@ -25,8 +25,8 @@
 
             <div class="card-body">
                 <ul class="nav nav-tabs nav-tabs-top">
-                    <li class="nav-item"><a href="#top-tab1" @if($active_tab == 'petrol') class="nav-link active" @else class="nav-link" @endif data-toggle="tab">Petrol</a></li>
                     <li class="nav-item"><a href="#top-tab2" @if($active_tab == 'diesel') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Diesel</a></li>
+                    <li class="nav-item"><a href="#top-tab1" @if($active_tab == 'petrol') class="nav-link active" @else class="nav-link" @endif data-toggle="tab">Petrol</a></li>
                     <li class="nav-item"><a href="#top-tab3" @if($active_tab == 'misc') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Misc. Products</a></li>
                     <li class="nav-item"><a href="#top-tab4" @if($active_tab == 'sale_detail') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Sales Detail</a></li>
                     <li class="nav-item"><a href="#top-tab5" @if($active_tab == 'debit_credit') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Debit Credit</a></li>
