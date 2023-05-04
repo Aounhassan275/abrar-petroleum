@@ -13,7 +13,7 @@ class DebitCreditAccount extends Model
 {
     protected $fillable = [
         'customer_id','vendor_id','supplier_id','user_id','expense_id','name','account_category_id',
-        'employee_id','phone','address','designation',
+        'employee_id','phone','address','designation','product_id'
     ];
     public function customer()
     {
@@ -30,6 +30,10 @@ class DebitCreditAccount extends Model
     public function expense()
     {
         return $this->belongsTo(Expense::class,'expense_id');
+    }
+    public function product()
+    {
+        return $this->belongsTo(Product::class,'product_id');
     }
     public function accountCategory()
     {

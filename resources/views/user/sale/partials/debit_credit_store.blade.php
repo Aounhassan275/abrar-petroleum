@@ -72,7 +72,7 @@
         <div class="form-group col-md-1"></div>
         <div class="form-group col-md-2">
             <select name="account_id[]" class="form-control" readonly>
-                <option selected value="{{$cash_account_id}}">Cash</option>
+                <option selected value="{{$cash_account_id}}">Cash In Hand</option>
 
             </select>
         </div>

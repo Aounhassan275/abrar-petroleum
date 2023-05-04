@@ -205,12 +205,12 @@
 								<span>Supplier</span>
 							</a>
 						</li> --}}
-						{{-- <li class="nav-item">
+						<li class="nav-item">
 							<a href="{{route('user.purchase.index')}}" class="nav-link {{Request::is('user/purchase') || Request::is('user/purchase/*')?'active':''}}">
 								<i class="icon-home4"></i>
 								<span>Purchase</span>
 							</a>
-						</li> --}}
+						</li>
 						{{-- <li class="nav-item">
 							<a href="{{route('user.customer.index')}}" class="nav-link {{Request::is('user/customer') || Request::is('user/customer/*')?'active':''}}">
 								<i class="icon-home4"></i>

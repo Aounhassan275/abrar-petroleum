@@ -24,10 +24,23 @@
                 method: 'post',
                 data: $('#debitCreditForm').serialize(),
                 headers: {
-                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}",
                 },
                 success: function(response){
                     $('#cash_debit_values').val(response.difference);
+                }
+            });
+        });
+        $('.calcluate-debit-credit-values-for-updates').click(function(){
+            $.ajax({
+                url: "{{route('user.debit_credit.calculate_debit_credit_values')}}",
+                method: 'POST',
+                data: $('#debitCreditUpdateForm').serialize(),
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                success: function(response){
+                    $('.cash_debit_values').val(response.difference);
                 }
             });
         });

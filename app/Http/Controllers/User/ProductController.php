@@ -5,9 +5,11 @@ namespace App\Http\Controllers\User;
 use App\Helpers\LossGainHelper;
 use App\Http\Controllers\Controller;
 use App\Models\AccountCategory;
+use App\Models\DebitCreditAccount;
 use App\Models\Product;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -49,9 +51,15 @@ class ProductController extends Controller
 				'selling_price.numeric'=>'Selling Price Must be Numeric',
 			]
 			);
-            Product::create($request->all());
-            toastr()->success('Product is Created Successfully');
+            $product = Product::create($request->all());
             $account = AccountCategory::where('name','Products')->first();
+            DebitCreditAccount::create([
+                'name' => $request->name,
+                'user_id' => Auth::user()->id,
+                'account_category_id' => $account->id,
+                'product_id' => $product->id,
+            ]);  
+            toastr()->success('Product is Created Successfully');
             return redirect()->to(route('user.account_category.index').'?active_tab='.$account->id);
         }catch(Exception $e)
         {

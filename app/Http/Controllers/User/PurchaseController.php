@@ -75,8 +75,13 @@ class PurchaseController extends Controller
                     'sale_date' => date('Y-m-d'),
                 ]);
             }
-                
-            
+            $account_id  = DebitCreditAccount::where('product_id',$request->product_id)->first()->id;
+            DebitCredit::create([
+                'user_id' => Auth::user()->id,
+                'debit' => @$purchase->total_amount,
+                'account_id' => $account_id,
+                'sale_date' => date('Y-m-d'),
+            ]);
             toastr()->success('Purchase is Created Successfully');
             return redirect()->back();
 

@@ -1,5 +1,4 @@
-<form action="{{route('user.debit_credit.update',Auth::user()->id)}}" method="post" id="debitCreditUpdateForm" enctype="multipart/form-data" >
-    @method('PUT')
+<form action="{{route('user.debit_credit.update_form')}}" method="post" id="debitCreditUpdateForm" enctype="multipart/form-data" >
     @csrf
     <div class="row">
         <div class="form-group col-4">
@@ -11,6 +10,7 @@
         </div>
         <div class="form-group col-8  text-right">
             <button type="button" class="btn btn-success add-more-fields">Add More Fields</button>
+            <button type="button" class="btn btn-primary calcluate-debit-credit-values-for-updates">Calcluate</button>
         </div>
     </div>
 
@@ -38,6 +38,33 @@
             Description
         </div>
     </div>      
+    @if(Auth::user()->haveDebitCredit($date)->where('account_id',1)->count() == 0)
+    <div class="row">
+        <div class="form-group col-md-1"></div>
+        <div class="form-group col-md-2">
+            <input type="hidden" name="debit_credit_id[]" value="">
+            <select name="account_id[]" class="form-control" readonly>
+                <option selected value="1">Sale</option>
+            </select>
+        </div>
+        <div class="form-group col-md-2">
+            <input type="text" name="product_id[]" class="form-control" readonly >
+        </div>
+        <div class="form-group col-md-1">
+            <input type="text" name="qty[]" class="form-control" readonly >
+        </div>
+        <div class="form-group col-md-2">
+            <input type="text" name="debit[]" class="form-control" value="0" readonly>
+
+        </div>
+        <div class="form-group col-md-2">
+            <input type="text" name="credit[]" class="form-control" readonly value="{{Auth::user()->todaySaleAmount($date)}}">
+        </div>
+        <div class="form-group col-md-2">
+            <input type="text" name="description[]" class="form-control" readonly value="">
+        </div>
+    </div>  
+    @endif
     @foreach(Auth::user()->haveDebitCredit($date) as $key => $debit_credit)
     <div class="row">
         <input type="hidden" name="debit_credit_id[]" value="{{$debit_credit->id}}">
@@ -72,11 +99,11 @@
             <input type="text" name="qty[]" value="{{@$debit_credit->qty}}" class="form-control" id="credit_debit_qty_{{$key}}" onchange="debitQuantity('{{ @$key }}')" @if($debit_credit->account_id == 1 || $debit_credit->account_id == $cash_account_id) readonly @endif>
         </div>
         <div class="form-group col-md-2">
-            <input type="text" name="debit[]" value="{{@$debit_credit->debit}}"  id="credit_debit_debit_{{$key}}" class="form-control" value="0"  @if($debit_credit->account_id == 1 || $debit_credit->account_id == $cash_account_id) readonly @endif>
+            <input type="text" name="debit[]" value="{{@$debit_credit->debit}}"  id="credit_debit_debit_{{$key}}" class="form-control {{$debit_credit->account_id == $cash_account_id ? 'cash_debit_values' : ''}}" @if($debit_credit->account_id == 1 || $debit_credit->account_id == $cash_account_id) readonly @endif>
 
         </div>
         <div class="form-group col-md-2">
-            <input type="text" name="credit[]" value="{{@$debit_credit->credit}}" id="credit_debit_credit_{{$key}}" class="form-control"  @if($debit_credit->account_id == 1 || $debit_credit->account_id == $cash_account_id) readonly @endif value="{{Auth::user()->todaySaleAmount($date)}}">
+            <input type="text" name="credit[]" value="{{@$debit_credit->credit}}" id="credit_debit_credit_{{$key}}" class="form-control {{$debit_credit->account_id == $cash_account_id ? 'cash_credit_values' : ''}}"  @if($debit_credit->account_id == 1 || $debit_credit->account_id == $cash_account_id) readonly @endif>
         </div>
         <div class="form-group col-md-2">
             <input type="text" name="description[]" value="{{@$debit_credit->description}}"  class="form-control" readonly value="">
@@ -86,6 +113,35 @@
     <div id="debit_credit_field">
         
     </div>
+    @if(Auth::user()->haveDebitCredit($date)->where('account_id',$cash_account_id)->count() == 0)
+      
+    <div class="row">
+        <div class="form-group col-md-1"></div>
+        <div class="form-group col-md-2">
+            <input type="hidden" name="debit_credit_id[]" value="">
+            <select name="account_id[]" class="form-control" readonly>
+                <option selected value="{{$cash_account_id}}">Cash In Hand</option>
+
+            </select>
+        </div>
+        <div class="form-group col-md-2">
+            <input type="text" name="product_id[]" class="form-control" readonly >
+        </div>
+        <div class="form-group col-md-1">
+            <input type="text" name="qty[]" class="form-control" readonly >
+        </div>
+        <div class="form-group col-md-2">
+            <input type="text" name="debit[]" class="form-control" id="cash_debit_values" value="0" readonly>
+
+        </div>
+        <div class="form-group col-md-2">
+            <input type="text" name="credit[]" class="form-control" id="cash_credit_values"  readonly>
+        </div>
+        <div class="form-group col-md-2">
+            <input type="text" name="description[]" class="form-control" readonly value="">
+        </div>
+    </div> 
+    @endif
     <div class="text-right" style="margin-top:10px;">
         <button type="button" id="update-debit-credit-sale" class="btn btn-primary">Post <i class="icon-paperplane ml-2"></i></button>
     </div> 
