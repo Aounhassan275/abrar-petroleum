@@ -109,7 +109,7 @@
                 <tr>
                     <td>
                         Purchase 
-                        <button type="button" data-toggle="modal" data-target="#add-purchase-modal" product_name="Petrol" product_id="1"
+                        <button type="button" data-toggle="modal" data-target="#add-purchase-modal" product_name="PMG" product_id="2"
                            class="add-purchase-btn btn btn-primary btn-sm">Add New Purchase</button>
 
                     </td>

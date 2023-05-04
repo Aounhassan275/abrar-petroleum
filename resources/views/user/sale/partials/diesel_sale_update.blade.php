@@ -14,7 +14,7 @@
     <input type="hidden" name="product_id" value="{{$diesel_machine->product_id}}">
     <input type="hidden" name="machine_id[]" value="{{$diesel_machine->id}}">
     <input name="price[]" id="diesel_price_{{$index}}" type="hidden" value="{{@$diesel_machine->product->selling_price}}">
-    <input name="total_amount[]" id="diesel_total_amount_{{$index}}" type="hidden" >
+    <input name="total_amount[]" id="diesel_total_amount_{{$index}}" value="{{$diesel_machine->getSale($date)?$diesel_machine->getSale($date)->total_amount:''}}" type="hidden" >
     <input name="type[]" value="retail_sale" type="hidden" >
     <input type="hidden" name="sale_id[]" value="{{$diesel_machine->getSale($date)?$diesel_machine->getSale($date)->id:''}}">
     <div class="row">
@@ -119,7 +119,7 @@
                 <tr>
                     <td>
                         Purchase 
-                        <button type="button" data-toggle="modal" data-target="#add-purchase-modal" product_name="Diesel" product_id="1"
+                        <button type="button" data-toggle="modal" data-target="#add-purchase-modal" product_name="HSD" product_id="1"
                            class="add-purchase-btn btn btn-primary btn-sm">Add New Purchase</button>
 
                     </td>
@@ -135,7 +135,7 @@
                 </tr>
                 <tr>
                     <td>Closing</td>
-                    <td>{{Auth::user()->getDieselOpeningBalance($date) + Auth::user()->getDieselOpeningBalance($date) - Auth::user()->getTodayDieselSale($date)}}</td>
+                    <td>{{Auth::user()->getDieselOpeningBalance($date) + Auth::user()->getTodayDieselPurchase($date) - Auth::user()->getTodayDieselSale($date)}}</td>
                 </tr>
 
             </tbody>

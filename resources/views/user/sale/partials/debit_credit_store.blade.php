@@ -38,6 +38,30 @@
             Description
         </div>
     </div>      
+    @if($lastDayCash)
+    <div class="row">
+        <div class="form-group col-md-1"></div>
+        <div class="form-group col-md-2">
+            <input type="text" value="Last Day Cash In Hand" class="form-control" readonly>
+        </div>
+        <div class="form-group col-md-2">
+            <input type="text" class="form-control" readonly >
+        </div>
+        <div class="form-group col-md-1">
+            <input type="text" class="form-control" readonly >
+        </div>
+        <div class="form-group col-md-2">
+            <input type="text"class="form-control" value="" readonly>
+
+        </div>
+        <div class="form-group col-md-2">
+            <input type="text" name="last_day_cash" class="form-control" readonly value="{{$lastDayCash->debit}}">
+        </div>
+        <div class="form-group col-md-2">
+            <input type="text" class="form-control" readonly value="">
+        </div>
+    </div>  
+    @endif     
     <div class="row">
         <div class="form-group col-md-1"></div>
         <div class="form-group col-md-2">
@@ -64,7 +88,7 @@
         <div class="form-group col-md-2">
             <input type="text" name="description[]" class="form-control" readonly value="">
         </div>
-    </div>  
+    </div> 
     <div id="debit_credit_field">
         
     </div>    
@@ -83,11 +107,10 @@
             <input type="text" name="qty[]" class="form-control" readonly >
         </div>
         <div class="form-group col-md-2">
-            <input type="text" name="debit[]" class="form-control" id="cash_debit_values" value="0" readonly>
-
+            <input type="text" name="debit[]" class="form-control cash_debit_values" id="cash_debit_values" value="0" readonly>
         </div>
         <div class="form-group col-md-2">
-            <input type="text" name="credit[]" class="form-control" id="cash_credit_values"  readonly>
+            <input type="text" name="credit[]" class="form-control cash_credit_values" id="cash_credit_values"  readonly>
         </div>
         <div class="form-group col-md-2">
             <input type="text" name="description[]" class="form-control" readonly value="">

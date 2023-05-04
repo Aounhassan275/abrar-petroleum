@@ -237,7 +237,7 @@ class DebitCreditController extends Controller
     {
         
         $totalDebit = 0;
-        $totalCredit = 0;
+        $totalCredit = $request->last_day_cash?$request->last_day_cash:0;
         $cash_account_id = DebitCreditAccount::where('name','Cash in Hand')->first()->id;
         foreach($request->account_id as $key => $account_id)
         {

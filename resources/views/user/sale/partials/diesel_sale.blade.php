@@ -109,7 +109,7 @@
                 <tr>
                     <td>
                         Purchase 
-                        <button type="button" data-toggle="modal" data-target="#add-purchase-modal" product_name="Diesel" product_id="2"
+                        <button type="button" data-toggle="modal" data-target="#add-purchase-modal" product_name="HSD" product_id="1"
                             class="add-purchase-btn btn btn-primary btn-sm">Add New Purchase</button>
 
                     </td>
@@ -125,7 +125,7 @@
                 </tr>
                 <tr>
                     <td>Closing</td>
-                    <td>{{Auth::user()->getDieselOpeningBalance($date) + Auth::user()->getDieselOpeningBalance($date) - Auth::user()->getTodayDieselSale($date)}}</td>
+                    <td>{{Auth::user()->getDieselOpeningBalance($date) + Auth::user()->getTodayDieselPurchase($date) - Auth::user()->getTodayDieselSale($date)}}</td>
                 </tr>
 
             </tbody>

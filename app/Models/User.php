@@ -199,15 +199,25 @@ class User extends Authenticatable
     public function getDieselOpeningBalance($date)
     {
         $product = Product::where('name','HSD')->first();
-        $totalQtyStock = $this->purchases->where('product_id',$product->id)->sum('qty');
-        $totalAccessStock = $this->purchases->where('product_id',$product->id)->sum('access');
-        $totalStock = $totalAccessStock + $totalQtyStock;
+        $totalQtyStock = Purchase::where('user_id',$this->id)->where('product_id',$product->id)
+                            ->whereDate('created_at','!=',$date)
+                            ->sum('qty');
+        $totalAccessStock = Purchase::where('user_id',$this->id)->where('product_id',$product->id)
+                            ->whereDate('created_at','!=',$date)
+                            ->sum('access');
+        $totalStock = $totalQtyStock + $totalAccessStock;
         $totalSale = Sale::where('user_id',$this->id)
                         ->where('product_id',$product->id)
                         ->where('type','!=','test')
                         ->whereDate('sale_date','!=',$date)
+                        ->sum('qty');       
+        $testSale = Sale::where('user_id',$this->id)
+                        ->where('product_id',$product->id)
+                        ->where('type','test')
+                        ->whereDate('sale_date','!=',$date)
                         ->sum('qty');
-        $avaiableStock = $totalStock - $totalSale;
+        $sale = $totalSale - $testSale;
+        $avaiableStock = $totalStock - $sale;
         return $avaiableStock;
     }
     public function getTodayDieselSale($date)

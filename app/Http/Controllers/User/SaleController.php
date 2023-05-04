@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\DebitCredit;
 use App\Models\DebitCreditAccount;
 use App\Models\Product;
 use App\Models\Sale;
@@ -24,15 +25,18 @@ class SaleController extends Controller
         $petrol = Product::where('name','PMG')->first();
         if($request->date)
         {
-            $date = Carbon::parse($request->date);
+            $date =  Carbon::parse($request->date);
+            $day_before =  Carbon::parse($request->date)->subDay();
         }else{
-            $date = Carbon::today();
+            $date =  Carbon::today();
+            $day_before = date('Y-m-d',strtotime("-1 days"));
         }
         $active_tab = $request->active_tab?$request->active_tab:'diesel';
         $accounts = DebitCreditAccount::where('user_id',Auth::user()->id)->orWhereNull('user_id')->where('name','!=','Cash in Hand')->where('name','!=','Sale')->get();
         $cash_account_id = DebitCreditAccount::where('name','Cash in Hand')->first()->id;
+        $lastDayCash = DebitCredit::where('account_id',$cash_account_id)->whereDate('sale_date',$day_before)->first();
         $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
-        return view('user.sale.create',compact('petrol','diesel','date','active_tab','accounts','products','cash_account_id'));
+        return view('user.sale.create',compact('petrol','diesel','date','active_tab','accounts','products','cash_account_id','lastDayCash'));
     }
 
     /**
