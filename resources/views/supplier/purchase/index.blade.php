@@ -35,7 +35,7 @@
                 <td>PKR {{$purchase->total_amount}}</td>
                 <td>{{@$purchase->terminal->name}}</td>
                 <td>{{@$purchase->vehicle->name}}</td>
-                <td>{{$purchase->created_at->format('d M,Y')}}</td>
+                <td>{{$purchase->date->format('d M,Y')}}</td>
                 <td>
                     <a href="{{route('supplier.purchase.edit',$purchase->id)}}" class="btn btn-primary btn-sm">Edit</a>
                 </td>

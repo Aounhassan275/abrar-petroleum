@@ -98,7 +98,7 @@ class Product extends Model
                         ->sum('total_amount'); 
         $total_purchases = Purchase::where('user_id',Auth::user()->id)
                         ->where('product_id',$this->id)
-                        ->whereBetween('created_at', [$start_date,$end_date])
+                        ->whereBetween('date', [$start_date,$end_date])
                         ->sum('total_amount'); 
         return $total_sales - $total_purchases;
     }

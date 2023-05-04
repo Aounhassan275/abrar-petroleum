@@ -106,10 +106,10 @@ class User extends Authenticatable
     {
         $product = Product::where('name','PMG')->first();
         $totalQtyStock = Purchase::where('user_id',$this->id)->where('product_id',$product->id)
-                            ->whereDate('created_at','!=',$date)
+                            ->whereDate('date','!=',$date)
                             ->sum('qty');
         $totalAccessStock = Purchase::where('user_id',$this->id)->where('product_id',$product->id)
-                            ->whereDate('created_at','!=',$date)
+                            ->whereDate('date','!=',$date)
                             ->sum('access');
         $totalStock = $totalQtyStock + $totalAccessStock;
         $totalSale = Sale::where('user_id',$this->id)
@@ -164,20 +164,20 @@ class User extends Authenticatable
     public function getTodayPetrolPurchase($date)
     {
         $product = Product::where('name','PMG')->first();
-        $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('created_at',$date)->sum('qty');
-        $todayAccessPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('created_at',$date)->sum('access');
+        $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('date',$date)->sum('qty');
+        $todayAccessPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('date',$date)->sum('access');
         return $todayPurchase + $todayAccessPurchase;
     }
     public function getTodayPetrolPurchaseTotalAmount($date)
     {
         $product = Product::where('name','PMG')->first();
-        $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('created_at',$date)->sum('total_amount');
+        $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('date',$date)->sum('total_amount');
         return $todayPurchase;
     }
     public function getTodayPetrolPurchasePrice($date)
     {
         $product = Product::where('name','PMG')->first();
-        $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('created_at',$date)->first();
+        $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('date',$date)->first();
         return $todayPurchase ? $todayPurchase->price : 0;
     }
     public function totalExpense($start_date,$end_date)
@@ -200,10 +200,10 @@ class User extends Authenticatable
     {
         $product = Product::where('name','HSD')->first();
         $totalQtyStock = Purchase::where('user_id',$this->id)->where('product_id',$product->id)
-                            ->whereDate('created_at','!=',$date)
+                            ->whereDate('date','!=',$date)
                             ->sum('qty');
         $totalAccessStock = Purchase::where('user_id',$this->id)->where('product_id',$product->id)
-                            ->whereDate('created_at','!=',$date)
+                            ->whereDate('date','!=',$date)
                             ->sum('access');
         $totalStock = $totalQtyStock + $totalAccessStock;
         $totalSale = Sale::where('user_id',$this->id)
@@ -233,8 +233,8 @@ class User extends Authenticatable
     public function getTodayDieselPurchase($date)
     {
         $product = Product::where('name','HSD')->first();
-        $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('created_at',$date)->sum('qty');
-        $todayAccessPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('created_at',$date)->sum('access');
+        $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('date',$date)->sum('qty');
+        $todayAccessPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('date',$date)->sum('access');
         return $todayPurchase + $todayAccessPurchase;
     }
     public function haveSale($date,$product = null)
