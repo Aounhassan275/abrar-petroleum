@@ -67,11 +67,11 @@ class SaleController extends Controller
                         if($request->qty[$key] > $product->availableStock())
                         {
                             toastr()->error('Stock is not avaiable');
-                            if($product->name == 'Petrol')
+                            if($product->name == 'PMG')
                             {
-                                return redirect()->to(route('user.sale.index').'?active_tab=petrol');
+                                return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
                             }else{
-                                return redirect()->to(route('user.sale.index').'?active_tab=diesel');
+                                return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
                             }
                         }
                         $sale = Sale::create([
@@ -96,11 +96,11 @@ class SaleController extends Controller
                     {
                         toastr()->error('Stock is not avaiable');
                         
-                        if($product->name == 'Petrol')
+                        if($product->name == 'PMG')
                         {
-                            return redirect()->to(route('user.sale.index').'?active_tab=petrol');
+                            return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
                         }else{
-                            return redirect()->to(route('user.sale.index').'?active_tab=diesel');
+                            return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
                         }
                     }
                     $total = $product->selling_price * $request->testing_quantity;
@@ -120,11 +120,11 @@ class SaleController extends Controller
                     if($request->wholesale_quantity > $product->availableStock())
                     {
                         toastr()->error('Stock is not avaiable');
-                        if($product->name == 'Petrol')
+                        if($product->name == 'PMG')
                         {
-                            return redirect()->to(route('user.sale.index').'?active_tab=petrol');
+                            return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
                         }else{
-                            return redirect()->to(route('user.sale.index').'?active_tab=diesel');
+                            return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
                         }                    }
                     Sale::create([
                         'user_id' => Auth::user()->id,
@@ -137,11 +137,11 @@ class SaleController extends Controller
                     ]);
                 }
                 toastr()->success('Sale is Created Successfully');
-                if($product->name == 'Petrol')
+                if($product->name == 'PMG')
                 {
-                    return redirect()->to(route('user.sale.index').'?active_tab=petrol');
+                    return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
                 }else{
-                    return redirect()->to(route('user.sale.index').'?active_tab=diesel');
+                    return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
                 }  
             }elseif($request->is_misc_sale){
                 foreach($request->qty as $key => $qty)
@@ -152,7 +152,7 @@ class SaleController extends Controller
                         if($qty > $product->availableStock())
                         {
                             toastr()->error('Stock is not avaiable');
-                            return redirect()->to(route('user.sale.index').'?active_tab=misc');
+                            return redirect()->to(route('user.sale.index').'?active_tab=misc&date='.$request->sale_date);
                         }
                         $sale = Sale::create([
                             'user_id' => Auth::user()->id,
@@ -164,7 +164,7 @@ class SaleController extends Controller
                             'sale_date' => $request->sale_date,
                         ]);
                         toastr()->success('Sale is Created Successfully');
-                        return redirect()->to(route('user.sale.index').'?active_tab=misc');
+                        return redirect()->to(route('user.sale.index').'?active_tab=misc&date='.$request->sale_date);
                     }
                 }
             }else{
@@ -230,11 +230,11 @@ class SaleController extends Controller
                             if($total_qty > $product->availableStock())
                             {
                                 toastr()->error('Stock is not avaiable');  
-                                if($product->name == 'Petrol')
+                                if($product->name == 'PMG')
                                 {
-                                    return redirect()->to(route('user.sale.index').'?active_tab=petrol');
+                                    return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
                                 }else{
-                                    return redirect()->to(route('user.sale.index').'?active_tab=diesel');
+                                    return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
                                 }  
                             }
                             $sale->update([
@@ -250,11 +250,11 @@ class SaleController extends Controller
                             if($request->qty[$key] > $product->availableStock())
                             {
                                 toastr()->error('Stock is not avaiable');  
-                                if($product->name == 'Petrol')
+                                if($product->name == 'PMG')
                                 {
-                                    return redirect()->to(route('user.sale.index').'?active_tab=petrol');
+                                    return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
                                 }else{
-                                    return redirect()->to(route('user.sale.index').'?active_tab=diesel');
+                                    return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
                                 }  
                             }
                             $sale = Sale::create([
@@ -282,11 +282,11 @@ class SaleController extends Controller
                         if($total_qty > $product->availableStock())
                         {
                             toastr()->error('Stock is not avaiable');  
-                            if($product->name == 'Petrol')
+                            if($product->name == 'PMG')
                             {
-                                return redirect()->to(route('user.sale.index').'?active_tab=petrol');
+                                return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
                             }else{
-                                return redirect()->to(route('user.sale.index').'?active_tab=diesel');
+                                return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
                             }  
                         }
                         $total = $product->selling_price * $request->testing_quantity;
@@ -300,11 +300,11 @@ class SaleController extends Controller
                         if($request->testing_quantity > $product->availableStock())
                         {
                             toastr()->error('Stock is not avaiable');  
-                            if($product->name == 'Petrol')
+                            if($product->name == 'PMG')
                             {
-                                return redirect()->to(route('user.sale.index').'?active_tab=petrol');
+                                return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
                             }else{
-                                return redirect()->to(route('user.sale.index').'?active_tab=diesel');
+                                return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
                             }  
                         }
                         $total = $product->selling_price * $request->testing_quantity;
@@ -329,11 +329,11 @@ class SaleController extends Controller
                         if($total_qty > $product->availableStock())
                         {
                             toastr()->error('Stock is not avaiable');  
-                            if($product->name == 'Petrol')
+                            if($product->name == 'PMG')
                             {
-                                return redirect()->to(route('user.sale.index').'?active_tab=petrol');
+                                return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
                             }else{
-                                return redirect()->to(route('user.sale.index').'?active_tab=diesel');
+                                return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
                             }  
                         }
                         $total = $product->selling_price * $request->testing_quantity;
@@ -346,11 +346,11 @@ class SaleController extends Controller
                         if($request->wholesale_quantity > $product->availableStock())
                         {
                             toastr()->error('Stock is not avaiable');  
-                            if($product->name == 'Petrol')
+                            if($product->name == 'PMG')
                             {
-                                return redirect()->to(route('user.sale.index').'?active_tab=petrol');
+                                return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
                             }else{
-                                return redirect()->to(route('user.sale.index').'?active_tab=diesel');
+                                return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
                             }  
                         }
                         Sale::create([
@@ -366,11 +366,11 @@ class SaleController extends Controller
 
                 }
                 toastr()->success('Sale is Created Successfully');
-                if($product->name == 'Petrol')
+                if($product->name == 'PMG')
                 {
-                    return redirect()->to(route('user.sale.index').'?active_tab=petrol');
+                    return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
                 }else{
-                    return redirect()->to(route('user.sale.index').'?active_tab=diesel');
+                    return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
                 }  
             }elseif($request->is_misc_sale){
                 
@@ -386,7 +386,7 @@ class SaleController extends Controller
                             if($total_qty > $product->availableStock())
                             {
                                 toastr()->error('Stock is not avaiable');  
-                                return redirect()->to(route('user.sale.index').'?active_tab=misc');              
+                                return redirect()->to(route('user.sale.index').'?active_tab=misc&date='.$request->sale_date);              
                             }
                             $sale->update([
                                 'price' => $request->price[$key],
@@ -398,7 +398,7 @@ class SaleController extends Controller
                             if($qty > $product->availableStock())
                             {
                                 toastr()->error('Stock is not avaiable');
-                                return redirect()->to(route('user.sale.index').'?active_tab=misc');              
+                                return redirect()->to(route('user.sale.index').'?active_tab=misc&date='.$request->sale_date);              
                             }
                             $sale = Sale::create([
                                 'user_id' => Auth::user()->id,
