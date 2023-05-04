@@ -212,7 +212,7 @@ class User extends Authenticatable
     }
     public function getTodayDieselSale($date)
     {
-        $product = Product::where('name','PMG')->first();
+        $product = Product::where('name','HSD')->first();
         $todaySale = Sale::where('user_id',$this->id)
                         ->where('product_id',$product->id)
                         ->where('type','retail_sale')
