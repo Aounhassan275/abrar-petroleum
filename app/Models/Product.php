@@ -44,6 +44,7 @@ class Product extends Model
             $user_id = Auth::user()->id;
         $total_sale = Sale::where('user_id',$user_id)
                         ->where('type','!=','test')
+                        ->where('product_id',$this->id)
                         ->sum('qty'); 
         return $total_sale;
     }
