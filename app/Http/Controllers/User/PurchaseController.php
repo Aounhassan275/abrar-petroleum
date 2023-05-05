@@ -82,6 +82,12 @@ class PurchaseController extends Controller
                 'account_id' => $account_id,
                 'sale_date' => date('Y-m-d'),
             ]);
+            if($request->product_id == 2)
+            {
+                return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->date);
+            }else{
+                return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->date);
+            }
             toastr()->success('Purchase is Created Successfully');
             return redirect()->back();
 

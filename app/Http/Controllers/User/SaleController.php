@@ -23,13 +23,20 @@ class SaleController extends Controller
     {
         $diesel = Product::where('name','HSD')->first();
         $petrol = Product::where('name','PMG')->first();
+        $sale_date = Sale::all()->last()->sale_date;
         if($request->date)
         {
+            $sale_date->addDay();    
+            if(Carbon::parse($request->date)->gt($sale_date))
+            {
+                toastr()->error('Not Allowed');
+                return back();
+            }
             $date =  Carbon::parse($request->date);
             $day_before =  Carbon::parse($request->date)->subDay();
         }else{
-            $date =  Carbon::today();
-            $day_before = date('Y-m-d',strtotime("-1 days"));
+            $date =  $sale_date->addDay();
+            $day_before = Sale::all()->last()->sale_date;
         }
         $active_tab = $request->active_tab?$request->active_tab:'diesel';
         $accounts = DebitCreditAccount::where('user_id',Auth::user()->id)->orWhereNull('user_id')->where('name','!=','Cash in Hand')->where('name','!=','Sale')->get();
