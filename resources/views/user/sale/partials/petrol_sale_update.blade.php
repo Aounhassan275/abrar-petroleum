@@ -6,7 +6,7 @@
         <label>
             Date
             <input type="text" name="sale_date" id="date" class="daterange-single form-control pull-right dates" style="height: 35px; "
-                   value="{{ date('d/m/Y', strtotime(@$date))}}">
+            value="{{ date('m/d/Y', strtotime(@$date))}}">
         </label>   
     </div>
     <input type="hidden" name="user_id" value="{{Auth::user()->id}}">

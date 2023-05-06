@@ -5,7 +5,7 @@
             <label>
                 Date
                 <input type="text" name="sale_date" id="debit_credit_date" class="daterange-single form-control pull-right dates" style="height: 35px; "
-                    value="{{ date('d/m/Y', strtotime(@$date))}}">
+                value="{{ date('m/d/Y', strtotime(@$date))}}">
             </label>   
         </div>
         <div class="form-group col-8  text-right">

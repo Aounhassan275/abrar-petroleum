@@ -33,7 +33,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label> Date</label>
-                            <input name="date" type="date"  class="form-control"  required>
+                            <input name="date" type="text" readonly value="{{ date('d/m/Y', strtotime(@$date))}}" class="form-control"  required>
                         </div>
                         <div class="form-group col-md-6">
                             <label>Vendor</label>

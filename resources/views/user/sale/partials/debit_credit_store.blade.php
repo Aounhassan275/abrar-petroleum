@@ -5,12 +5,8 @@
             <label>
                 Date
                 <input type="text" name="sale_date" id="debit_credit_date" class="daterange-single form-control pull-right dates" style="height: 35px; "
-                    value="{{ date('d/m/Y', strtotime(@$date))}}">
+                    value="{{ date('m/d/Y', strtotime(@$date))}}">
             </label>   
-        </div>
-        <div class="form-group col-8  text-right">
-            <button type="button" class="btn btn-success add-more-fields">Add More Fields</button>
-            <button type="button" class="btn btn-primary calcluate-debit-credit-values">Calcluate</button>
         </div>
     </div>
 
@@ -117,6 +113,8 @@
         </div>
     </div> 
     <div class="text-right" style="margin-top:10px;">
+        <button type="button" class="btn btn-success add-more-fields">Add More Fields</button>
+        <button type="button" class="btn btn-primary calcluate-debit-credit-values">Calcluate</button>
         <button type="button" id="store-debit-credit-sale" class="btn btn-primary">Post <i class="icon-paperplane ml-2"></i></button>
     </div> 
     
