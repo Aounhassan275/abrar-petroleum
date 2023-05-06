@@ -69,6 +69,7 @@ class Product extends Model
         $test_sale = Sale::where('user_id',Auth::user()->id)
                         ->where('product_id',$this->id)
                         ->where('type','test')
+                        ->whereDate('sale_date',$date)
                         ->where('product_id',$this->id)
                         ->sum('qty'); 
         return $total_sale - $test_sale;
