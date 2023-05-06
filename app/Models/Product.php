@@ -46,7 +46,11 @@ class Product extends Model
                         ->where('type','!=','test')
                         ->where('product_id',$this->id)
                         ->sum('qty'); 
-        return $total_sale;
+        $total_test_sale = Sale::where('user_id',$user_id)
+                        ->where('type','test')
+                        ->where('product_id',$this->id)
+                        ->sum('qty'); 
+        return $total_sale - $total_test_sale;
     }
     public function availableStock($user_id = null)
     {
@@ -59,9 +63,15 @@ class Product extends Model
     {
         $total_sale = Sale::where('user_id',Auth::user()->id)
                         ->where('product_id',$this->id)
+                        ->where('type','!=','test')
                         ->whereDate('sale_date',$date)
                         ->sum('qty'); 
-        return $total_sale;
+        $test_sale = Sale::where('user_id',Auth::user()->id)
+                        ->where('product_id',$this->id)
+                        ->where('type','test')
+                        ->where('product_id',$this->id)
+                        ->sum('qty'); 
+        return $total_sale - $test_sale;
     }
     public function totalTestSale($date)
     {
@@ -88,7 +98,12 @@ class Product extends Model
                         ->whereDate('sale_date',$date)
                         ->where('type','!=','test')
                         ->sum('total_amount'); 
-        return $total_amount;
+        $total_sale_amount = Sale::where('user_id',Auth::user()->id)
+                        ->where('product_id',$this->id)
+                        ->whereDate('sale_date',$date)
+                        ->where('type','test')
+                        ->sum('total_amount'); 
+        return $total_amount - $total_sale_amount;
     }
     public function totalDrAmount($start_date,$end_date)
     {

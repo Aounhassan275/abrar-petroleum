@@ -106,21 +106,21 @@ class User extends Authenticatable
     {
         $product = Product::where('name','PMG')->first();
         $totalQtyStock = Purchase::where('user_id',$this->id)->where('product_id',$product->id)
-                            ->whereDate('date','!=',$date)
+                            ->whereDate('date','<',$date)
                             ->sum('qty');
         $totalAccessStock = Purchase::where('user_id',$this->id)->where('product_id',$product->id)
-                            ->whereDate('date','!=',$date)
+                            ->whereDate('date','<',$date)
                             ->sum('access');
         $totalStock = $totalQtyStock + $totalAccessStock;
         $totalSale = Sale::where('user_id',$this->id)
                         ->where('product_id',$product->id)
                         ->where('type','!=','test')
-                        ->whereDate('sale_date','!=',$date)
+                        ->whereDate('sale_date','<',$date)
                         ->sum('qty');       
         $testSale = Sale::where('user_id',$this->id)
                         ->where('product_id',$product->id)
                         ->where('type','test')
-                        ->whereDate('sale_date','!=',$date)
+                        ->whereDate('sale_date','<',$date)
                         ->sum('qty');
         $sale = $totalSale - $testSale;
         $avaiableStock = $totalStock - $sale;
@@ -200,21 +200,21 @@ class User extends Authenticatable
     {
         $product = Product::where('name','HSD')->first();
         $totalQtyStock = Purchase::where('user_id',$this->id)->where('product_id',$product->id)
-                            ->whereDate('date','!=',$date)
+                            ->whereDate('date','<',$date)
                             ->sum('qty');
         $totalAccessStock = Purchase::where('user_id',$this->id)->where('product_id',$product->id)
-                            ->whereDate('date','!=',$date)
+                            ->whereDate('date','<',$date)
                             ->sum('access');
         $totalStock = $totalQtyStock + $totalAccessStock;
         $totalSale = Sale::where('user_id',$this->id)
                         ->where('product_id',$product->id)
                         ->where('type','!=','test')
-                        ->whereDate('sale_date','!=',$date)
+                        ->whereDate('sale_date','<',$date)
                         ->sum('qty');       
         $testSale = Sale::where('user_id',$this->id)
                         ->where('product_id',$product->id)
                         ->where('type','test')
-                        ->whereDate('sale_date','!=',$date)
+                        ->whereDate('sale_date','<',$date)
                         ->sum('qty');
         $sale = $totalSale - $testSale;
         $avaiableStock = $totalStock - $sale;
@@ -228,7 +228,12 @@ class User extends Authenticatable
                         ->where('type','retail_sale')
                         ->whereDate('sale_date',$date)
                         ->sum('qty');
-        return $todaySale;
+        $todayTestSale = Sale::where('user_id',$this->id)
+                        ->where('product_id',$product->id)
+                        ->where('type','test')
+                        ->whereDate('sale_date',$date)
+                        ->sum('qty');
+        return $todaySale - $todayTestSale;
     }
     public function getTodayDieselPurchase($date)
     {
@@ -281,6 +286,7 @@ class User extends Authenticatable
     public function todaySaleAmount($date)
     {
         $todaySale = Sale::where('user_id',$this->id)
+                        ->where('type','!=','test')
                         ->whereDate('sale_date',$date)
                         ->sum('total_amount');
         $testSale = Sale::where('user_id',$this->id)
