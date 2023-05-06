@@ -73,9 +73,9 @@
             <tr>
                 <td>{{$key+1}}</td>
                 <td>{{$product->name}}</td>
-                <td>PKR {{$product->supplier_purchasing_price}}</td>
-                <td>PKR {{$product->purchasing_price}}</td>
-                <td>PKR {{$product->selling_price}}</td>
+                <td>{{$product->supplier_purchasing_price}}</td>
+                <td>{{$product->purchasing_price}}</td>
+                <td>{{$product->selling_price}}</td>
                 <td>
                     <button data-toggle="modal" data-target="#edit_modal" name="{{$product->name}}"
                         purchasing_price="{{$product->purchasing_price}}" selling_price="{{$product->selling_price}}" 

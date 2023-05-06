@@ -27,9 +27,9 @@
             <tr>
                 <td>{{$key+1}}</td>
                 <td>{{@$purchase->product->name}}</td>
-                <td>PKR {{$purchase->price}}</td>
+                <td>{{$purchase->price}}</td>
                 <td>{{$purchase->qty}}</td>
-                <td>PKR {{$purchase->total_amount}}</td>
+                <td>{{$purchase->total_amount}}</td>
                 <td>{{@$purchase->vendor->name}}</td>
                 <td>{{@$purchase->terminal->name}}</td>
                 <td>

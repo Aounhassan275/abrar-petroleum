@@ -19,7 +19,7 @@
             <td>{{$customer->name .' S/o '. $customer->father_name}}</td>
             <td>{{$customer->cnic}}</td>
             <td>{{$customer->phone}}</td>
-            <td>PKR {{$customer->balance}}</td>
+            <td>{{$customer->balance}}</td>
             <td>
                 <a href="{{route('user.customer.edit',$customer->id)}}" class="btn btn-primary btn-sm">Edit</a>
             </td>

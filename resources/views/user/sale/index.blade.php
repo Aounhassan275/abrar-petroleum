@@ -25,9 +25,9 @@
             <tr>
                 <td>{{$key+1}}</td>
                 <td>{{$sale->product->name}}</td>
-                <td>PKR {{$sale->price}}</td>
+                <td>{{$sale->price}}</td>
                 <td>{{$sale->qty}}</td>
-                <td>PKR {{$sale->total_amount}}</td>
+                <td>{{$sale->total_amount}}</td>
                 <td>
                     <a href="{{route('user.sale.edit',$sale->id)}}" class="btn btn-primary btn-sm">Edit</a>
                 </td>

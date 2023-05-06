@@ -16,8 +16,8 @@
             <td>{{$petrol->totalSale($date)}}</td>
             <td>{{$petrol->totalTestSale($date)}}</td>
             <td>{{$petrol->totalWholeSale($date)}}</td>
-            <td>PKR {{$petrol->getSaleRate($date)}}</td>
-            <td>PKR {{$petrol->totalSaleAmount($date)}}</td>
+            <td>{{$petrol->getSaleRate($date)}}</td>
+            <td>{{$petrol->totalSaleAmount($date)}}</td>
         </tr>
         @endif
         @if($diesel->totalSale($date) > 0 || $diesel->totalTestSale($date) > 0)
@@ -26,8 +26,8 @@
             <td>{{$diesel->totalSale($date)}}</td>
             <td>{{$diesel->totalTestSale($date)}}</td>
             <td>{{$diesel->totalWholeSale($date)}}</td>
-            <td>PKR {{$diesel->getSaleRate($date)}}</td>
-            <td>PKR {{$diesel->totalSaleAmount($date)}}</td>
+            <td>{{$diesel->getSaleRate($date)}}</td>
+            <td>{{$diesel->totalSaleAmount($date)}}</td>
         </tr>
         @endif
         @foreach(Auth::user()->products as $misc_product_index => $misc_product)    
@@ -37,8 +37,8 @@
             <td>{{$misc_product->totalSale($date)}}</td>
             <td>{{$misc_product->totalTestSale($date)}}</td>
             <td>0</td>
-            <td>PKR {{$misc_product->getSaleRate($date)}}</td>
-            <td>PKR {{$misc_product->totalSaleAmount($date)}}</td>
+            <td>{{$misc_product->getSaleRate($date)}}</td>
+            <td>{{$misc_product->totalSaleAmount($date)}}</td>
         </tr>
         @endif
         @endforeach

@@ -25,7 +25,7 @@
             @foreach (Auth::user()->expenses as $expense_key => $expense)
             <tr>
                 <td>{{$expense_key+1}}</td>
-                <td>PKR {{$expense->amount}}</td>
+                <td>{{$expense->amount}}</td>
                 <td>{{@$expense->type->name}}</td>
                 <td>{{@$expense->user->username}}</td>
                 

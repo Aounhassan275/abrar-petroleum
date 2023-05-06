@@ -29,10 +29,10 @@
             <tr>
                 <td>{{$key+1}}</td>
                 <td>{{@$purchase->product->name}}</td>
-                <td>PKR {{$purchase->price}}</td>
+                <td>{{$purchase->price}}</td>
                 <td>{{$purchase->qty}}</td>
                 <td>{{$purchase->access}}</td>
-                <td>PKR {{$purchase->total_amount}}</td>
+                <td>{{$purchase->total_amount}}</td>
                 <td>{{@$purchase->terminal->name}}</td>
                 <td>{{@$purchase->vehicle->name}}</td>
                 <td>{{$purchase->date->format('d M,Y')}}</td>

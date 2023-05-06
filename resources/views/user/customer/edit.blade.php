@@ -129,7 +129,7 @@
                     <img src="{{asset($transcation->image)}}" height="150" width="150" alt="">
                     @endif
                 </td>
-                <td>PKR {{@$transcation->amount}}</td>
+                <td>{{@$transcation->amount}}</td>
                 <td>{{$transcation->type}}</td>
             </tr>
             @endforeach

@@ -114,7 +114,7 @@
                 </td>
                 <td >{{$payment->vendorAccount->title}}</td>
                 <td >{{$payment->date->format('Y-m-d')}}</td>
-                <td>PKR {{$payment->amount}}</td>
+                <td>{{$payment->amount}}</td>
                 <td>
                     <form action="{{route('user.purchase_payment.destroy',$payment->id)}}" method="POST">
                         @method('DELETE')
