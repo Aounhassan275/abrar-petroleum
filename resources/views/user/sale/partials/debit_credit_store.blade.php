@@ -79,7 +79,7 @@
             <input type="text" name="qty[]" class="form-control" readonly >
         </div>
         <div class="form-group col-md-2">
-            <input type="text" name="debit[]" class="form-control" value="0" readonly>
+            <input type="text" name="debit[]" class="form-control" value="" readonly>
 
         </div>
         <div class="form-group col-md-2">
@@ -107,7 +107,7 @@
             <input type="text" name="qty[]" class="form-control" readonly >
         </div>
         <div class="form-group col-md-2">
-            <input type="text" name="debit[]" class="form-control cash_debit_values" id="cash_debit_values" value="0" readonly>
+            <input type="text" name="debit[]" class="form-control cash_debit_values" id="cash_debit_values" value="" readonly>
         </div>
         <div class="form-group col-md-2">
             <input type="text" name="credit[]" class="form-control cash_credit_values" id="cash_credit_values"  readonly>

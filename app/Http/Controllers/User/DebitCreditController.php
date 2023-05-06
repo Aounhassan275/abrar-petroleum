@@ -54,7 +54,7 @@ class DebitCreditController extends Controller
             // $totalCredit = 0;
             foreach($request->account_id as $key => $account_id)
             {
-                if($request->debit[$key] > 0 || $request->credit[$key] > 0)
+                if($request->debit[$key] != null || $request->credit[$key] != null && $request->debit[$key] > 0 || $request->credit[$key] > 0)
                 {    
                     // $totalDebit = $totalDebit + @$request->debit[$key];
                     // $totalCredit = $totalCredit + @$request->credit[$key];
@@ -70,24 +70,12 @@ class DebitCreditController extends Controller
                     ]);
                 }
             }
-            // if($totalDebit > 0 || $totalCredit > 0)
-            // {
-            //     $differenceProduct = $totalCredit - $totalDebit;
-            //     $cash_account_id = DebitCreditAccount::where('name','Cash in Hand')->first()->id;
-            //     DebitCredit::create([
-            //         'user_id' => Auth::user()->id,
-            //         'debit' => $differenceProduct,
-            //         'credit' => 0,
-            //         'account_id' => $cash_account_id,
-            //         'sale_date' => $request->sale_date,
-            //     ]);
-            // }
             toastr()->success('Debit Credit Entry is Created Successfully');
-            return redirect()->to(route('user.sale.index').'?active_tab=debit_credit');
+            return redirect()->to(route('user.sale.index').'?active_tab=debit_credit&date='.$request->sale_date);
         }catch(Exception $e)
         {
             toastr()->error($e->getMessage());
-            return redirect()->to(route('user.sale.index').'?active_tab=debit_credit');
+            return redirect()->to(route('user.sale.index').'?active_tab=debit_credit&date='.$request->sale_date);
         }
     }
 
@@ -143,7 +131,7 @@ class DebitCreditController extends Controller
                 }
                 else
                 {              
-                    if($request->debit[$key] > 0 ||  $request->credit[$key] > 0)
+                    if($request->debit[$key] != null || $request->credit[$key] != null && $request->debit[$key] > 0 || $request->credit[$key] > 0)
                     {
                         DebitCredit::create([
                             'user_id' => Auth::user()->id,
@@ -163,7 +151,7 @@ class DebitCreditController extends Controller
         }catch(Exception $e)
         {
             toastr()->error($e->getMessage());
-            return redirect()->to(route('user.sale.index').'?active_tab=debit_credit');
+            return redirect()->to(route('user.sale.index').'?active_tab=debit_credit&date='.$request->sale_date);
         }
     }
     public function updateForm(Request $request)
@@ -189,7 +177,7 @@ class DebitCreditController extends Controller
                 }
                 else
                 {              
-                    if($request->debit[$key] > 0 ||  $request->credit[$key] > 0)
+                    if($request->debit[$key] != null || $request->credit[$key] != null && $request->debit[$key] > 0 || $request->credit[$key] > 0)
                     {
                         DebitCredit::create([
                             'user_id' => Auth::user()->id,

@@ -23,11 +23,11 @@
         <input type="text" name="qty[]" id="credit_debit_qty_{{$key}}" onchange="debitQuantity('{{ @$key }}')" class="form-control" value="">
     </div>
     <div class="form-group col-md-2">
-        <input type="text" name="debit[]" id="credit_debit_debit_{{$key}}" class="form-control debit_values" value="0">
+        <input type="text" name="debit[]" id="credit_debit_debit_{{$key}}" class="form-control debit_values" value="">
 
     </div>
     <div class="form-group col-md-2">
-        <input type="text" name="credit[]" id="credit_debit_credit_{{$key}}" class="form-control credit_values" value="0">
+        <input type="text" name="credit[]" id="credit_debit_credit_{{$key}}" class="form-control credit_values" value="">
     </div>
     <div class="form-group col-md-2">
         <input type="text" name="description[]" class="form-control" value="">
