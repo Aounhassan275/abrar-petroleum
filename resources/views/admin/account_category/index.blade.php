@@ -28,6 +28,10 @@
                             <label>Name</label>
                             <input name="name" type="text" class="form-control" placeholder="Enter Name" required>
                         </div>
+                        <div class="form-group col-md-3">
+                            <label>Color</label>
+                            <input type="color" class="form-control form-control-color" name="color" id="exampleColorInput" value="#563d7c" title="Choose your color">
+                        </div>
                     </div>
                     <div class="text-right">
                         <button type="submit" class="btn btn-primary">Create <i class="icon-paperplane ml-2"></i></button>
@@ -48,6 +52,7 @@
             <tr>
                 <th>#</th>
                 <th colspan="3">Name</th>
+                <th>Color</th>
                 <th>Action</th>
                 <th>Action</th>
             
@@ -58,10 +63,10 @@
             <tr>
                 <td>{{$key+1}}</td>
                 <td colspan="3">{{$account_category->name}}</td>
-                
+                <td>{{$account_category->color}}</td>
                 <td>
                     <button data-toggle="modal" data-target="#edit_modal" name="{{$account_category->name}}"
-                        id="{{$account_category->id}}" class="edit-btn btn btn-primary">Edit</button>
+                        color="{{$account_category->color}}" id="{{$account_category->id}}" class="edit-btn btn btn-primary">Edit</button>
                 </td>
                 <td>
                     <form action="{{route('admin.account_category.destroy',$account_category->id)}}" method="POST">
@@ -93,6 +98,10 @@
                         <label for="name">Name</label>
                         <input class="form-control" type="text" id="name" name="name" placeholder="Enter Name" required>
                     </div>
+                    <div class="form-group">
+                        <label for="color">Color</label>
+                        <input type="color" class="form-control form-control-color" name="color" id="color" title="Choose your color">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Cancel</button>
@@ -110,6 +119,8 @@
         $('.edit-btn').click(function(){
             let id = $(this).attr('id');
             let name = $(this).attr('name');
+            let color = $(this).attr('color');
+            $('#color').val(color);
             $('#name').val(name);
             $('#id').val(id);
             $('#updateForm').attr('action','{{route('admin.account_category.update','')}}' +'/'+id);

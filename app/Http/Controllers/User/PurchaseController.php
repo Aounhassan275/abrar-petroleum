@@ -72,7 +72,7 @@ class PurchaseController extends Controller
                     'qty' => @$purchase->access,
                     'credit' => @$creditAmount,
                     'account_id' => $account_id,
-                    'sale_date' => date('Y-m-d'),
+                    'sale_date' => $purchase->date,
                 ]);
             }
             $account_id  = DebitCreditAccount::where('product_id',$request->product_id)->first()->id;
@@ -80,8 +80,19 @@ class PurchaseController extends Controller
                 'user_id' => Auth::user()->id,
                 'debit' => @$purchase->total_amount,
                 'account_id' => $account_id,
-                'sale_date' => date('Y-m-d'),
+                'sale_date' => $purchase->date,
             ]);
+            if($request->supplier_id)
+            {
+                $supplier_account_id  = DebitCreditAccount::where('supplier_id',$request->supplier_id)->first()->id;
+                DebitCredit::create([
+                    'user_id' => Auth::user()->id,
+                    'credit' => @$purchase->total_amount,
+                    'account_id' => $supplier_account_id,
+                    'sale_date' => $purchase->date,
+                    'description' => $purchase->qty.' litres '.$purchase->product->name,
+                ]);
+            }
             if($request->product_id == 2)
             {
                 return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->date);

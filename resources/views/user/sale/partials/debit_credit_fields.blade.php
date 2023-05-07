@@ -5,9 +5,9 @@
     </div>
     <div class="form-group col-md-2">
         <select name="account_id[]" id="credit_debit_account_{{$key}}" class="form-control select-search">
-            <option>Select</option>
+            <option value="">Select</option>
             @foreach($accounts as $account)
-            <option value="{{$account->id}}">{{$account->name}}</option>
+            <option value="{{$account->id}}">{{$account->name}} @if($account->designation) ({{@$account->designation}}) @endif</option>
             @endforeach
         </select>
     </div>

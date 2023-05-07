@@ -31,10 +31,7 @@
                             <label>Product Access</label>
                             <input name="access" type="text" value="{{old('access')?old('access'):0}}" class="form-control" placeholder="Enter Product Access" required>
                         </div>
-                        <div class="form-group col-md-6">
-                            <label> Date</label>
-                            <input name="date" type="text" readonly value="{{ date('d/m/Y', strtotime(@$date))}}" class="form-control"  required>
-                        </div>
+                        <input type="hidden" name="date" value="{{@$date}}">
                         <div class="form-group col-md-6">
                             <label>Vendor</label>
                             <select class="form-control select-search" name="vendor_id" id="vendor_id" data-fouc>

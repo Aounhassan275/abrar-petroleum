@@ -111,8 +111,6 @@ class DebitCreditController extends Controller
     public function update(Request $request,$id)
     {
         try{
-            // $totalDebit = 0;
-            // $totalCredit = 0;
             foreach($request->account_id as $key => $account_id)
             {
                 if($request->debit_credit_id[$key])

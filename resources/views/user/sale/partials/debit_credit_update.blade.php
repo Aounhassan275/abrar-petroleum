@@ -8,10 +8,6 @@
                 value="{{ date('m/d/Y', strtotime(@$date))}}">
             </label>   
         </div>
-        <div class="form-group col-8  text-right">
-            <button type="button" class="btn btn-success add-more-fields">Add More Fields</button>
-            <button type="button" class="btn btn-primary calcluate-debit-credit-values-for-updates">Calcluate</button>
-        </div>
     </div>
 
     <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
@@ -95,7 +91,7 @@
         <input type="hidden" name="debit_credit_id[]" value="{{$debit_credit->id}}">
         <div class="form-group col-md-1"></div>
         <div class="form-group col-md-2">
-            <select name="account_id[]" class="form-control" @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly @endif>
+            <select name="account_id[]" class="form-control" required @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly @endif>
                 @if($debit_credit->account_id == 42)
                     <option selected value="42">Sale</option>
                 @elseif($debit_credit->account_id == $cash_account_id)
@@ -144,7 +140,7 @@
         <div class="form-group col-md-1"></div>
         <div class="form-group col-md-2">
             <input type="hidden" name="debit_credit_id[]" value="">
-            <select name="account_id[]" class="form-control" readonly>
+            <select name="account_id[]" class="form-control" required readonly>
                 <option selected value="{{$cash_account_id}}">Cash In Hand</option>
 
             </select>
@@ -167,7 +163,9 @@
         </div>
     </div> 
     @endif
-    <div class="text-right" style="margin-top:10px;">
+    <div class="text-right" style="margin-top:10px;"> 
+        <button type="button" class="btn btn-success add-more-fields">Add More Fields</button>
+        <button type="button" class="btn btn-primary calcluate-debit-credit-values">Calcluate</button>
         <button type="button" id="update-debit-credit-sale" class="btn btn-primary">Post <i class="icon-paperplane ml-2"></i></button>
     </div> 
     

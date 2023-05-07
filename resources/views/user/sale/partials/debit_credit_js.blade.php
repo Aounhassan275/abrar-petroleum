@@ -14,6 +14,7 @@
                 success: function(response){
                     key_value = key_value + 1;
                     $('#debit_credit_field').append(response.html);
+                    $("html, body").animate({ scrollTop: $(document).height()-$(window).height() });
                 }
             });
         });

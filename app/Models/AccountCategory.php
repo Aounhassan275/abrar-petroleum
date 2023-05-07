@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 class AccountCategory extends Model
 {
     protected $fillable = [
-        'name'
+        'name','color'
     ];
     public function debitCreditAccount()
     {
