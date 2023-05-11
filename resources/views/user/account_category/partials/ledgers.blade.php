@@ -1,3 +1,7 @@
+<p>Petrol Ledger 
+    <span class="badge badge-success">Opening Stock : {{Auth::user()->getPetrolOpeningBalance($start_date)}}</span>
+    <span class="badge badge-info">Amount : {{Auth::user()->getTodayPetrolPurchasePrice($start_date) * Auth::user()->getPetrolOpeningBalance($start_date)}}</span>
+</p>
 <table class="table datatable-button-html5-basic">
     <thead>
         <tr>
@@ -16,13 +20,14 @@
         @php 
         $totalPurchase = 0;
         $totalSale = 0;
-        $totalQunatity = 0;
+        $totalQunatity = Auth::user()->getPetrolOpeningBalance($start_date);
         $quantityBalance = 0;
         $totalDebit = 0;
         $totalCredit = 0;
-        $amountBalance = 0;
+        $amountBalance = -(Auth::user()->getTodayPetrolPurchasePrice($start_date) * Auth::user()->getPetrolOpeningBalance($start_date));
         @endphp
         @foreach($dates as $key => $date)
+        
         @if(Auth::user()->getTodayPetrolPurchase($date) > 0 || Auth::user()->getTodayPetrolSale($date) > 0)
         @php 
             $totalPurchase = $totalPurchase + Auth::user()->getTodayPetrolPurchase($date);

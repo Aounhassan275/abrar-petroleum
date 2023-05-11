@@ -35,14 +35,17 @@
         @php 
         $totalDebit = 0;
         $totalCredit = 0;
+        $is_working_captial = false;
         @endphp
         @foreach($accounts as $key => $account)
-        @if($account->debitCredits($start_date,$end_date) < 0 || $account->debitCredits($start_date,$end_date) > 0)
+        @if($account->name != 'Sale' && ($account->debitCredits($start_date,$end_date) < 0 || $account->debitCredits($start_date,$end_date) > 0))
         <tr>
             <td>{{@$account->name}}</td>
             <td>{{@$account->accountCategory->name}}</td>
             <td>
-                @if($account->debitCredits($start_date,$end_date) < 0)
+                @if($account->name == "Cash in Hand")
+                {{abs(@$lastDayCash->debit)}}
+                @elseif($account->debitCredits($start_date,$end_date) < 0)
                 {{abs($account->debitCredits($start_date,$end_date))}}
                 @endif
             </td>
@@ -53,15 +56,49 @@
             </td>
         </tr>
         @php 
-        if($account->debitCredits($start_date,$end_date) < 0)
+        if($account->name == "Cash in Hand")
         {
-            $totalDebit += abs($account->debitCredits($start_date,$end_date));
+            if($account->debit < 0)
+            {
+                $totalDebit += abs($account->debit);
+            }else{
+                $totalCredit += abs($account->debit);
+            }
+
         }else{
-            $totalCredit += abs($account->debitCredits($start_date,$end_date));
+            if($account->debitCredits($start_date,$end_date) < 0)
+            {
+                $totalDebit += abs($account->debitCredits($start_date,$end_date));
+            }else{
+                $totalCredit += abs($account->debitCredits($start_date,$end_date));
+            }
+        }
+        if($account->name == "Working Capital")
+        {
+            $is_working_captial = true;
         }
         @endphp
         @endif
         @endforeach
+        @if($is_working_captial == false)
+        <tr>
+            <td>Working Capital</td>
+            <td>Primary Account</td>
+            <td>
+                
+            <td>
+                {{$workingCaptial->credit}}
+            </td>
+        </tr>
+        @php 
+            if($account->credit < 0)
+            {
+                $totalDebit += abs($account->credit);
+            }else{
+                $totalCredit += abs($account->credit);
+            }
+        @endphp
+        @endif
         <tr>
             <td colspan="2" class="text-center">Total Balance</td>
             <td>{{$totalDebit}}</td>
