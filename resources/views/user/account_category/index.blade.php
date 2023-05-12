@@ -67,7 +67,7 @@
                             </form>
                             @include('user.account_category.partials.debit_credits')
                             @if($account_category->name == "Products")
-                                @include('user.account_category.partials.ledgers')
+                                {{-- @include('user.account_category.partials.ledgers') --}}
                                 @include('user.product.index')
                             @else
                             <div class="row" style="margin-top:20px!important;">

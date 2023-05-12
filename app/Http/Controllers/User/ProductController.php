@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\AccountCategory;
 use App\Models\DebitCreditAccount;
 use App\Models\Product;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -76,9 +78,21 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show($id,Request $request)
     {
-        //
+        $product = Product::find($id); 
+        if($request->start_date)
+        {
+            $start_date = Carbon::parse($request->start_date);
+            $end_date = Carbon::parse($request->end_date);
+        }else{
+            $start_date = Carbon::now()->startOfMonth();
+            $end_date = Carbon::today();
+        }
+        $dateRange = CarbonPeriod::create($start_date, $end_date);
+        $dates = array_map(fn ($date) => $date->format('Y-m-d'), iterator_to_array($dateRange));
+       
+        return view('user.product.show',compact('product','dates','start_date','end_date'));
     }
 
     /**

@@ -51,27 +51,35 @@
                 <th>Product Name</th>
                 <th>Product Purchasing Price</th>
                 <th>Product Selling Price</th>
+                <th>Ledger</th>
                 <th>Action</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (Auth::user()->products as $key => $product)
+            @foreach (App\Models\Product::whereNull('user_id')->orWhere('user_id',Auth::user()->id)->get() as $key => $product)
             <tr>
                 <td>{{$key+1}}</td>
                 <td>{{$product->name}}</td>
                 <td>{{$product->purchasing_price}}</td>
                 <td>{{$product->selling_price}}</td>
                 <td>
-                    <button data-toggle="modal" data-target="#edit_modal" name="{{$product->name}}"
-                        purchasing_price="{{$product->purchasing_price}}" selling_price="{{$product->selling_price}}" id="{{$product->id}}" class="edit-btn btn btn-primary">Edit</button>
+                    <a href="{{route('user.product.show',$product->id)}}" target="_blank">Show Ledger</a>
                 </td>
                 <td>
+                    @if($product->user_id)
+                    <button data-toggle="modal" data-target="#edit_modal" name="{{$product->name}}"
+                        purchasing_price="{{$product->purchasing_price}}" selling_price="{{$product->selling_price}}" id="{{$product->id}}" class="edit-btn btn btn-primary">Edit</button>
+                    @endif
+                </td>
+                <td>
+                    @if($product->user_id)
                     <form action="{{route('user.product.destroy',$product->id)}}" method="POST">
                         @method('DELETE')
                         @csrf
                     <button class="btn btn-danger">Delete</button>
                     </form>
+                    @endif
                 </td>
             </tr>
             @endforeach

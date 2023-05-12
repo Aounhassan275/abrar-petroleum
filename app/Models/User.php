@@ -126,6 +126,71 @@ class User extends Authenticatable
         $avaiableStock = $totalStock - $sale;
         return $avaiableStock;
     }
+    public function getOpeningBalance($date,$product)
+    {
+        $totalQtyStock = Purchase::where('user_id',$this->id)->where('product_id',$product->id)
+                            ->whereDate('date','<',$date)
+                            ->sum('qty');
+        $totalAccessStock = Purchase::where('user_id',$this->id)->where('product_id',$product->id)
+                            ->whereDate('date','<',$date)
+                            ->sum('access');
+        $totalStock = $totalQtyStock + $totalAccessStock;
+        $totalSale = Sale::where('user_id',$this->id)
+                        ->where('product_id',$product->id)
+                        ->where('type','!=','test')
+                        ->whereDate('sale_date','<',$date)
+                        ->sum('qty');       
+        $testSale = Sale::where('user_id',$this->id)
+                        ->where('product_id',$product->id)
+                        ->where('type','test')
+                        ->whereDate('sale_date','<',$date)
+                        ->sum('qty');
+        $sale = $totalSale - $testSale;
+        $avaiableStock = $totalStock - $sale;
+        return $avaiableStock;
+    }
+    public function getTodaySale($date,$product)
+    {
+        $todaySale = Sale::where('user_id',$this->id)
+                        ->where('product_id',$product->id)
+                        ->where('type','retail_sale')
+                        ->whereDate('sale_date',$date)
+                        ->sum('qty');
+        $testSale = Sale::where('user_id',$this->id)
+                        ->where('product_id',$product->id)
+                        ->where('type','test')
+                        ->whereDate('sale_date',$date)
+                        ->sum('qty');
+        return $todaySale - $testSale;
+    }
+    public function getTodaySaleTotalAmount($date,$product)
+    {
+        $todaySale = Sale::where('user_id',$this->id)
+                        ->where('product_id',$product->id)
+                        ->where('type','retail_sale')
+                        ->whereDate('sale_date',$date)
+                        ->sum('total_amount');
+        return $todaySale;
+    }
+    public function getTodayPurchaseTotalAmount($date,$product)
+    {
+        $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('date',$date)->sum('total_amount');
+        return $todayPurchase;
+    }
+    public function getTodayPurchasePrice($date,$product)
+    {
+        $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('date',$date)->first();
+        return $todayPurchase ? $todayPurchase->price : 0;
+    }
+    public function getTodaySalePrice($date,$product)
+    {
+        $todaySale = Sale::where('user_id',$this->id)
+                        ->where('product_id',$product->id)
+                        ->where('type','retail_sale')
+                        ->whereDate('sale_date',$date)
+                        ->first();
+        return $todaySale?$todaySale->price:0;
+    }
     public function getTodayPetrolSale($date)
     {
         $product = Product::where('name','PMG')->first();
@@ -179,6 +244,21 @@ class User extends Authenticatable
         $product = Product::where('name','PMG')->first();
         $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('date',$date)->first();
         return $todayPurchase ? $todayPurchase->price : 0;
+    }
+    public function getPurchasePrice($date,$product)
+    {
+        $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('date',$date)->first();
+        if(!$todayPurchase)
+        {
+            $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('date','<',$date)->orderBy('date','DESC')->first();
+        }
+        return $todayPurchase ? $todayPurchase->price : 0;
+    }
+    public function getTodayPurchase($date,$product)
+    {
+        $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('date',$date)->sum('qty');
+        $todayAccessPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('date',$date)->sum('access');
+        return $todayPurchase + $todayAccessPurchase;
     }
     public function totalExpense($start_date,$end_date)
     {

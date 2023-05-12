@@ -1,6 +1,26 @@
 <script>
     $(document).ready(function(){
         var key_value = 1;
+        $(document).keypress(function(event){
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if(keycode == '93'){
+                $.ajax({
+                    url: "{{route('user.debit_credit.get_credit_fields')}}",
+                    method: 'post',
+                    data: {
+                        key : key_value,
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    success: function(response){
+                        key_value = key_value + 1;
+                        $('#debit_credit_field').append(response.html);
+                        $("html, body").animate({ scrollTop: $(document).height()-$(window).height() });
+                    }
+                });
+            }
+        });
         $('.add-more-fields').click(function(){
             $.ajax({
                 url: "{{route('user.debit_credit.get_credit_fields')}}",
