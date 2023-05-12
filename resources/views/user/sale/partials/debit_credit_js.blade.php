@@ -33,6 +33,7 @@
             });
         });
         $('.calcluate-debit-credit-values-for-updates').click(function(){
+            alert(132);
             $.ajax({
                 url: "{{route('user.debit_credit.calculate_debit_credit_values')}}",
                 method: 'POST',

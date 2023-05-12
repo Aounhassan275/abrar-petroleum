@@ -165,7 +165,7 @@
     @endif
     <div class="text-right" style="margin-top:10px;"> 
         <button type="button" class="btn btn-success add-more-fields">Add More Fields</button>
-        <button type="button" class="btn btn-primary calcluate-debit-credit-values">Calcluate</button>
+        <button type="button" class="btn btn-primary calcluate-debit-credit-values-for-updates">Calcluate</button>
         <button type="button" id="update-debit-credit-sale" class="btn btn-primary">Post <i class="icon-paperplane ml-2"></i></button>
     </div> 
     
