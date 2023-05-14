@@ -46,7 +46,6 @@ class SaleController extends Controller
                 ->where('debit_credit_accounts.user_id',Auth::user()->id)
                 ->orWhereNull('debit_credit_accounts.user_id')
                 ->groupBy('debit_credits.account_id')
-                ->groupBy('debit_credits.account_id')
                 ->orderBy('accounts', 'DESC')->get();
         $cash_account_id = DebitCreditAccount::where('name','Cash in Hand')->first()->id;
         $lastDayCash = DebitCredit::where('account_id',$cash_account_id)->whereDate('sale_date',$day_before)->first();
