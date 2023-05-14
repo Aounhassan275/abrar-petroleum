@@ -1,7 +1,7 @@
 @extends('user.layout.index')
 
 @section('title')
-    Manage Purchase
+    Manage Purchase or Add Access
 @endsection
 @section('content')
 <div class="card">
@@ -15,10 +15,10 @@
                 <th>Product</th>
                 <th>Price</th>
                 <th>Qty</th>
+                <th>Access</th>
                 <th>Total Amount</th>
                 <th>Vendor Name</th>
                 <th>Vendor Terminal</th>
-                <th>Action</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -29,18 +29,12 @@
                 <td>{{@$purchase->product->name}}</td>
                 <td>{{$purchase->price}}</td>
                 <td>{{$purchase->qty}}</td>
+                <td>{{$purchase->access}}</td>
                 <td>{{$purchase->total_amount}}</td>
                 <td>{{@$purchase->vendor->name}}</td>
                 <td>{{@$purchase->terminal->name}}</td>
                 <td>
                     <a href="{{route('user.purchase.edit',$purchase->id)}}" class="btn btn-primary btn-sm">Edit</a>
-                </td>
-                <td>
-                    <form action="{{route('user.purchase.destroy',$purchase->id)}}" method="POST">
-                        @method('DELETE')
-                        @csrf
-                    <button class="btn btn-danger btn-sm">Delete</button>
-                    </form>
                 </td>
             </tr>
             @endforeach

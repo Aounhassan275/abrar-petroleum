@@ -34,21 +34,21 @@
                     <div @if($active_tab == $account_category->id)  class="tab-pane fade show active" @else class="tab-pane fade" @endif id="top-tab{{$index}}">
                         <div class="card-body">
                             <form method="GET" id="searchForm">
+                                <input type="hidden" name="active_tab" value="{{ $account_category->id}}">
                                 <div class="row">
-                                    <div class="form-group col-3">
-                                        <label>
-                                            Start Date
+                                    <div class="form-group col-2">
+                                        <label>Start Date</label> 
                                             <input type="text" name="start_date" class="daterange-single form-control pull-right dates" style="height: 35px; "
                                                 value="{{ date('m/d/Y', strtotime(@$start_date))}}">
-                                        </label>   
+                                          
                                     </div>
-                                    <div class="form-group col-3">
+                                    <div class="form-group col-2">
                                         <label>
                                             End Date
+                                        </label>   
 
                                             <input type="text" name="end_date" class="daterange-single form-control pull-right dates" style="height: 35px; "
                                                 value="{{ date('m/d/Y', strtotime(@$end_date))}}">
-                                        </label>   
                                     </div>
                                     <div class="form-group col-3">
                                         <label>Choose Sub Account</label> 
@@ -59,15 +59,23 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="form-group col-3">
+                                    <div class="form-group col-2">
+                                        <label>Type</label> 
+                                        <select name="type" class="form-control select-search">
+                                            <option value="By Date">By Date</option>  
+                                            <option {{request()->type == "All"?'selected':''}} value="All">All</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-2">
                                         <br>
-                                        <button type="button" id="search-form-btn" class="btn btn-primary">Search</button>
+                                        <button type="submit" id="search-form-btn" class="btn btn-primary">Search</button>
                                     </div>
                                 </div>
                             </form>
+                            @if($sub_account && $active_tab == $account_category->id)
                             @include('user.account_category.partials.debit_credits')
+                            @endif
                             @if($account_category->name == "Products")
-                                {{-- @include('user.account_category.partials.ledgers') --}}
                                 @include('user.product.index')
                             @else
                             <div class="row" style="margin-top:20px!important;">

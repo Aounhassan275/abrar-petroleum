@@ -363,6 +363,14 @@ class User extends Authenticatable
                         ->first();  
         return $sale;
     }
+    public function getDip($date,$product)
+    {   
+        $dip = Dip::where('user_id',$this->id)
+                        ->where('product_id',$product->id)
+                        ->whereDate('date',$date)
+                        ->first();  
+        return $dip;
+    }
     public function todaySaleAmount($date)
     {
         $todaySale = Sale::where('user_id',$this->id)

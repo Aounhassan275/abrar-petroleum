@@ -71,6 +71,28 @@
     {
         $('#remove-'+index).remove();
     }
+    function checkColor(index)
+    {
+        var account_id = $('#credit_debit_account_' + index).val();
+        $.ajax({
+            url: "{{route('user.debit_credit.get_color')}}",
+            method: 'post',
+            data: {
+                id : account_id,
+            },
+            headers: {
+                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+            },
+            success: function(response){
+                $('#credit_debit_account_' + index).attr('style','color:'+response.color+'!important;');
+                $('#credit_debit_product_' + index).attr('style','color:'+response.color+'!important;');
+                $('#credit_debit_qty_' + index).attr('style','color:'+response.color+'!important;');
+                $('#credit_debit_debit_' + index).attr('style','color:'+response.color+'!important;');
+                $('#credit_debit_credit_' + index).attr('style','color:'+response.color+'!important;');
+                $('#credit_debit_description_' + index).attr('style','color:'+response.color+'!important;');
+            }
+        });
+    }
     function debitQuantity(index)
     {
         var qty = $('#credit_debit_qty_' + index).val();

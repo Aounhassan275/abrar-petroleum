@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\DebitCredit;
 use App\Models\DebitCreditAccount;
+use App\Models\Dip;
 use App\Models\Product;
 use App\Models\Sale;
 use Carbon\Carbon;
@@ -39,7 +40,14 @@ class SaleController extends Controller
             $day_before = Sale::all()->last()->sale_date;
         }
         $active_tab = $request->active_tab?$request->active_tab:'diesel';
-        $accounts = DebitCreditAccount::where('user_id',Auth::user()->id)->orWhereNull('user_id')->where('name','!=','Cash in Hand')->where('name','!=','Sale')->get();
+        $accounts =   DebitCreditAccount::select('debit_credit_accounts.*')
+                ->join('debit_credits', 'debit_credit_accounts.id', 'debit_credits.account_id')
+                ->selectRaw('count(debit_credits.account_id) as accounts')
+                ->where('debit_credit_accounts.user_id',Auth::user()->id)
+                ->orWhereNull('debit_credit_accounts.user_id')
+                ->groupBy('debit_credits.account_id')
+                ->groupBy('debit_credits.account_id')
+                ->orderBy('accounts', 'DESC')->get();
         $cash_account_id = DebitCreditAccount::where('name','Cash in Hand')->first()->id;
         $lastDayCash = DebitCredit::where('account_id',$cash_account_id)->whereDate('sale_date',$day_before)->first();
         $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
@@ -145,6 +153,15 @@ class SaleController extends Controller
                         'type' => 'whole_sale',
                         'sale_date' => $request->sale_date,
                         'qty' => $request->wholesale_quantity,
+                    ]);
+                }
+                if($request->dip)
+                {
+                    Dip::create([
+                        'user_id' => Auth::user()->id,
+                        'product_id' => $request->product_id,
+                        'access' => $request->dip,
+                        'date' => $request->sale_date,
                     ]);
                 }
                 toastr()->success('Sale is Created Successfully');
@@ -375,6 +392,24 @@ class SaleController extends Controller
                         ]);
                     }
 
+                }
+                
+                if($request->dip)
+                {
+                    if($request->dip_id)
+                    {
+                        $dip = Dip::find($request->dip);
+                        $dip->update([
+                            'access' => $request->dip,
+                        ]);
+                    }else{
+                        Dip::create([
+                            'user_id' => Auth::user()->id,
+                            'product_id' => $request->product_id,
+                            'access' => $request->dip,
+                            'date' => $request->sale_date,
+                        ]);
+                    }
                 }
                 toastr()->success('Sale is Created Successfully');
                 if($product->name == 'PMG')

@@ -101,6 +101,13 @@
             <input type="number" class="form-control" name="wholesale_total_amount" id="diesel_wholesale_total_amount" value="{{Auth::user()->getWholeSale($date,$diesel)?Auth::user()->getWholeSale($date,$diesel)->total_amount:null}}">
         </div>
     </div>
+    <div class="row">
+        <input type="hidden" name="dip_id" value="{{Auth::user()->getDip($date,$diesel)?Auth::user()->getDip($date,$diesel)->id:''}}">
+        <div class="form-group col-md-2">
+            <label>Dip</label>
+            <input type="number" class="form-control" name="dip" value="{{Auth::user()->getDip($date,$diesel)?Auth::user()->getDip($date,$diesel)->access:''}}">
+        </div>
+    </div>
     
     <div class="row">
         <table class="table">
@@ -131,7 +138,7 @@
                 </tr>
                 <tr>
                     <td>Sales</td>
-                    <td>{{Auth::user()->getTodayDieselSale($date)}}</td>
+                    <td id="diesel_sales">{{Auth::user()->getTodayDieselSale($date)}}</td>
                 </tr>
                 <tr>
                     <td>Closing</td>

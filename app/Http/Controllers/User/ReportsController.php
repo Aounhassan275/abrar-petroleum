@@ -25,6 +25,7 @@ class ReportsController extends Controller
         }
         $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
         $active_tab = $request->active_tab?$request->active_tab:'trail_balance';
+        $product_account_category_id = AccountCategory::where('name','Products')->first()->id;
         $accounts = DebitCreditAccount::where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
         $category_id = AccountCategory::where('name','Expenses & Income')->first()->id;
         $cash_account_id = DebitCreditAccount::where('name','Cash in Hand')->first()->id;
@@ -32,6 +33,6 @@ class ReportsController extends Controller
         $working_captial_id = DebitCreditAccount::where('name','Working Capital')->first()->id;
         $workingCaptial = DebitCredit::where('account_id',$working_captial_id)->orderBy('sale_date','DESC')->first();
         $expenseAccounts = DebitCreditAccount::where('user_id',Auth::user()->id)->orWhereNull('user_id')->where('account_category_id',$category_id)->get();
-        return view('user.reports.index',compact('active_tab','start_date','end_date','products','accounts','expenseAccounts','lastDayCash','workingCaptial'));   
+        return view('user.reports.index',compact('active_tab','start_date','end_date','products','accounts','expenseAccounts','lastDayCash','workingCaptial','product_account_category_id'));   
     }
 }

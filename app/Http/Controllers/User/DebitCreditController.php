@@ -212,11 +212,26 @@ class DebitCreditController extends Controller
     public function getCreditFields(Request $request)
     {
         $key = $request->key;
-        $accounts = DebitCreditAccount::where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
+        $accounts =   DebitCreditAccount::select('debit_credit_accounts.*')
+                ->join('debit_credits', 'debit_credit_accounts.id', 'debit_credits.account_id')
+                ->selectRaw('count(debit_credits.account_id) as accounts')
+                ->where('debit_credit_accounts.user_id',Auth::user()->id)
+                ->orWhereNull('debit_credit_accounts.user_id')
+                ->groupBy('debit_credits.account_id')
+                ->groupBy('debit_credits.account_id')
+                ->orderBy('accounts', 'DESC')->get();
         $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
         $html = view('user.sale.partials.debit_credit_fields', compact('key','accounts','products'))->render();
         return response([
             'html' => $html,
+        ], 200);
+    }
+    public function getColor(Request $request)
+    {
+        $account = DebitCreditAccount::find($request->id);
+        return response([
+            'account_category' => @$account->accountCategory,
+            'color' => @$account->accountCategory->color,
         ], 200);
     }
     public function calculateDebitCreditValues(Request $request)

@@ -3,6 +3,10 @@
 @section('title')
     {{$product->name}} Ledger
 @endsection
+
+@section('css')
+<script src="{{asset('admin/global_assets/js/demo_pages/picker_date.js')}}"></script>
+@endsection
 @section('content')
 <div class="card">
     <div class="card-header header-elements-inline">
@@ -11,6 +15,30 @@
             <span class="badge badge-info">Amount : {{Auth::user()->getPurchasePrice($start_date,$product) * Auth::user()->getOpeningBalance($start_date,$product)}}</span>
         </p>
     </div>
+    <form method="GET">
+        <div class="row col-md-12">
+            <input type="hidden" name="active_tab" value="trail_balance">
+            <div class="form-group col-2">
+                <label>
+                    Start Date
+                    <input type="text" name="start_date" class="daterange-single form-control pull-right dates" style="height: 35px; "
+                        value="{{ date('m/d/Y', strtotime(@$start_date))}}">
+                </label>   
+            </div>
+            <div class="form-group col-2">
+                <label>
+                    End Date
+    
+                    <input type="text" name="end_date" class="daterange-single form-control pull-right dates" style="height: 35px; "
+                        value="{{ date('m/d/Y', strtotime(@$end_date))}}">
+                </label>   
+            </div>
+            <div class="form-group col-2">
+                <br>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+    </form>
     <table class="table datatable-button-html5-basic">
         <thead>
             <tr>

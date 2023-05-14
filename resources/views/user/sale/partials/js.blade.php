@@ -18,6 +18,10 @@
                 var price = $('#petrol_price_' + index).val();
                 total_amount = parseFloat(price*qty);
                 $('#petrol_total_amount_' + index).val(total_amount.toFixed(2));
+                var petrol_sales = $('#petrol_sales').html();
+                petrol_sales = parseFloat(petrol_sales);
+                petrol_sales_qty = petrol_sales + qty;
+                $('#petrol_sales').html(petrol_sales_qty);
             }else{
                 alert('Current Reading is Less than Previous Reading');
                 $('#petrol_current_reading_' + index).val();
@@ -65,6 +69,10 @@
                 var price = $('#diesel_price_' + index).val();
                 total_amount = parseFloat(price*qty);
                 $('#diesel_total_amount_' + index).val(total_amount.toFixed(2));
+                var diesel_sales = $('#diesel_sales').html();
+                diesel_sales = parseFloat(diesel_sales);
+                diesel_sales_qty = diesel_sales + qty;
+                $('#diesel_sales').html(diesel_sales_qty);
             }else{
                 alert('Current Reading is Less than Previous Reading');
                 $('#diesel_current_reading_' + index).val();

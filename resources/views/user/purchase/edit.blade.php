@@ -16,7 +16,7 @@
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label>Products</label>
-                            <select class="form-control select-search" name="product_id" id="product_id" required data-fouc>
+                            <select class="form-control select-search" name="product_id" readonly id="product_id" required data-fouc>
                                 <option value="">Choose  Product</option>
                                 @foreach(App\Models\Product::all() as $product)    
                                 <option @if($purchase->product_id == $product->id) selected @endif value="{{$product->id}}">{{$product->name}}</option>
@@ -29,7 +29,11 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label>Product Qty</label>
-                            <input name="qty" id="qty" type="text" value="{{$purchase->qty}}" class="form-control" placeholder="Enter Product Quantity" required>
+                            <input name="qty" id="qty" type="text" value="{{$purchase->qty}}" class="form-control" placeholder="Enter Product Quantity" required readonly>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Product Access</label>
+                            <input name="access" type="text" value="{{$purchase->access}}" class="form-control" placeholder="Enter Product Access" required>
                         </div>
                         <div class="form-group col-md-6">
                             <label>Product Total Amount</label>
@@ -58,7 +62,7 @@
                         @else 
                         <div class="form-group col-md-6" id="supplier_field">
                             <label>Supplier</label>
-                            <select class="form-control select-search" name="supplier_id"readonly>
+                            <select class="form-control select-search" name="supplier_id" readonly>
                                 <option selected value="{{App\Models\Supplier::first()->id}}">{{App\Models\Supplier::first()->name}}</option>
                                 
                             </select>

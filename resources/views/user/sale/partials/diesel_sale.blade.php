@@ -42,7 +42,7 @@
             @if($key == 0)
             <label>Qty</label>
             @endif
-            <input name="qty[]" id="diesel_qty_{{$key}}" type="text" value="{{old('qty')}}" class="form-control" placeholder="Enter Product Quantity"  readonly>
+            <input name="qty[]" id="diesel_qty_{{$key}}" type="text" value="{{old('qty')}}" class="form-control desiel_qty" placeholder="Enter Product Quantity"  readonly>
         </div>
     </div>
     @endforeach
@@ -93,6 +93,12 @@
         </div>
     </div>
     <div class="row">
+        <div class="form-group col-md-2">
+            <label>Dip</label>
+            <input type="number" class="form-control" name="dip">
+        </div>
+    </div>
+    <div class="row">
         <table class="table">
             <thead>
                 <tr>
@@ -121,7 +127,7 @@
                 </tr>
                 <tr>
                     <td>Sales</td>
-                    <td>{{Auth::user()->getTodayDieselSale($date)}}</td>
+                    <td id="diesel_sales">{{Auth::user()->getTodayDieselSale($date)}}</td>
                 </tr>
                 <tr>
                     <td>Closing</td>

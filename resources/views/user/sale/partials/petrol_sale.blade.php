@@ -93,6 +93,12 @@
     </div>
     
     <div class="row">
+        <div class="form-group col-md-2">
+            <label>Dip</label>
+            <input type="number" class="form-control" name="dip">
+        </div>
+    </div>
+    <div class="row">
         <table class="table">
             <thead>
                 <tr>
@@ -121,7 +127,7 @@
                 </tr>
                 <tr>
                     <td>Sales</td>
-                    <td>{{Auth::user()->getTodayPetrolSale($date)}}</td>
+                    <td  id="petrol_sales">{{Auth::user()->getTodayPetrolSale($date)}}</td>
                 </tr>
                 <tr>
                     <td>Closing</td>

@@ -91,7 +91,7 @@
         <input type="hidden" name="debit_credit_id[]" value="{{$debit_credit->id}}">
         <div class="form-group col-md-1"></div>
         <div class="form-group col-md-2">
-            <select name="account_id[]" class="form-control" required @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly @endif>
+            <select name="account_id[]" style="color:{{$debit_credit->account->accountCategory->color}};" class="form-control" required @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly @endif>
                 @if($debit_credit->account_id == 42)
                     <option selected value="42">Sale</option>
                 @elseif($debit_credit->account_id == $cash_account_id)
@@ -105,9 +105,9 @@
         </div>
         <div class="form-group col-md-2">
             @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id)
-            <input type="text" name="product_id[]" class="form-control"  readonly >
+            <input type="text" name="product_id[]" style="color:{{$debit_credit->account->accountCategory->color}};" class="form-control"  readonly >
             @else
-            <select name="product_id[]" id="credit_debit_product_{{$key}}" class="form-control select-search">
+            <select name="product_id[]" style="color:{{$debit_credit->account->accountCategory->color}};" id="credit_debit_product_{{$key}}" class="form-control">
                 <option value="">Select</option>
                 @foreach($products as $product)
                 <option value="{{$product->id}}">{{$product->name}}</option>
@@ -117,17 +117,17 @@
             @endif
         </div>
         <div class="form-group col-md-1">
-            <input type="text" name="qty[]" value="{{@$debit_credit->qty}}" class="form-control" id="credit_debit_qty_{{$key}}" onchange="debitQuantity('{{ @$key }}')" @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly @endif>
+            <input type="text" name="qty[]" style="color:{{$debit_credit->account->accountCategory->color}};" value="{{@$debit_credit->qty}}" class="form-control" id="credit_debit_qty_{{$key}}" onchange="debitQuantity('{{ @$key }}')" @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly @endif>
         </div>
         <div class="form-group col-md-2">
-            <input type="text" name="debit[]" value="{{@$debit_credit->debit}}"  id="credit_debit_debit_{{$key}}" class="form-control {{$debit_credit->account_id == $cash_account_id ? 'cash_debit_values' : ''}}" @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly  @endif>
+            <input type="text" name="debit[]" style="color:{{$debit_credit->account->accountCategory->color}};" value="{{@$debit_credit->debit}}"  id="credit_debit_debit_{{$key}}" class="form-control {{$debit_credit->account_id == $cash_account_id ? 'cash_debit_values' : ''}}" @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly  @endif>
 
         </div>
         <div class="form-group col-md-2">
-            <input type="text" name="credit[]" value="{{@$debit_credit->credit}}" id="credit_debit_credit_{{$key}}" class="form-control {{$debit_credit->account_id == $cash_account_id ? 'cash_credit_values' : ''}}"  @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly @endif>
+            <input type="text" name="credit[]" style="color:{{$debit_credit->account->accountCategory->color}};" value="{{@$debit_credit->credit}}" id="credit_debit_credit_{{$key}}" class="form-control {{$debit_credit->account_id == $cash_account_id ? 'cash_credit_values' : ''}}"  @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly @endif>
         </div>
         <div class="form-group col-md-2">
-            <input type="text" name="description[]" value="{{@$debit_credit->description}}"  class="form-control" readonly value="">
+            <input type="text" name="description[]" style="color:{{$debit_credit->account->accountCategory->color}};" value="{{@$debit_credit->description}}"  class="form-control" readonly value="">
         </div>
     </div>  
     @endforeach

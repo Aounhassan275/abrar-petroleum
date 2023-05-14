@@ -38,7 +38,33 @@
         $is_working_captial = false;
         @endphp
         @foreach($accounts as $key => $account)
-        @if($account->name != 'Sale' && ($account->debitCredits($start_date,$end_date) < 0 || $account->debitCredits($start_date,$end_date) > 0))
+        @if($account->account_category_id == $product_account_category_id)
+        @if(($account->getProductBalance($start_date,$end_date) < 0 || $account->getProductBalance($start_date,$end_date) > 0))
+        <tr>
+            <td>{{@$account->name}}</td>
+            <td>{{@$account->accountCategory->name}}</td>
+            <td>
+                @if($account->getProductBalance($start_date,$end_date) < 0)
+                {{abs($account->getProductBalance($start_date,$end_date))}}
+                @endif
+            </td>
+            <td>
+                @if($account->getProductBalance($start_date,$end_date) > 0)
+                {{$account->getProductBalance($start_date,$end_date)}}
+                @endif
+            </td>
+        </tr>
+        
+        @php 
+        if($account->getProductBalance($start_date,$end_date) < 0)
+        {
+            $totalDebit += abs($account->getProductBalance($start_date,$end_date));
+        }else{
+            $totalCredit += abs($account->getProductBalance($start_date,$end_date));
+        }
+        @endphp
+        @endif
+        @elseif($account->name != 'Sale' && ($account->debitCredits($start_date,$end_date) < 0 || $account->debitCredits($start_date,$end_date) > 0))
         <tr>
             <td>{{@$account->name}}</td>
             <td>{{@$account->accountCategory->name}}</td>

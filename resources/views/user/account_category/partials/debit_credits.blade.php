@@ -16,7 +16,7 @@
         @php 
         $balance = 0;
         @endphp
-        @foreach($account_category->debitCredits($start_date,$end_date,$sub_account) as $key => $debitCredit)
+        @foreach($account_category->debitCredits($start_date,$end_date,$sub_account,request()->type) as $key => $debitCredit)
         @php 
             $balance = $balance + $debitCredit->credit;
             $balance = $balance - $debitCredit->debit;
