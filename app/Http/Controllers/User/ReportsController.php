@@ -20,7 +20,8 @@ class ReportsController extends Controller
             $start_date = Carbon::parse($request->start_date);
             $end_date = Carbon::parse($request->end_date);
         }else{
-            $start_date = Carbon::now()->startOfMonth();
+            // $start_date = Carbon::now()->startOfMonth();
+            $start_date = Carbon::parse(DebitCredit::first()->sale_date);
             $end_date = Carbon::today();
         }
         $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
