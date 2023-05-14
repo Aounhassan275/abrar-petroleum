@@ -217,7 +217,6 @@ class DebitCreditController extends Controller
                 ->selectRaw('count(debit_credits.account_id) as accounts')
                 ->where('debit_credit_accounts.user_id',Auth::user()->id)
                 ->orWhereNull('debit_credit_accounts.user_id')
-                ->groupBy('debit_credits.account_id')
                 ->orderBy('accounts', 'DESC')->get();
         $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
         $html = view('user.sale.partials.debit_credit_fields', compact('key','accounts','products'))->render();
