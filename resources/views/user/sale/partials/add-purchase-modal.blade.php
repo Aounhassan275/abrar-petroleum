@@ -21,15 +21,15 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label>Product Qty</label>
-                            <input name="qty" id="purchase_qty" type="text" value="{{old('qty')}}" class="form-control" placeholder="Enter Product Quantity" required>
+                            <input name="qty" id="purchase_qty" type="text" value="{{old('qty')?old('qty'):0}}" class="form-control" placeholder="Enter Product Quantity" >
                         </div>
                         <div class="form-group col-md-6">
                             <label>Product Total Amount</label>
-                            <input name="total_amount" id="purchase_total_amount" type="text" value="{{old('total_amount')}}" class="form-control" placeholder="Enter Product Total Amount" required readonly>
+                            <input name="total_amount" id="purchase_total_amount" type="text" value="{{old('total_amount')?old('total_amount'):0}}" class="form-control" placeholder="Enter Product Total Amount" readonly>
                         </div>
                         <div class="form-group col-md-6">
                             <label>Product Access</label>
-                            <input name="access" type="text" value="{{old('access')?old('access'):0}}" class="form-control" placeholder="Enter Product Access" required>
+                            <input name="access" type="text" value="{{old('access')?old('access'):0}}" class="form-control" placeholder="Enter Product Access">
                         </div>
                         <input type="hidden" name="date" value="{{@$date}}">
                         <div class="form-group col-md-6">

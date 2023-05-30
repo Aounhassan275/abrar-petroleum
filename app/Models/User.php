@@ -170,6 +170,12 @@ class User extends Authenticatable
                         ->where('type','retail_sale')
                         ->whereDate('sale_date',$date)
                         ->sum('total_amount');
+        // $testSale = Sale::where('user_id',$this->id)
+        //                 ->where('product_id',$product->id)
+        //                 ->where('type','test')
+        //                 ->whereDate('sale_date',$date)
+        //                 ->sum('qty');
+        // return $todaySale - $testSale;
         return $todaySale;
     }
     public function getTodayPurchaseTotalAmount($date,$product)

@@ -75,23 +75,27 @@ class PurchaseController extends Controller
                     'sale_date' => $purchase->date,
                 ]);
             }
-            $account_id  = DebitCreditAccount::where('product_id',$request->product_id)->first()->id;
-            DebitCredit::create([
-                'user_id' => Auth::user()->id,
-                'debit' => @$purchase->total_amount,
-                'account_id' => $account_id,
-                'sale_date' => $purchase->date,
-            ]);
-            if($request->supplier_id)
+            if($request->total_amount > 0)
             {
-                $supplier_account_id  = DebitCreditAccount::where('supplier_id',$request->supplier_id)->first()->id;
+                $account_id  = DebitCreditAccount::where('product_id',$request->product_id)->first()->id;
                 DebitCredit::create([
                     'user_id' => Auth::user()->id,
-                    'credit' => @$purchase->total_amount,
-                    'account_id' => $supplier_account_id,
+                    'debit' => @$purchase->total_amount,
+                    'account_id' => $account_id,
                     'sale_date' => $purchase->date,
-                    'description' => $purchase->qty.' litres '.$purchase->product->name,
                 ]);
+                if($request->supplier_id)
+                {
+                    $supplier_account_id  = DebitCreditAccount::where('supplier_id',$request->supplier_id)->first()->id;
+                    DebitCredit::create([
+                        'user_id' => Auth::user()->id,
+                        'credit' => @$purchase->total_amount,
+                        'account_id' => $supplier_account_id,
+                        'sale_date' => $purchase->date,
+                        'description' => $purchase->qty.' litres '.$purchase->product->name,
+                    ]);
+                }
+
             }
             if($request->product_id == 2)
             {
