@@ -29,7 +29,11 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label>Product Access</label>
-                            <input name="access" type="text" value="{{old('access')?old('access'):0}}" class="form-control" placeholder="Enter Product Access">
+                            <input name="access" id="access"  type="text" value="{{old('access')?old('access'):0}}" class="form-control" placeholder="Enter Product Access">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Access Total Amount</label>
+                            <input name="access_total_amount" id="access_total_amount" type="text" value="{{old('access_total_amount')?old('access_total_amount'):0}}" class="form-control" placeholder="Enter Product Total Amount" readonly>
                         </div>
                         <input type="hidden" name="date" value="{{@$date}}">
                         <div class="form-group col-md-6">

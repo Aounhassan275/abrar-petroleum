@@ -4,7 +4,9 @@
         <button type="button"  class="btn btn-sm btn-danger" onclick="removeFields('{{ @$key }}')">Remove</button>
     </div>
     <div class="form-group col-md-2">
-        <select name="account_id[]" id="credit_debit_account_{{$key}}" onchange="checkColor('{{ @$key }}')" class="form-control select-search">
+        <select name="account_id[]" id="credit_debit_account_{{$key}}" 
+        {{-- onchange="checkColor('{{ @$key }}')"  --}}
+        class="form-control select-search">
             <option value="">Select</option>
             @foreach($accounts as $account)
             <option value="{{$account->id}}">{{$account->name}} @if($account->designation) ({{@$account->designation}}) @endif</option>

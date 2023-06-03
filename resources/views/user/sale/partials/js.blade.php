@@ -247,6 +247,12 @@
             total_amount = parseFloat(price*qty);
             $('#purchase_total_amount').val(total_amount.toFixed(2));
         });
+        $('#access').change(function(){
+            qty = this.value;
+            price = $('#purchase_price').val();
+            total_amount = parseFloat(price*qty);
+            $('#access_total_amount').val(total_amount.toFixed(2));
+        });
         $('#vendor_id').change(function(){
             id = this.value;
             $.ajax({

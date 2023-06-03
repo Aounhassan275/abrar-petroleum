@@ -65,12 +65,11 @@ class PurchaseController extends Controller
             if($purchase->access > 0)
             {
                 $account_id  = DebitCreditAccount::where('name','Product Excess')->first()->id;
-                $creditAmount = $purchase->access * $purchase->price;
                 DebitCredit::create([
                     'user_id' => Auth::user()->id,
                     'product_id' => @$purchase->product_id,
                     'qty' => @$purchase->access,
-                    'credit' => @$creditAmount,
+                    'credit' => @$purchase->access_total_amount,
                     'account_id' => $account_id,
                     'sale_date' => $purchase->date,
                 ]);
