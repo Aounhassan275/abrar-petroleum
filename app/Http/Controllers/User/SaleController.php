@@ -31,10 +31,12 @@ class SaleController extends Controller
             if(Carbon::parse($request->date)->gt($sale_date))
             {
                 toastr()->error('Not Allowed');
-                return back();
+                $date =  $sale_date;
+                $day_before = Sale::all()->last()->sale_date;
+            }else{
+                $date =  Carbon::parse($request->date);
+                $day_before =  Carbon::parse($request->date)->subDay();
             }
-            $date =  Carbon::parse($request->date);
-            $day_before =  Carbon::parse($request->date)->subDay();
         }else{
             $date =  $sale_date->addDay();
             $day_before = Sale::all()->last()->sale_date;

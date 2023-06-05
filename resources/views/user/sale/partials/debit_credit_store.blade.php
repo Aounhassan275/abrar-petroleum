@@ -51,7 +51,7 @@
 
         </div>
         <div class="form-group col-md-2">
-            <input type="text" name="last_day_cash" class="form-control" readonly value="{{$lastDayCash->debit}}">
+            <input type="text" name="last_day_cash" class="form-control" readonly value="{{round($lastDayCash->debit)}}">
         </div>
         <div class="form-group col-md-2">
             <input type="text" class="form-control" readonly value="">
@@ -79,7 +79,7 @@
 
         </div>
         <div class="form-group col-md-2">
-            <input type="text" name="credit[]" class="form-control" readonly value="{{Auth::user()->todaySaleAmount($date)}}">
+            <input type="text" name="credit[]" class="form-control" readonly value="{{round(Auth::user()->todaySaleAmount($date))}}">
         </div>
         <div class="form-group col-md-2">
             <input type="text" name="description[]" class="form-control" readonly value="">

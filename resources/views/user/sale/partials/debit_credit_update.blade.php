@@ -52,7 +52,7 @@
 
         </div>
         <div class="form-group col-md-2">
-            <input type="text" name="last_day_cash" class="form-control" readonly value="{{$lastDayCash->debit}}">
+            <input type="text" name="last_day_cash" class="form-control" readonly value="{{round($lastDayCash->debit)}}">
         </div>
         <div class="form-group col-md-2">
             <input type="text" class="form-control" readonly value="">
@@ -79,7 +79,7 @@
 
         </div>
         <div class="form-group col-md-2">
-            <input type="text" name="credit[]" class="form-control" readonly value="{{Auth::user()->todaySaleAmount($date)}}">
+            <input type="text" name="credit[]" class="form-control" readonly value="{{round(Auth::user()->todaySaleAmount($date))}}">
         </div>
         <div class="form-group col-md-2">
             <input type="text" name="description[]" class="form-control" readonly value="">
@@ -130,13 +130,13 @@
         <div class="form-group col-md-2">
             <input type="text" name="debit[]" 
             {{-- style="color:{{$debit_credit->account->accountCategory->color}};"  --}}
-            value="{{@$debit_credit->debit}}"  id="credit_debit_debit_{{$key}}" class="form-control {{$debit_credit->account_id == $cash_account_id ? 'cash_debit_values' : ''}}" @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly  @endif>
+            value="{{round(@$debit_credit->debit,0)}}"  id="credit_debit_debit_{{$key}}" class="form-control {{$debit_credit->account_id == $cash_account_id ? 'cash_debit_values' : ''}}" @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly  @endif>
 
         </div>
         <div class="form-group col-md-2">
             <input type="text" name="credit[]" 
             {{-- style="color:{{$debit_credit->account->accountCategory->color}};"  --}}
-            value="{{@$debit_credit->credit}}" id="credit_debit_credit_{{$key}}" class="form-control {{$debit_credit->account_id == $cash_account_id ? 'cash_credit_values' : ''}}"  @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly @endif>
+            value="{{round(@$debit_credit->credit)}}" id="credit_debit_credit_{{$key}}" class="form-control {{$debit_credit->account_id == $cash_account_id ? 'cash_credit_values' : ''}}"  @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly @endif>
         </div>
         <div class="form-group col-md-2">
             <input type="text" name="description[]" 
