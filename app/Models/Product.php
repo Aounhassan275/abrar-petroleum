@@ -52,6 +52,22 @@ class Product extends Model
                         ->sum('qty'); 
         return $total_sale - $total_test_sale;
     }
+    public function totaPurchasesQty($user_id = null)
+    {
+        if(!$user_id)
+            $user_id = Auth::user()->id;
+        return Purchase::where('user_id',$user_id)
+                        ->where('product_id',$this->id)
+                        ->sum('qty'); 
+    }
+    public function totaPurchasesAmount($user_id = null)
+    {
+        if(!$user_id)
+            $user_id = Auth::user()->id;
+        return Purchase::where('user_id',$user_id)
+                        ->where('product_id',$this->id)
+                        ->sum('total_amount'); 
+    }
     public function availableStock($user_id = null)
     {
         if(!$user_id)

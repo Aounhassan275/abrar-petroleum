@@ -191,11 +191,10 @@ class SaleController extends Controller
                             'type' => 'misc_sale',
                             'qty' => $qty,
                             'sale_date' => $request->sale_date,
-                        ]);
-                        toastr()->success('Sale is Created Successfully');
-                        return redirect()->to(route('user.sale.index').'?active_tab=misc&date='.$request->sale_date);
-                    }
+                        ]);}
                 }
+                toastr()->success('Sale is Created Successfully');
+                return redirect()->to(route('user.sale.index').'?active_tab=misc&date='.$request->sale_date);
             }else{
                 $sale = Sale::create($request->all());    
                 if($sale->machine)
