@@ -17,8 +17,7 @@
                 <th>Qty</th>
                 <th>Access</th>
                 <th>Total Amount</th>
-                <th>Vendor Name</th>
-                <th>Vendor Terminal</th>
+                <th>Date</th>
                 <th>Action</th>
                 <th>Action</th>
             </tr>
@@ -32,8 +31,7 @@
                 <td>{{$purchase->qty}}</td>
                 <td>{{$purchase->access}}</td>
                 <td>{{$purchase->total_amount}}</td>
-                <td>{{@$purchase->vendor->name}}</td>
-                <td>{{@$purchase->terminal->name}}</td>
+                <td>{{$purchase->date?Carbon\Carbon::parse(@$purchase->date)->format('Y-m-d'):''}}</td>
                 <td>
                     <a href="{{route('user.purchase.edit',$purchase->id)}}" class="btn btn-primary btn-sm">Edit</a>
                 </td>
