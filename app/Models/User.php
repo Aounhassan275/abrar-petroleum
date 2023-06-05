@@ -344,6 +344,21 @@ class User extends Authenticatable
         }
         return $sales;
     }
+    public function haveLastSale($date,$product = null)
+    {   
+        if($product){
+            $next_date = date("Y-m-d",strtotime ( '+1 day' , strtotime ( $date ) )) ;
+            if($this->haveSale($next_date,$product)->count() > 0)
+            {
+                return false;
+            }
+            if($this->haveSale($date,$product)->count() > 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     public function haveDebitCredit($date)
     {   
         $sales = DebitCredit::where('user_id',$this->id)

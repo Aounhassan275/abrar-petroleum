@@ -36,6 +36,7 @@
                     <div @if($active_tab == 'petrol')  class="tab-pane fade show active" @else class="tab-pane fade" @endif id="top-tab1">
                         <div class="card-body">
                             @if(Auth::user()->haveSale($date,$petrol)->count() > 0)
+                                @include('user.sale.partials.sale_petrol_delete')
                                 @include('user.sale.partials.petrol_sale_update')
                             @else 
                                 @include('user.sale.partials.petrol_sale')
@@ -47,6 +48,7 @@
                     <div  @if($active_tab == 'diesel')  class="tab-pane fade show active" @else class="tab-pane fade" @endif id="top-tab2">
                         <div class="card-body">
                             @if(Auth::user()->haveSale($date,$diesel)->count() > 0)
+                                @include('user.sale.partials.sale_diesel_delete')
                                 @include('user.sale.partials.diesel_sale_update')
                             @else 
                             @include('user.sale.partials.diesel_sale')

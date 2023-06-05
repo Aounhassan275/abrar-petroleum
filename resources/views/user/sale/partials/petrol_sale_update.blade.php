@@ -1,3 +1,4 @@
+
 <form action="{{route('user.sale.update',Auth::user()->id)}}" method="post" id="petrolSaleUpdateForm" enctype="multipart/form-data" >
     @method('PUT')
     @csrf

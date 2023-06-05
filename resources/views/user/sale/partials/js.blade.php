@@ -179,6 +179,21 @@
             });
         });
         
+        $('#submit-delete-sale').change(function(){
+            data = $('#deleteTodaySale').serialize();
+            $.ajax({
+                url: "{{route('user.sale.delete_sale')}}",
+                method: 'post',
+                data: data,
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                success: function(response){
+                    location.reload();
+                }
+            });
+        });
+        
         $('#product_id').change(function(){
             id = this.value;
             $.ajax({

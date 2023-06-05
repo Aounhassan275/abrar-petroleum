@@ -501,8 +501,34 @@ class SaleController extends Controller
     }
     public function deleteSale(Request $request)
     {
-        $sale = Sale::find($request->id);
-        $sale->delete();
+        if($request->delete_diesel_product_id)
+        {
+            $product = Product::find($request->delete_diesel_product_id);
+        }else{
+            $product = Product::find($request->delete_petrol_product_id);
+        }
+        $date = $request->delete_petrol_date?$request->delete_petrol_date:$request->delete_diesel_date;
+        $sales = Sale::where('user_id',Auth::user()->id)->where('sale_date',$date)
+                        ->where('product_id',$product->id)->get();
+        foreach($sales as $sale)
+        {
+            if($sale->type == "retail_sale")
+            {
+                $sale->machine->update(['meter_reading'=>$sale->previous_reading]);
+            }
+            if($sale->type != "test")
+            {
+                $debit_credit = DebitCredit::where('account_id','42')->where('sale_date',$date)->first();
+                if($debit_credit)
+                {
+                    $debit_credit->update([
+                        'credit' => $debit_credit->credit -= $sale->total_amount
+                    ]);
+                }
+
+            }
+            $sale->delete();
+        }
         toastr()->success('Sale Deleted successfully');
         return response([
             'success' => true,
