@@ -164,15 +164,13 @@ class SaleController extends Controller
                         'access' => $request->dip,
                         'date' => $request->sale_date,
                     ]);
-                }
-                $next_date = Carbon::parse($request->sale_date);
-                $next_date->addDay();    
+                }   
                 toastr()->success('Sale is Created Successfully');
                 if($product->name == 'PMG')
                 {
-                    return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$next_date->format('Y-m-d'));
+                    return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
                 }else{
-                    return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$next_date->format('Y-m-d'));
+                    return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
                 }  
             }elseif($request->is_misc_sale){
                 foreach($request->qty as $key => $qty)
@@ -194,10 +192,8 @@ class SaleController extends Controller
                             'qty' => $qty,
                             'sale_date' => $request->sale_date,
                         ]);
-                        $next_date = Carbon::parse($request->sale_date);
-                        $next_date->addDay();    
                         toastr()->success('Sale is Created Successfully');
-                        return redirect()->to(route('user.sale.index').'?active_tab=misc&date='.$next_date->format('Y-m-d'));
+                        return redirect()->to(route('user.sale.index').'?active_tab=misc&date='.$request->sale_date);
                     }
                 }
             }else{
