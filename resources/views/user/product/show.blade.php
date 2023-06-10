@@ -58,7 +58,7 @@
             $totalPurchase = 0;
             $totalSale = 0;
             $totalQunatity = Auth::user()->getOpeningBalance($start_date,$product);
-            $quantityBalance = 0;
+            $quantityBalance = Auth::user()->getOpeningBalance($start_date,$product);
             $totalDebit = 0;
             $totalCredit = 0;
             $amountBalance = -(Auth::user()->getPurchasePrice($start_date,$product) * Auth::user()->getOpeningBalance($start_date,$product));

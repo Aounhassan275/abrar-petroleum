@@ -57,15 +57,21 @@ class DebitCreditAccount extends Model
     }
     public function getProductBalance($start_date,$end_date)
     {
+        
         $purchase = Purchase::where('user_id',Auth::user()->id)
             ->where('product_id',$this->product_id)
             ->whereBetween('date', [$start_date,$end_date])->sum('total_amount');
-        $sale = Sale::where('user_id',Auth::user()->id)
+        $total_sale = Sale::where('user_id',Auth::user()->id)
             ->where('product_id',$this->product_id)
-            ->where('type','retail_sale')
+            ->where('type','!=','test')
             ->whereBetween('sale_date', [$start_date,$end_date])->sum('total_amount');
+        $testSale = Sale::where('user_id',Auth::user()->id)
+            ->where('product_id',$this->product_id)
+            ->where('type','test')
+            ->whereBetween('sale_date', [$start_date,$end_date])->sum('total_amount');
+        $sale = $total_sale - $testSale;
         $product = Product::find($this->product_id);
         $amount = -(Auth::user()->getPurchasePrice($start_date,$product) * Auth::user()->getOpeningBalance($start_date,$product));
-        return $amount + $sale - $purchase;
+        return round($amount + $sale - $purchase);
     }
 }

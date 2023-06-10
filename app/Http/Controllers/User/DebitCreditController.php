@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class DebitCreditController extends Controller
 {
@@ -215,13 +216,13 @@ class DebitCreditController extends Controller
     public function getCreditFields(Request $request)
     {
         $key = $request->key;
-        $accounts =   DebitCreditAccount::select('debit_credit_accounts.*')
-                ->join('debit_credits', 'debit_credit_accounts.id', 'debit_credits.account_id')
-                ->selectRaw('count(debit_credits.account_id) as accounts')
-                ->where('debit_credit_accounts.user_id',Auth::user()->id)
+        $accounts = DebitCreditAccount::leftJoin('debit_credits', 'debit_credit_accounts.id', '=', 'debit_credits.account_id')
+                ->select('debit_credit_accounts.*', DB::raw('COUNT(debit_credits.account_id) as accounts'))
+                ->where('debit_credit_accounts.user_id', Auth::user()->id)
                 ->orWhereNull('debit_credit_accounts.user_id')
-                ->groupBy('debit_credits.account_id')
-                ->orderBy('accounts', 'DESC')->get();
+                ->groupBy('debit_credit_accounts.id')
+                ->orderBy('accounts', 'DESC')
+                ->get();
         $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
         $html = view('user.sale.partials.debit_credit_fields', compact('key','accounts','products'))->render();
         return response([

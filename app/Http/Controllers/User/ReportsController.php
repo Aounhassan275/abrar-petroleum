@@ -7,6 +7,7 @@ use App\Models\AccountCategory;
 use App\Models\DebitCredit;
 use App\Models\DebitCreditAccount;
 use App\Models\Product;
+use App\Models\Sale;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,6 +26,9 @@ class ReportsController extends Controller
             $end_date = Carbon::today();
         }
         $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
+        $test_sales = Sale::where('user_id',Auth::user()->id)
+            ->where('type','test')
+            ->whereBetween('sale_date', [$start_date,$end_date])->get();
         $active_tab = $request->active_tab?$request->active_tab:'trail_balance';
         $product_account_category_id = AccountCategory::where('name','Products')->first()->id;
         $accounts = DebitCreditAccount::where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
@@ -34,6 +38,6 @@ class ReportsController extends Controller
         $working_captial_id = DebitCreditAccount::where('name','Working Capital')->first()->id;
         $workingCaptial = DebitCredit::where('account_id',$working_captial_id)->orderBy('sale_date','DESC')->first();
         $expenseAccounts = DebitCreditAccount::where('user_id',Auth::user()->id)->orWhereNull('user_id')->where('account_category_id',$category_id)->get();
-        return view('user.reports.index',compact('active_tab','start_date','end_date','products','accounts','expenseAccounts','lastDayCash','workingCaptial','product_account_category_id'));   
+        return view('user.reports.index',compact('active_tab','start_date','end_date','products','accounts','expenseAccounts','lastDayCash','workingCaptial','product_account_category_id','test_sales'));   
     }
 }

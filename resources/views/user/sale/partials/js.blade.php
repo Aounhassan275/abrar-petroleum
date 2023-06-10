@@ -51,6 +51,16 @@
             // }
         }
     }
+    function saleDetailPrice(index)
+    {
+        var qty = $('#change_sale_quantity_' + index).html();
+        var price = $('#change_sale_rate_' + index).val();
+        price = parseFloat(price);
+        qty = parseFloat(qty);
+        total_amount = parseFloat(price*qty);
+        $('#change_sale_amount_' + index).html(total_amount.toFixed(0));
+        $('#change_sale_rate_button').show();
+    }
     function dieselCurrentReading(index)
     {
         var previous_reading = $('#diesel_previous_reading_' + index).val();
@@ -311,6 +321,21 @@
                 },
                 success: function(response){
                     $('#purchase_price').val(response.purchasing_price);
+                }
+            });
+        });
+        $('#change_sale_rate_button').click(function(){
+            data = $('#changeProductSalePriceForm').serialize();
+            $.ajax({
+                url: "{{route('user.sale.update_sale_rate')}}",
+                method: 'post',
+                data: data,
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                success: function(response){
+                    var url = "{{route('user.sale.index')}}"+"?date="+response.date+"&active_tab=sale_detail";
+                    location.href = url;
                 }
             });
         });

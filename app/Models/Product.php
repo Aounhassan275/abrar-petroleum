@@ -129,11 +129,17 @@ class Product extends Model
                         ->whereBetween('sale_date', [$start_date,$end_date])
                         ->where('type','!=','test')
                         ->sum('total_amount'); 
+        $test_sale = Sale::where('user_id',Auth::user()->id)
+                        ->where('product_id',$this->id)
+                        ->whereBetween('sale_date', [$start_date,$end_date])
+                        ->where('type','test')
+                        ->sum('total_amount'); 
+        $sales = $total_sales - $test_sale;
         $total_purchases = Purchase::where('user_id',Auth::user()->id)
                         ->where('product_id',$this->id)
                         ->whereBetween('date', [$start_date,$end_date])
                         ->sum('total_amount'); 
-        return $total_sales - $total_purchases;
+        return round($sales - $total_purchases);
     }
     public function getSaleRate($date)
     {

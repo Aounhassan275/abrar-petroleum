@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class SaleController extends Controller
 {
@@ -42,13 +43,13 @@ class SaleController extends Controller
             $day_before = Sale::all()->last()->sale_date;
         }
         $active_tab = $request->active_tab?$request->active_tab:'diesel';
-        $accounts =   DebitCreditAccount::select('debit_credit_accounts.*')
-                ->join('debit_credits', 'debit_credit_accounts.id', 'debit_credits.account_id')
-                ->selectRaw('count(debit_credits.account_id) as accounts')
-                ->where('debit_credit_accounts.user_id',Auth::user()->id)
+        $accounts = DebitCreditAccount::leftJoin('debit_credits', 'debit_credit_accounts.id', '=', 'debit_credits.account_id')
+                ->select('debit_credit_accounts.*', DB::raw('COUNT(debit_credits.account_id) as accounts'))
+                ->where('debit_credit_accounts.user_id', Auth::user()->id)
                 ->orWhereNull('debit_credit_accounts.user_id')
-                ->groupBy('debit_credits.account_id')
-                ->orderBy('accounts', 'DESC')->get();
+                ->groupBy('debit_credit_accounts.id')
+                ->orderBy('accounts', 'DESC')
+                ->get();
         $cash_account_id = DebitCreditAccount::where('name','Cash in Hand')->first()->id;
         $lastDayCash = DebitCredit::where('account_id',$cash_account_id)->whereDate('sale_date',$day_before)->first();
         $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
@@ -532,6 +533,37 @@ class SaleController extends Controller
         }
         toastr()->success('Sale Deleted successfully');
         return response([
+            'success' => true,
+        ], 200);
+    }
+    public function updateSaleRate(Request $request)
+    {
+        foreach($request->change_product_id  as $key => $change_product_id)
+        {
+            $product = Product::find($change_product_id);
+            if($product->getSaleRate($request->change_rate_date) != $request->change_sale_rate[$key])
+            {
+                if($product->user_id)
+                {
+                    $sales = Sale::where('user_id',Auth::user()->id)->whereDate('sale_date',$request->change_rate_date)
+                    ->where('product_id',$product->id)->where('type','misc_sale')->get();
+
+                }else{
+                    $sales = Sale::where('user_id',Auth::user()->id)->whereDate('sale_date',$request->change_rate_date)
+                    ->where('product_id',$product->id)->where('type','retail_sale')->get();
+                }
+                foreach($sales as $sale)
+                {
+                    $sale->update([
+                        'price' => $request->change_sale_rate[$key],
+                        'total_amount' => $request->change_sale_rate[$key] * $sale->qty,
+                    ]);
+                }
+            }
+        }
+        toastr()->success('Sale Updated successfully');
+        return response([
+            'date' => $request->change_rate_date,
             'success' => true,
         ], 200);
     }

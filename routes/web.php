@@ -96,6 +96,7 @@ Route::group(['prefix' => 'user', 'as'=>'user.','namespace' => 'User'], function
     /******************SALE ROUTES****************/
     Route::post('sale/get_sale_details', 'SaleController@getSaleDetails')->name('sale.getSaleDetails');  
     Route::post('sale/delete_sale', 'SaleController@deleteSale')->name('sale.delete_sale');  
+    Route::post('sale/update_sale_rate', 'SaleController@updateSaleRate')->name('sale.update_sale_rate');  
     Route::resource('sale', 'SaleController');  
     /******************EXPENSE ROUTES****************/
     Route::resource('expense', 'ExpenseController');  

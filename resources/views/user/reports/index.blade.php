@@ -27,7 +27,7 @@
                     <li class="nav-item"><a href="#top-tab1" @if($active_tab == 'trail_balance') class="nav-link active" @else class="nav-link" @endif data-toggle="tab">Trail Balance</a></li>
                     <li class="nav-item"><a href="#top-tab2" @if($active_tab == 'income_statement') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Income Statement</a></li>
                     <li class="nav-item"><a href="#top-tab3" @if($active_tab == 'standard_income_statement') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Standard Income Statement</a></li>
-                    {{-- <li class="nav-item"><a href="#top-tab4" @if($active_tab == 'sale_detail') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Sales Detail</a></li> --}}
+                    <li class="nav-item"><a href="#top-tab4" @if($active_tab == 'testing_sale') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Testing Sale</a></li>
                     {{-- <li class="nav-item"><a href="#top-tab5" @if($active_tab == 'debit_credit') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Debit Credit</a></li> --}}
                 </ul>
 
@@ -50,6 +50,11 @@
                     <div @if($active_tab == 'standard_income_statement')  class="tab-pane fade show active" @else class="tab-pane fade" @endif id="top-tab3"> 
                         <div class="card-body">
                             @include('user.reports.partials.standard_income_statement')
+                        </div>
+                    </div>
+                    <div @if($active_tab == 'testing_sale')  class="tab-pane fade show active" @else class="tab-pane fade" @endif id="top-tab4"> 
+                        <div class="card-body">
+                            @include('user.reports.partials.testing_sale')
                         </div>
                     </div>
                 </div>

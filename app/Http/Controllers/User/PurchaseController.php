@@ -72,6 +72,15 @@ class PurchaseController extends Controller
                     'credit' => @$purchase->access_total_amount,
                     'account_id' => $account_id,
                     'sale_date' => $purchase->date,
+                    'description' => $purchase->access.' litres '.$purchase->product->name,
+                ]);
+                $account_id  = DebitCreditAccount::where('product_id',$request->product_id)->first()->id;
+                DebitCredit::create([
+                    'user_id' => Auth::user()->id,
+                    'debit' => @$purchase->access_total_amount,
+                    'account_id' => $account_id,
+                    'sale_date' => $purchase->date,
+                    'description' => $purchase->access.' litres '.$purchase->product->name,
                 ]);
             }
             if($request->total_amount > 0)

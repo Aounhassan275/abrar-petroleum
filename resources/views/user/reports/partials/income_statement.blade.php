@@ -41,7 +41,7 @@
         @endphp
         @foreach($products as $key => $product)
         @php 
-            $price = $product->availableStock() * $product->selling_price;
+            $price = round($product->availableStock() * $product->selling_price);
             $totalAmount = $product->totalDrAmount($start_date,$end_date);
             $revenue = $price - abs($totalAmount);
             $totalRevenue += $revenue;
@@ -51,7 +51,7 @@
             <td>{{$product->name}}</td>
             <td>{{$product->availableStock()}}</td>
             <td>{{$product->selling_price}}</td>
-            <td>{{$price}}</td>
+            <td>{{($price)}}</td>
             <td>
                 @if($totalAmount < 0) 
                 {{abs($totalAmount)}}
@@ -61,7 +61,7 @@
                 {{abs($totalAmount)}}
                 @endif
             </td>
-            <td>{{$revenue}}</td>
+            <td>{{round($revenue)}}</td>
         </tr>
         @endforeach
     </tbody>
