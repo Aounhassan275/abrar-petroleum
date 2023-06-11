@@ -53,7 +53,7 @@ class DebitCreditAccount extends Model
             ->where('debit_credit_accounts.id',$this->id)
             ->whereBetween('debit_credits.sale_date', [$start_date,$end_date])
             ->sum('debit');
-        return $credit - $debit;
+        return round($credit - $debit);
     }
     public function getProductBalance($start_date,$end_date)
     {

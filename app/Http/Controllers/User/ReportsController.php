@@ -37,7 +37,7 @@ class ReportsController extends Controller
         $lastDayCash = DebitCredit::where('account_id',$cash_account_id)->orderBy('sale_date','DESC')->first();
         $working_captial_id = DebitCreditAccount::where('name','Working Capital')->first()->id;
         $workingCaptial = DebitCredit::where('account_id',$working_captial_id)->orderBy('sale_date','DESC')->first();
-        $expenseAccounts = DebitCreditAccount::where('user_id',Auth::user()->id)->orWhereNull('user_id')->where('account_category_id',$category_id)->get();
+        $expenseAccounts = DebitCreditAccount::where('account_category_id',$category_id)->get();
         return view('user.reports.index',compact('active_tab','start_date','end_date','products','accounts','expenseAccounts','lastDayCash','workingCaptial','product_account_category_id','test_sales'));   
     }
 }

@@ -10,7 +10,7 @@ use Carbon\Carbon;
 
 class LossGainHelper
 {
-    public static function procceed($old_amount,$product){
+    public static function procceed($old_amount,$product,$old_selling_amount,$date){
         $users = User::all();
         foreach($users as $user)
         {
@@ -21,9 +21,12 @@ class LossGainHelper
                 LossGainTranscation::create([
                     'user_id' => $user->id,
                     'product_id' => $product->id,
+                    'date' => $date,
                     'amount' => $totalAmount,
                     'old_price' => $old_amount,
                     'new_price' => $product->purchasing_price,
+                    'old_selling_price' => $old_selling_amount,
+                    'new_selling_price' => $product->selling_price,
                     'qty' => $product->availableStock($user->id),
                 ]);
                 $account = DebitCreditAccount::where('name','Rate Gain and Loss')->first();

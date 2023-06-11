@@ -153,7 +153,7 @@ class User extends Authenticatable
     {
         $todaySale = Sale::where('user_id',$this->id)
                         ->where('product_id',$product->id)
-                        ->where('type','retail_sale')
+                        ->where('type','!=','test')
                         ->whereDate('sale_date',$date)
                         ->sum('qty');
         $testSale = Sale::where('user_id',$this->id)

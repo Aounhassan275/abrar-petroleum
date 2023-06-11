@@ -50,6 +50,12 @@ class PurchaseController extends Controller
                     'supplier_id' => Supplier::first()->id
                 ]);
             }
+            if($request->access_total_amount)
+            {
+                $request->merge([
+                    'total_amount' => $request->access_total_amount
+                ]);
+            }
             $purchase = Purchase::create($request->all());
             if($request->amount)
             {
@@ -83,7 +89,7 @@ class PurchaseController extends Controller
                     'description' => $purchase->access.' litres '.$purchase->product->name,
                 ]);
             }
-            if($request->total_amount > 0)
+            else if($request->total_amount > 0)
             {
                 $account_id  = DebitCreditAccount::where('product_id',$request->product_id)->first()->id;
                 DebitCredit::create([

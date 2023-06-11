@@ -93,7 +93,7 @@
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title mt-0" id="myModalLabel">Update User</h5>
+                    <h5 class="modal-title mt-0" id="myModalLabel">Update Product</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
@@ -108,6 +108,10 @@
                     <div class="form-group">
                         <label>Product Selling Price</label>
                         <input name="selling_price" id="selling_price" type="text" class="form-control" placeholder="Enter Product Selling Price" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Product Change Date</label>
+                        <input name="date" id="date" type="date" class="form-control" placeholder="Enter Product Selling Price" required>
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -117,14 +117,16 @@ class ProductController extends Controller
     {
         $product = Product::find($id);
         $old_amount = 0;
+        $old_selling_amount = 0;
         if($request->purchasing_price != $product->purchasing_price)
         {
             $old_amount = $product->purchasing_price;
+            $old_selling_amount = $product->selling_price;
         }
         $product->update($request->all());
         if($old_amount > 0)
         {
-            LossGainHelper::procceed($old_amount,$product);
+            LossGainHelper::procceed($old_amount,$product,$old_selling_amount,$request->date);
         }
         toastr()->success('Product Informations Updated successfully');
         $account = AccountCategory::where('name','Products')->first();

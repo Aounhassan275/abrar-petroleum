@@ -109,6 +109,10 @@
                         <label>Product Selling Price</label>
                         <input name="selling_price" id="selling_price" type="text" class="form-control" placeholder="Enter Product Selling Price" required>
                     </div>
+                    <div class="form-group">
+                        <label>Product Change Date</label>
+                        <input name="date" id="date" type="date" class="form-control" placeholder="Enter Product Selling Price" required>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Cancel</button>

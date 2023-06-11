@@ -41,7 +41,7 @@
         @endphp
         @foreach($products as $key => $product)
         @php 
-            $price = round($product->availableStock() * $product->selling_price);
+            $price = round($product->availableStock() * $product->purchasing_price);
             $totalAmount = $product->totalDrAmount($start_date,$end_date);
             $revenue = $price - abs($totalAmount);
             $totalRevenue += $revenue;
@@ -50,7 +50,7 @@
             <td>{{$key+1}}</td>
             <td>{{$product->name}}</td>
             <td>{{$product->availableStock()}}</td>
-            <td>{{$product->selling_price}}</td>
+            <td>{{$product->purchasing_price}}</td>
             <td>{{($price)}}</td>
             <td>
                 @if($totalAmount < 0) 
@@ -104,7 +104,7 @@
                     <i class="icon-stack-picture icon-3x opacity-75"></i>
                 </div>
                 <div class="media-body text-right">
-                    <h3 class="mb-0">{{abs($totalRevenue - Auth::user()->totalExpense($start_date,$end_date))}}</h3>
+                    <h3 class="mb-0">{{abs($totalRevenue - abs(Auth::user()->totalExpense($start_date,$end_date)))}}</h3>
                     <span class="text-uppercase font-size-xs">Net Profit</span>
                 </div>
             </div>

@@ -27,7 +27,7 @@
 $totalRevenue = 0;
 foreach($products as $key => $product)
 {
-    $price = $product->availableStock() * $product->selling_price;
+    $price = round($product->availableStock() * $product->purchasing_price);
     $totalAmount = $product->totalDrAmount($start_date,$end_date);
     $revenue = $price - abs($totalAmount);
     $totalRevenue += $revenue;
@@ -67,5 +67,13 @@ foreach($products as $key => $product)
     </div>
     <div class="col-md-6 text-center">
         <p><b>{{abs(Auth::user()->totalExpense($start_date,$end_date))}}</b></p>
+    </div>
+</div>
+<div class="row" style="border-style: inset;">
+    <div class="col-md-6 text-center">
+        <p><b>Total Net Profit</b></p>
+    </div>
+    <div class="col-md-6 text-center">
+        <p><b>{{abs($totalRevenue - abs(Auth::user()->totalExpense($start_date,$end_date)))}}</b></p>
     </div>
 </div>
