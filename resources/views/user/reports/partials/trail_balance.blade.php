@@ -108,7 +108,7 @@
         @endphp
         @endif
         @endforeach
-        @if($is_working_captial == false)
+        @if($is_working_captial == false && $workingCaptial)
         <tr>
             <td>Working Capital</td>
             <td>Primary Account</td>

@@ -51,7 +51,7 @@ class SaleController extends Controller
                 ->orderBy('accounts', 'DESC')
                 ->get();
         $cash_account_id = DebitCreditAccount::where('name','Cash in Hand')->first()->id;
-        $lastDayCash = DebitCredit::where('account_id',$cash_account_id)->whereDate('sale_date',$day_before)->first();
+        $lastDayCash = DebitCredit::where('account_id',$cash_account_id)->whereDate('sale_date',$day_before)->where('user_id',Auth::user()->id)->first();
         $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
         return view('user.sale.create',compact('petrol','diesel','date','active_tab','accounts','products','cash_account_id','lastDayCash'));
     }
@@ -520,7 +520,7 @@ class SaleController extends Controller
             }
             if($sale->type != "test")
             {
-                $debit_credit = DebitCredit::where('account_id','42')->where('sale_date',$date)->first();
+                $debit_credit = DebitCredit::where('account_id','42')->where('user_id',Auth::user()->id)->where('sale_date',$date)->first();
                 if($debit_credit)
                 {
                     $debit_credit->update([

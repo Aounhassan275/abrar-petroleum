@@ -22,7 +22,7 @@ class ReportsController extends Controller
             $end_date = Carbon::parse($request->end_date);
         }else{
             // $start_date = Carbon::now()->startOfMonth();
-            $start_date = Carbon::parse(DebitCredit::first()->sale_date);
+            $start_date = Carbon::parse(DebitCredit::where('user_id',Auth::user()->id)->first()->sale_date);
             $end_date = Carbon::today();
         }
         $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
@@ -34,9 +34,9 @@ class ReportsController extends Controller
         $accounts = DebitCreditAccount::where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
         $category_id = AccountCategory::where('name','Expenses & Income')->first()->id;
         $cash_account_id = DebitCreditAccount::where('name','Cash in Hand')->first()->id;
-        $lastDayCash = DebitCredit::where('account_id',$cash_account_id)->orderBy('sale_date','DESC')->first();
+        $lastDayCash = DebitCredit::where('account_id',$cash_account_id)->where('user_id',Auth::user()->id)->orderBy('sale_date','DESC')->first();
         $working_captial_id = DebitCreditAccount::where('name','Working Capital')->first()->id;
-        $workingCaptial = DebitCredit::where('account_id',$working_captial_id)->orderBy('sale_date','DESC')->first();
+        $workingCaptial = DebitCredit::where('account_id',$working_captial_id)->where('user_id',Auth::user()->id)->orderBy('sale_date','DESC')->first();
         $expenseAccounts = DebitCreditAccount::where('account_category_id',$category_id)->get();
         return view('user.reports.index',compact('active_tab','start_date','end_date','products','accounts','expenseAccounts','lastDayCash','workingCaptial','product_account_category_id','test_sales'));   
     }
