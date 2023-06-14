@@ -91,12 +91,7 @@
     <div class="row">
         <input type="hidden" name="debit_credit_id[]" value="{{$debit_credit->id}}">
         <div class="form-group col-md-1">
-            
-            <form action="{{route('user.debit_credit.destroy',$debit_credit->id)}}" method="POST">
-                @method('DELETE')
-                @csrf
-            <button class="btn btn-danger btn-sm">Delete</button>
-            </form>
+            <button onclick="deleteDebitCredit('{{$debit_credit->id}}')" type="button" class="btn btn-danger btn-sm">Delete</button>
         </div>
         <div class="form-group col-md-2">
             <select name="account_id[]" 

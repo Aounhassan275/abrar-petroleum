@@ -120,6 +120,22 @@
             });
         }
     }
+    function deleteDebitCredit(id)
+    {
+        // url  = 
+        $.ajax({
+            url: "{{route('user.debit_credit.destory')}}",
+            method: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+            },
+            success: function(response){
+                var price = response.selling_price;
+                total_amount = parseFloat(price*qty);
+                $('#credit_debit_debit_' + index).val(total_amount.toFixed(2));
+            }
+        });
+    }
     jQuery(document).ready(function ($) {
         $('#store-debit-credit-sale').on('click', function (event) {
             event.preventDefault();
