@@ -61,7 +61,8 @@
     @endif  
     @if(Auth::user()->haveDebitCredit($date)->where('account_id',42)->count() == 0)
     <div class="row">
-        <div class="form-group col-md-1"></div>
+        <div class="form-group col-md-1">
+        </div>
         <div class="form-group col-md-2">
             <input type="hidden" name="debit_credit_id[]" value="">
             <select name="account_id[]" class="form-control" readonly>
@@ -89,7 +90,14 @@
     @foreach(Auth::user()->haveDebitCredit($date) as $key => $debit_credit)
     <div class="row">
         <input type="hidden" name="debit_credit_id[]" value="{{$debit_credit->id}}">
-        <div class="form-group col-md-1"></div>
+        <div class="form-group col-md-1">
+            
+            <form action="{{route('user.debit_credit.destroy',$debit_credit->id)}}" method="POST">
+                @method('DELETE')
+                @csrf
+            <button class="btn btn-danger btn-sm">Delete</button>
+            </form>
+        </div>
         <div class="form-group col-md-2">
             <select name="account_id[]" 
             {{-- style="color:{{$debit_credit->account->accountCategory->color}};"  --}}

@@ -209,9 +209,13 @@ class DebitCreditController extends Controller
      * @param  \App\Models\DebitCredit  $debitCredit
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DebitCredit $debitCredit)
+    public function destroy($id)
     {
-        //
+        $debitCredit = DebitCredit::find($id);
+        $sale_date = $debitCredit->sale_date;
+        $debitCredit->delete();
+        toastr()->success('Debit Credit Deleted successfully');
+        return redirect()->to(route('user.sale.index').'?active_tab=debit_credit&date='.$sale_date);
     }
     public function getCreditFields(Request $request)
     {
