@@ -122,17 +122,17 @@
     }
     function deleteDebitCredit(id)
     {
-        // url  = 
         $.ajax({
-            url: "{{route('user.debit_credit.destory')}}",
-            method: 'GET',
+            url: "{{route('user.debit_credit.delete')}}",
+            method: 'post',
+            data: {
+                id : id,
+            },
             headers: {
                 'X-CSRF-TOKEN': "{{ csrf_token() }}"
             },
             success: function(response){
-                var price = response.selling_price;
-                total_amount = parseFloat(price*qty);
-                $('#credit_debit_debit_' + index).val(total_amount.toFixed(2));
+                window.location.reload();
             }
         });
     }

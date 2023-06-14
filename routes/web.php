@@ -105,6 +105,7 @@ Route::group(['prefix' => 'user', 'as'=>'user.','namespace' => 'User'], function
     Route::post('debit_credit/calculate_debit_credit_values', 'DebitCreditController@calculateDebitCreditValues')->name('debit_credit.calculate_debit_credit_values');  
     Route::post('debit_credit/get_color', 'DebitCreditController@getColor')->name('debit_credit.get_color');  
     Route::post('debit_credit/update_form', 'DebitCreditController@updateForm')->name('debit_credit.update_form');  
+    Route::post('debit_credit/delete', 'DebitCreditController@delete')->name('debit_credit.delete');  
     Route::resource('debit_credit', 'DebitCreditController');  
     /******************Account Category ROUTES****************/
     Route::resource('account_category', 'AccountCategoryController');  
