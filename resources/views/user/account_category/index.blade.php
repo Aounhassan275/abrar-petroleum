@@ -54,7 +54,7 @@
                                         <label>Choose Sub Account</label> 
                                         <select name="sub_account" class="form-control select-search">
                                             <option value="">Select</option>  
-                                            @foreach($account_category->debitCreditAccount as $debitSubAccount)
+                                            @foreach($account_category->userDebitCreditAccount() as $debitSubAccount)
                                             <option @if($sub_account == $debitSubAccount->id) selected @endif value="{{$debitSubAccount->id}}">{{$debitSubAccount->name}}</option>
                                             @endforeach
                                         </select>

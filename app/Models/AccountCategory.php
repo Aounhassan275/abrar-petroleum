@@ -14,6 +14,16 @@ class AccountCategory extends Model
     {
         return $this->hasMany(DebitCreditAccount::class);
     }
+    public function userDebitCreditAccount()
+    {
+        $userId = Auth::user()->id;
+        return DebitCreditAccount::query()->select('debit_credit_accounts.*')
+            ->where('account_category_id', $this->id)
+            ->where(function ($query) use ($userId) {
+                $query->where('user_id', $userId)
+                    ->orWhereNull('user_id');
+            })->get();
+    }
     public function debitCredits($start_date,$end_date,$sub_account,$type = 'By Date')
     {
        

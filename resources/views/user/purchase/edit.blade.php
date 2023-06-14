@@ -39,6 +39,10 @@
                             <label>Product Total Amount</label>
                             <input name="total_amount" id="total_amount" type="text" value="{{$purchase->total_amount}}" class="form-control" placeholder="Enter Product Total Amount" required readonly>
                         </div>
+                        <div class="form-group col-md-6">
+                            <label> Date</label>
+                            <input name="date" type="date"  class="form-control" value="{{$purchase->date?Carbon\Carbon::parse($purchase->date)->format('Y-m-d'):''}}"  required>
+                        </div>
                         @if($purchase->vendor)
                         <div class="form-group col-md-6">
                             <label>Vendor</label>

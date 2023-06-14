@@ -98,10 +98,6 @@
                             <label>Amount Pay to Vendor</label>
                             <input name="amount" id="amount" type="text" value="" class="form-control" placeholder="Enter Amoount">
                         </div>
-                        <div class="form-group col-md-6">
-                            <label>Date <small style="color:red;">If Not Today</small></label>
-                            <input name="date" type="date" value="" class="form-control" placeholder="Enter Vendor Account Number">
-                        </div>
                         {{-- <div class="form-group col-md-6">
                             <label>Image</label>
                             <input name="image" type="file" value="" class="form-control" placeholder="Enter Vendor Account Number">
