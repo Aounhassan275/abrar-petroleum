@@ -404,4 +404,9 @@ class User extends Authenticatable
                         ->sum('total_amount');
         return $todaySale - $testSale;
     }
+    
+    public function globalProductRate()
+    {
+        return $this->belongsTo(GlobalProductRate::class,'user_id');
+    }
 }

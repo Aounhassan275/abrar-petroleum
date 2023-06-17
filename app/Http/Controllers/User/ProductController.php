@@ -150,7 +150,7 @@ class ProductController extends Controller
     {
         $product = Product::find($request->id);
         $purchasing_price = $product?$product->purchasing_price:0;
-        $selling_price = $product?$product->selling_price:0;
+        $selling_price = $product?$product->selling_amount:0;
         return response()->json([
             'purchasing_price' => $purchasing_price,
             'selling_price' => $selling_price

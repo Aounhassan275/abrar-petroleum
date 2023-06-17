@@ -12,6 +12,9 @@ class Product extends Model
         'name','purchasing_price','selling_price','user_id','supplier_purchasing_price','supplier_id'
     ];
     
+	protected $appends = [
+		'selling_amount'
+	];
     public function purchases()
     {
         return $this->hasMany(Purchase::class);
@@ -23,12 +26,12 @@ class Product extends Model
     public static function petrolSellingPrice()
     {
         $product = Product::where('name','PMG')->first();
-        return $product->selling_price;
+        return $product->selling_amount;
     }
     public static function dieselSellingPrice()
     {
         $product = Product::where('name','HSD')->first();
-        return $product->selling_price;
+        return $product->selling_amount;
     }
     public function totalStocks($user_id = null)
     {
@@ -146,7 +149,7 @@ class Product extends Model
         $sale = Sale::where('user_id',Auth::user()->id)
                         ->where('product_id',$this->id)
                         ->whereDate('sale_date',$date)->first(); 
-        return $sale?$sale->price:$this->selling_price;
+        return $sale?$sale->price:$this->selling_amount;
     }
     public function getSale($date)
     {
@@ -184,4 +187,14 @@ class Product extends Model
         $available_stock = $this->supplierTotalStocks($supplier_id) - $this->supplierTotalSales($supplier_id);
         return $available_stock;
     }
+    
+	/**
+	 * @return string
+	 */
+	public function getSellingAmountAttribute() {
+        $selling_amount = GlobalProductRate::where('user_id',Auth::user()->id)->where('product_id',$this->id)->first();
+        if($selling_amount)
+            return $selling_amount->selling_price;
+		return @$this->selling_price;
+	}
 }

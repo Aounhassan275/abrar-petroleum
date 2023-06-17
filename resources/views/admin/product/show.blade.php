@@ -1,7 +1,7 @@
 @extends('admin.layout.index')
 
 @section('title')
-    Add Product
+{{$product->name}} Rates For Sites
 @endsection
 
 @section('content')
@@ -11,7 +11,7 @@
         <!-- Basic layout-->
         <div class="card">
             <div class="card-header header-elements-inline">
-                <h5 class="card-title">Add New Product</h5>
+                <h5 class="card-title">{{$product->name}} Rate For Sites</h5>
                 <div class="header-elements">
                     <div class="list-icons">
                         <a class="list-icons-item" data-action="collapse"></a>
@@ -21,20 +21,22 @@
             </div>
 
             <div class="card-body">
-                <form action="{{route('admin.product.store')}}" method="post" enctype="multipart/form-data" >
+                <form action="{{route('admin.global_product_rate.store')}}" method="post" enctype="multipart/form-data" >
                     @csrf
                     <div class="row">
+                        <input name="product_id" type="hidden" class="form-control" value="{{$product->id}}" placeholder="Enter Product Name" required>
                         <div class="form-group col-md-6">
-                            <label>Product Name</label>
-                            <input name="name" type="text" class="form-control" value="{{old('name')}}" placeholder="Enter Product Name" required>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label>Product Purchasing Price</label>
-                            <input name="purchasing_price" type="text" value="{{old('purchasing_price')}}" class="form-control" placeholder="Enter Product Purchasing Price" required>
+                            <label>User Name</label>
+                            <select class="form-control select-search" name="user_id" required>
+                                <option value="">Choose User</option>
+                                @foreach(App\Models\User::where('type','Site')->get() as $user)
+                                <option value="{{$user->id}}">{{$user->username}}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group col-md-6">
                             <label>Product Selling Price</label>
-                            <input name="selling_price" type="text" value="{{old('selling_price')}}" class="form-control" placeholder="Enter Product Selling Price" required>
+                            <input name="selling_price" type="text" value="{{$product->selling_price}}" class="form-control" placeholder="Enter Product Selling Price" required>
                         </div>
                     </div>
                     <div class="text-right">
@@ -55,25 +57,20 @@
         <thead>
             <tr>
                 <th>#</th>
-                <th>Product Name</th>
-                <th>Product Purchasing Price</th>
+                <th>User Name</th>
                 <th>Product Selling Price</th>
-                <th>Site Rates</th>
                 <th>Action</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (App\Models\Product::whereNull('user_id')->get() as $key => $product)
+            @foreach (App\Models\GlobalProductRate::where('product_id',$product->id)->get() as $key => $product)
             <tr>
                 <td>{{$key+1}}</td>
-                <td>{{$product->name}}</td>
-                <td>{{$product->purchasing_price}}</td>
+                <td>{{$product->user->username}}</td>
                 <td>{{$product->selling_price}}</td>
-                <td><a href="{{route('admin.product.show',$product->id)}}" target="_blank">Site Rate</a></td>
                 <td>
-                    <button data-toggle="modal" data-target="#edit_modal" name="{{$product->name}}"
-                        purchasing_price="{{$product->purchasing_price}}" selling_price="{{$product->selling_price}}" id="{{$product->id}}" class="edit-btn btn btn-primary">Edit</button>
+                    <button data-toggle="modal" data-target="#edit_modal" selling_price="{{$product->selling_price}}" id="{{$product->id}}" class="edit-btn btn btn-primary">Edit</button>
                 </td>
                 <td>
                     <form action="{{route('admin.product.destroy',$product->id)}}" method="POST">
@@ -95,25 +92,13 @@
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title mt-0" id="myModalLabel">Update User</h5>
+                    <h5 class="modal-title mt-0" id="myModalLabel">Update Global Product Rate</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Product Name</label>
-                        <input name="name" id="name" type="text" class="form-control" placeholder="Enter Product Name" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Product Purchasing Price</label>
-                        <input name="purchasing_price" id="purchasing_price" type="text" class="form-control" placeholder="Enter Product Purchasing Price" required>
-                    </div>
-                    <div class="form-group">
                         <label>Product Selling Price</label>
                         <input name="selling_price" id="selling_price" type="text" class="form-control" placeholder="Enter Product Selling Price" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Product Change Date</label>
-                        <input name="date" id="date" type="date" class="form-control" placeholder="Enter Product Selling Price" required>
                     </div>
                 </div>
                 <div class="modal-footer">

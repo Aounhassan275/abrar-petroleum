@@ -27,7 +27,7 @@
                 @if($product_index == 0)
                 <label>Selling Price</label>
                 @endif
-                <input name="price[]" id="misc_price_{{$product_index}}" type="text" class="form-control" readonly value="{{$product->getSale($date)?$product->getSale($date)->price:@$product->selling_price}}">
+                <input name="price[]" id="misc_price_{{$product_index}}" type="text" class="form-control" readonly value="{{$product->getSale($date)?$product->getSale($date)->price:@$product->selling_amount}}">
             </div>
             <div class="form-group col-md-3">
                 @if($product_index == 0)

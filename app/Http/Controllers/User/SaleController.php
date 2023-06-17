@@ -124,11 +124,11 @@ class SaleController extends Controller
                             return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
                         }
                     }
-                    $total = $product->selling_price * $request->testing_quantity;
+                    $total = $product->selling_amount * $request->testing_quantity;
                     Sale::create([
                         'user_id' => Auth::user()->id,
                         'product_id' => $request->product_id,
-                        'price' => $product->selling_price,
+                        'price' => $product->selling_amount,
                         'total_amount' => $total,
                         'type' => 'test',
                         'sale_date' => $request->sale_date,
@@ -318,9 +318,9 @@ class SaleController extends Controller
                                 return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
                             }  
                         }
-                        $total = $product->selling_price * $request->testing_quantity;
+                        $total = $product->selling_amount * $request->testing_quantity;
                         $sale->update([
-                            'price' => $product->selling_price,
+                            'price' => $product->selling_amount,
                             'total_amount' => $total,
                             'qty' => $request->testing_quantity,
                         ]);
@@ -336,11 +336,11 @@ class SaleController extends Controller
                                 return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
                             }  
                         }
-                        $total = $product->selling_price * $request->testing_quantity;
+                        $total = $product->selling_amount * $request->testing_quantity;
                         Sale::create([
                             'user_id' => Auth::user()->id,
                             'product_id' => $request->product_id,
-                            'price' => $product->selling_price,
+                            'price' => $product->selling_amount,
                             'total_amount' => $total,
                             'type' => 'test',
                             'sale_date' => $request->sale_date,
@@ -365,7 +365,7 @@ class SaleController extends Controller
                                 return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
                             }  
                         }
-                        $total = $product->selling_price * $request->testing_quantity;
+                        $total = $product->selling_amount * $request->testing_quantity;
                         $sale->update([
                             'price' => $request->wholesale_price,
                             'total_amount' => $request->wholesale_total_amount,

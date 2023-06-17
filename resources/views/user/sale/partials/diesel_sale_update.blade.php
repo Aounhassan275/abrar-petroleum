@@ -13,7 +13,7 @@
     @foreach(Auth::user()->getDieselMachine() as $index => $diesel_machine)
     <input type="hidden" name="product_id" value="{{$diesel_machine->product_id}}">
     <input type="hidden" name="machine_id[]" value="{{$diesel_machine->id}}">
-    <input name="price[]" id="diesel_price_{{$index}}" type="hidden" value="{{@$diesel_machine->product->selling_price}}">
+    <input name="price[]" id="diesel_price_{{$index}}" type="hidden" value="{{@$diesel_machine->product->selling_amount}}">
     <input name="total_amount[]" id="diesel_total_amount_{{$index}}" value="{{$diesel_machine->getSale($date)?$diesel_machine->getSale($date)->total_amount:''}}" type="hidden" >
     <input name="type[]" value="retail_sale" type="hidden" >
     <input type="hidden" name="sale_id[]" value="{{$diesel_machine->getSale($date)?$diesel_machine->getSale($date)->id:''}}">

@@ -48,6 +48,8 @@ Route::group(['prefix' => 'admin', 'as'=>'admin.','namespace' => 'Admin',], func
     Route::resource('account_category', 'AccountCategoryController');  
     /******************Debit Credit Account ROUTES****************/
     Route::resource('debit_credit_account', 'DebitCreditAccountController');  
+    /******************Global Product Rate ROUTES****************/
+    Route::resource('global_product_rate', 'GlobalProductRateController');  
   });
 });
 
