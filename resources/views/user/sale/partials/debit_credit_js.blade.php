@@ -49,6 +49,8 @@
                 },
                 success: function(response){
                     $('#cash_debit_values').val(response.difference);
+                    $('.total_debit_amount').val(response.totalDebit);
+                    $('.total_credit_amount').val(response.totalCredit);
                 }
             });
         });
@@ -62,6 +64,8 @@
                 },
                 success: function(response){
                     $('.cash_debit_values').val(response.difference);
+                    $('.total_debit_amount').val(response.totalDebit);
+                    $('.total_credit_amount').val(response.totalCredit);
                 }
             });
         });

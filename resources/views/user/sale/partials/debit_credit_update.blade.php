@@ -180,6 +180,20 @@
         </div>
     </div> 
     @endif
+    <div class="row">
+        <div class="form-group col-md-3">
+            <input type="text" value="Total Debit" class="form-control"  readonly >
+        </div>
+        <div class="form-group col-md-3">
+            <input type="text" value="" id="total_debit_amount" class="form-control total_debit_amount" readonly >
+        </div>
+        <div class="form-group col-md-3">
+            <input type="text" value="Total Credit" class="form-control"  readonly >
+        </div>
+        <div class="form-group col-md-3">
+            <input type="text" value="" id="total_credit_amount" class="form-control total_credit_amount" readonly >
+        </div>
+    </div> 
     <div class="text-right" style="margin-top:10px;"> 
         <button type="button" class="btn btn-success add-more-fields">Add More Fields</button>
         <button type="button" class="btn btn-primary calcluate-debit-credit-values-for-updates">Calcluate</button>

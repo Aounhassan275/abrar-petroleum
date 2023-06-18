@@ -113,17 +113,17 @@ class SaleController extends Controller
                 }
                 if($request->testing == true)
                 {
-                    if($request->testing_quantity > $product->availableStock())
-                    {
-                        toastr()->error('Stock is not avaiable');
+                    // if($request->testing_quantity > $product->availableStock())
+                    // {
+                    //     toastr()->error('Stock is not avaiable');
                         
-                        if($product->name == 'PMG')
-                        {
-                            return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
-                        }else{
-                            return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
-                        }
-                    }
+                    //     if($product->name == 'PMG')
+                    //     {
+                    //         return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
+                    //     }else{
+                    //         return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
+                    //     }
+                    // }
                     $total = $product->selling_amount * $request->testing_quantity;
                     Sale::create([
                         'user_id' => Auth::user()->id,
@@ -169,9 +169,9 @@ class SaleController extends Controller
                 toastr()->success('Sale is Created Successfully');
                 if($product->name == 'PMG')
                 {
-                    return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
+                    return redirect()->to(route('user.sale.index').'?active_tab=misc&date='.$request->sale_date);
                 }else{
-                    return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
+                    return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
                 }  
             }elseif($request->is_misc_sale){
                 foreach($request->qty as $key => $qty)
@@ -195,7 +195,7 @@ class SaleController extends Controller
                         ]);}
                 }
                 toastr()->success('Sale is Created Successfully');
-                return redirect()->to(route('user.sale.index').'?active_tab=misc&date='.$request->sale_date);
+                return redirect()->to(route('user.sale.index').'?active_tab=sale_detail&date='.$request->sale_date);
             }else{
                 $sale = Sale::create($request->all());    
                 if($sale->machine)
@@ -308,16 +308,16 @@ class SaleController extends Controller
                     {
                         $sale = Sale::find($request->testing_sale_id);      
                         $total_qty = $request->testing_quantity - $sale->qty;                  
-                        if($total_qty > $product->availableStock())
-                        {
-                            toastr()->error('Stock is not avaiable');  
-                            if($product->name == 'PMG')
-                            {
-                                return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
-                            }else{
-                                return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
-                            }  
-                        }
+                        // if($total_qty > $product->availableStock())
+                        // {
+                        //     toastr()->error('Stock is not avaiable');  
+                        //     if($product->name == 'PMG')
+                        //     {
+                        //         return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
+                        //     }else{
+                        //         return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
+                        //     }  
+                        // }
                         $total = $product->selling_amount * $request->testing_quantity;
                         $sale->update([
                             'price' => $product->selling_amount,
@@ -326,16 +326,16 @@ class SaleController extends Controller
                         ]);
                     }else{
                                           
-                        if($request->testing_quantity > $product->availableStock())
-                        {
-                            toastr()->error('Stock is not avaiable');  
-                            if($product->name == 'PMG')
-                            {
-                                return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
-                            }else{
-                                return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
-                            }  
-                        }
+                        // if($request->testing_quantity > $product->availableStock())
+                        // {
+                        //     toastr()->error('Stock is not avaiable');  
+                        //     if($product->name == 'PMG')
+                        //     {
+                        //         return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
+                        //     }else{
+                        //         return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
+                        //     }  
+                        // }
                         $total = $product->selling_amount * $request->testing_quantity;
                         Sale::create([
                             'user_id' => Auth::user()->id,
@@ -415,9 +415,9 @@ class SaleController extends Controller
                 toastr()->success('Sale is Created Successfully');
                 if($product->name == 'PMG')
                 {
-                    return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
+                    return redirect()->to(route('user.sale.index').'?active_tab=misc&date='.$request->sale_date);
                 }else{
-                    return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
+                    return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
                 }  
             }elseif($request->is_misc_sale){
                 
@@ -459,6 +459,8 @@ class SaleController extends Controller
                         }
                     }
                 }
+                toastr()->success('Sale is Created Successfully');
+                return redirect()->to(route('user.sale.index').'?active_tab=sale_detail&date='.$request->sale_date);
             }else{
                 $sale = Sale::find($id);
                 $sale->update($request->all());
@@ -531,6 +533,25 @@ class SaleController extends Controller
             }
             $sale->delete();
         }
+        toastr()->success('Sale Deleted successfully');
+        return response([
+            'success' => true,
+        ], 200);
+    }
+    public function deleteSaleForMisc(Request $request)
+    {
+        $sale = Sale::find($request->id);
+        if($sale->type != "test")
+        {
+            $debit_credit = DebitCredit::where('account_id','42')->where('user_id',Auth::user()->id)->where('sale_date',$sale->sale_date)->first();
+            if($debit_credit)
+            {
+                $debit_credit->update([
+                    'credit' => $debit_credit->credit -= $sale->total_amount
+                ]);
+            }
+        }
+        $sale->delete();
         toastr()->success('Sale Deleted successfully');
         return response([
             'success' => true,

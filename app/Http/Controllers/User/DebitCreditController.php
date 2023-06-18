@@ -71,8 +71,10 @@ class DebitCreditController extends Controller
                     ]);
                 }
             }
+            $next_date = Carbon::parse($request->sale_date);
+            $next_date->addDay(); 
             toastr()->success('Debit Credit Entry is Created Successfully');
-            return redirect()->to(route('user.sale.index').'?active_tab=debit_credit&date='.$request->sale_date);
+            return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$next_date->format('Y-m-d'));
         }catch(Exception $e)
         {
             toastr()->error($e->getMessage());
@@ -148,8 +150,8 @@ class DebitCreditController extends Controller
             
             $next_date = Carbon::parse($request->sale_date);
             $next_date->addDay();    
-            toastr()->success('Debit Credit Entry is Created Successfully');
-            return redirect()->to(route('user.sale.index').'?active_tab=debit_credit&date='.$next_date->format('Y-m-d'));
+            toastr()->success('Debit Credit Updated Successfully');
+            return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$next_date->format('Y-m-d'));
         }catch(Exception $e)
         {
             toastr()->error($e->getMessage());
@@ -194,8 +196,10 @@ class DebitCreditController extends Controller
                     }      
                 }
             }
-            toastr()->success('Debit Credit Entry is Created Successfully');
-            return redirect()->to(route('user.sale.index').'?active_tab=debit_credit&date='.$request->sale_date);
+            $next_date = Carbon::parse($request->sale_date);
+            $next_date->addDay();    
+            toastr()->success('Debit Credit Updated Successfully');
+            return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$next_date->format('Y-m-d'));      
         }catch(Exception $e)
         {
             toastr()->error($e->getMessage());

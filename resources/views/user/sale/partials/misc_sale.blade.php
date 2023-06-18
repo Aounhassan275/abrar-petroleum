@@ -5,7 +5,7 @@
     <div class="form-group col-4">
         <label>
             Date
-            <input type="text" name="sale_date" id="date" class="daterange-single form-control pull-right dates" style="height: 35px; "
+            <input type="text" name="sale_date" id="misc-date" class="daterange-single form-control pull-right dates" style="height: 35px; "
             value="{{ date('m/d/Y', strtotime(@$date))}}">
         </label>   
     </div>

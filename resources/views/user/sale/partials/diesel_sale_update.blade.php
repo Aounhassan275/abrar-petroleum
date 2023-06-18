@@ -54,7 +54,7 @@
                     <input
                             name="testing"
                             type="checkbox"
-                            id="diesel_testing"
+                            id="testing"
                             @if(Auth::user()->getTestSale($date,$diesel))
                             checked
                             @endif
@@ -63,12 +63,18 @@
             </div>
         </div>
     </div>
-    <div class="row" id="diesel_testing_fields" @if(Auth::user()->getTestSale($date,$diesel)) @else style="display:none;" @endif>
+    <div class="row" id="testing_fields" @if(Auth::user()->getTestSale($date,$diesel)) @else style="display:none;" @endif>
         <div class="form-group col-md-6">
             <label>Qty</label>
             <input type="hidden" name="testing_sale_id" value="{{Auth::user()->getTestSale($date,$diesel)?Auth::user()->getTestSale($date,$diesel)->id:null}}">
             <input type="number" class="form-control" value="{{Auth::user()->getTestSale($date,$diesel)?Auth::user()->getTestSale($date,$diesel)->qty:''}}" name="testing_quantity" id="">
         </div>
+        @if(Auth::user()->getTestSale($date,$diesel))
+        <div class="form-group col-md-6">
+            <br>
+            <button class="btn btn-danger btn-sm" type="button" onclick="deleteMiscSale('{{ Auth::user()->getTestSale($date,$diesel)->id }}')" >Delete</button>
+        </div>
+        @endif
     </div>
     <div class="row">
         <div class="form-group col-md-6">
@@ -88,18 +94,24 @@
     </div>
     <input type="hidden" name="whole_sale_id" value="{{Auth::user()->getWholeSale($date,$diesel)?Auth::user()->getWholeSale($date,$diesel)->id:null}}" id="">
     <div class="row" id="diesel_whole_sale_fields" @if(Auth::user()->getWholeSale($date,$diesel)) @else style="display:none;" @endif>
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-3">
             <label>Qty</label>
             <input type="number" class="form-control" name="wholesale_quantity" id="diesel_wholesale_quantity" value="{{Auth::user()->getWholeSale($date,$diesel)?Auth::user()->getWholeSale($date,$diesel)->qty:null}}">
         </div>
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-3">
             <label>Price</label>
             <input type="number" class="form-control" name="wholesale_price" id="diesel_wholesale_price" value="{{Auth::user()->getWholeSale($date,$diesel)?Auth::user()->getWholeSale($date,$diesel)->price:App\Models\Product::dieselSellingPrice()}}">
         </div>
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-3">
             <label>Total Amount</label>
             <input type="number" class="form-control" name="wholesale_total_amount" id="diesel_wholesale_total_amount" value="{{Auth::user()->getWholeSale($date,$diesel)?Auth::user()->getWholeSale($date,$diesel)->total_amount:null}}">
         </div>
+        @if(Auth::user()->getWholeSale($date,$diesel))
+        <div class="form-group col-md-3">
+            <br>
+            <button class="btn btn-danger btn-sm" type="button"  onclick="deleteMiscSale('{{ Auth::user()->getWholeSale($date,$diesel)->id }}')" >Delete</button>
+        </div>
+        @endif
     </div>
     <div class="row">
         <input type="hidden" name="dip_id" value="{{Auth::user()->getDip($date,$diesel)?Auth::user()->getDip($date,$diesel)->id:''}}">

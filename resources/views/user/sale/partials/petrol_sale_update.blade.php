@@ -70,6 +70,12 @@
             <input type="hidden" name="testing_sale_id" value="{{Auth::user()->getTestSale($date,$petrol)?Auth::user()->getTestSale($date,$petrol)->id:null}}">
             <input type="number" class="form-control" value="{{Auth::user()->getTestSale($date,$petrol)?Auth::user()->getTestSale($date,$petrol)->qty:''}}" name="testing_quantity" id="">
         </div>
+        @if(Auth::user()->getTestSale($date,$petrol))
+        <div class="form-group col-md-6">
+            <br>
+            <button class="btn btn-danger btn-sm" type="button"  onclick="deleteMiscSale('{{ Auth::user()->getTestSale($date,$petrol)->id }}')" >Delete</button>
+        </div>
+        @endif
     </div>
     <div class="row">
         <div class="form-group col-md-6">
@@ -89,18 +95,24 @@
     </div>
     <input type="hidden" name="whole_sale_id" value="{{Auth::user()->getWholeSale($date,$petrol)?Auth::user()->getWholeSale($date,$petrol)->id:null}}" id="">
     <div class="row" id="petrol_whole_sale_fields" @if(Auth::user()->getWholeSale($date,$petrol)) @else style="display:none;" @endif>
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-3">
             <label>Qty</label>
             <input type="number" class="form-control" name="wholesale_quantity" id="petrol_wholesale_quantity" value="{{Auth::user()->getWholeSale($date,$petrol)?Auth::user()->getWholeSale($date,$petrol)->qty:null}}">
         </div>
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-3">
             <label>Price</label>
             <input type="number" class="form-control" name="wholesale_price" id="petrol_wholesale_price" value="{{Auth::user()->getWholeSale($date,$petrol)?Auth::user()->getWholeSale($date,$petrol)->price:App\Models\Product::petrolSellingPrice()}}">
         </div>
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-3">
             <label>Total Amount</label>
             <input type="number" class="form-control" name="wholesale_total_amount" id="petrol_wholesale_total_amount" value="{{Auth::user()->getWholeSale($date,$petrol)?Auth::user()->getWholeSale($date,$petrol)->total_amount:null}}">
         </div>
+        @if(Auth::user()->getWholeSale($date,$petrol))
+        <div class="form-group col-md-3">
+            <br>
+            <button class="btn btn-danger btn-sm" type="button"  onclick="deleteMiscSale('{{ Auth::user()->getWholeSale($date,$petrol)->id }}')" >Delete</button>
+        </div>
+        @endif
     </div>
     
     <div class="row">

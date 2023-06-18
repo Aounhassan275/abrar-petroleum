@@ -92,7 +92,7 @@
     function deleteMiscSale(id)
     {
         $.ajax({
-            url: "{{route('user.sale.delete_sale')}}",
+            url: "{{route('user.sale.delete_sale_for_misc')}}",
             method: 'post',
             data: {
                 id: id,
@@ -189,8 +189,22 @@
             });
         });
         
-        $('#submit-delete-sale').change(function(){
-            data = $('#deleteTodaySale').serialize();
+        $('#submit-diesel-delete-sale').click(function(){
+            data = $('#deleteDieselTodaySale').serialize();
+            $.ajax({
+                url: "{{route('user.sale.delete_sale')}}",
+                method: 'post',
+                data: data,
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                success: function(response){
+                    location.reload();
+                }
+            });
+        });
+        $('#submit-petrol-delete-sale').click(function(){
+            data = $('#deletePetrolTodaySale').serialize();
             $.ajax({
                 url: "{{route('user.sale.delete_sale')}}",
                 method: 'post',
@@ -341,20 +355,22 @@
         });
         $('#sale_detail_date').change(function(){
             let date = $(this).val();
-            $('#sale-detail').html('');
-            $.ajax({
-                url: "{{route('user.sale.getSaleDetails')}}",
-                method: 'post',
-                data: {
-                    date: date,
-                },
-                headers: {
-                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                },
-                success: function(response){
-                    $('#sale-detail').html(response.html);
-                }
-            });
+            var url = "{{route('user.sale.index')}}"+"?date="+date+"&active_tab=sale_detail";
+            location.href = url;
+            // $('#sale-detail').html('');
+            // $.ajax({
+            //     url: "{{route('user.sale.getSaleDetails')}}",
+            //     method: 'post',
+            //     data: {
+            //         date: date,
+            //     },
+            //     headers: {
+            //         'X-CSRF-TOKEN': "{{ csrf_token() }}"
+            //     },
+            //     success: function(response){
+            //         $('#sale-detail').html(response.html);
+            //     }
+            // });
         });
         $('#date').change(function(){
             let date = $(this).val();
@@ -364,6 +380,11 @@
         $('#diesel_date').change(function(){
             let date = $(this).val();
             var url = "{{route('user.sale.index')}}"+"?date="+date+"&active_tab=diesel";
+            location.href = url;
+        });
+        $('#misc-date').change(function(){
+            let date = $(this).val();
+            var url = "{{route('user.sale.index')}}"+"?date="+date+"&active_tab=misc";
             location.href = url;
         });
         $('#debit_credit_date').change(function(){

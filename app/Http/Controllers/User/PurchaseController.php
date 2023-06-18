@@ -175,6 +175,33 @@ class PurchaseController extends Controller
     public function destroy($id)
     {
         $purchase = Purchase::find($id);
+        if($purchase->access > 0)
+        {
+            $account_id  = DebitCreditAccount::where('name','Product Excess')->first()->id;
+            DebitCredit::where('product_id',$purchase->product_id)->where('account_id',$account_id)
+                        ->where('sale_date',$purchase->date)->where('user_id',Auth::user()->id)->delete();
+            $product_account_id  = DebitCreditAccount::where('product_id',$purchase->product_id)->first()->id;
+            DebitCredit::where('user_id',Auth::user()->id)->where('account_id',$product_account_id)
+                        ->where('sale_date',$purchase->date)->delete();
+        }
+        else if($purchase->total_amount > 0)
+        {
+            $account_id  = DebitCreditAccount::where('product_id',$purchase->product_id)->first()->id;
+            DebitCredit::create([
+                'user_id' => Auth::user()->id,
+                'debit' => @$purchase->total_amount,
+                'account_id' => $account_id,                'sale_date' => $purchase->date,
+            ]);
+            DebitCredit::where('user_id',Auth::user()->id)->where('account_id',$account_id)
+                    ->where('sale_date',$purchase->date)->delete();
+            if($purchase->supplier_id)
+            {
+                $supplier_account_id  = DebitCreditAccount::where('supplier_id',$purchase->supplier_id)->first()->id;
+                DebitCredit::where('user_id',Auth::user()->id)->where('account_id',$supplier_account_id)
+                        ->where('sale_date',$purchase->date)->delete();
+            }
+        }
+        
         $purchase->delete();
         toastr()->success('Purchase Deleted successfully');
         return redirect()->back();

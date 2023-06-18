@@ -1,15 +1,13 @@
 <form method="GET">
     <div class="row">
         <input type="hidden" name="active_tab" value="trail_balance">
-        <input type="hidden" name="start_date" class="daterange-single form-control pull-right dates" style="height: 35px; "
-            value="{{ date('m/d/Y', strtotime(@$start_date))}}">
-        {{-- <div class="form-group col-2">
+        <div class="form-group col-2">
             <label>
                 Start Date
                 <input type="text" name="start_date" class="daterange-single form-control pull-right dates" style="height: 35px; "
                     value="{{ date('m/d/Y', strtotime(@$start_date))}}">
             </label>   
-        </div> --}}
+        </div>
         <div class="form-group col-2">
             <label>
                 Date
@@ -86,11 +84,11 @@
         @php 
         if($account->name == "Cash in Hand")
         {
-            if($account->debit < 0)
+            if(@$lastDayCash->debit < 0)
             {
-                $totalDebit += abs($account->debit);
+                $totalDebit += @$lastDayCash->debit;
             }else{
-                $totalCredit += abs($account->debit);
+                $totalDebit += abs(@$lastDayCash->debit);
             }
 
         }else{
@@ -121,9 +119,9 @@
         @php 
             if($account->credit < 0)
             {
-                $totalDebit += abs($account->credit);
+                $totalDebit += abs($workingCaptial->credit);
             }else{
-                $totalCredit += abs($account->credit);
+                $totalCredit += abs($workingCaptial->credit);
             }
         @endphp
         @endif
