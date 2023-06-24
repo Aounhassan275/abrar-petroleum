@@ -123,7 +123,7 @@ class Product extends Model
                         ->whereDate('sale_date',$date)
                         ->where('type','test')
                         ->sum('total_amount'); 
-        return $total_amount - $total_sale_amount;
+        return round($total_amount - $total_sale_amount);
     }
     public function totalDrAmount($start_date,$end_date)
     {

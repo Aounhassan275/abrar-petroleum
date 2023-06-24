@@ -43,17 +43,19 @@ class SaleController extends Controller
             $day_before = Sale::all()->last()->sale_date;
         }
         $active_tab = $request->active_tab?$request->active_tab:'diesel';
-        $accounts = DebitCreditAccount::leftJoin('debit_credits', 'debit_credit_accounts.id', '=', 'debit_credits.account_id')
-                ->select('debit_credit_accounts.*', DB::raw('COUNT(debit_credits.account_id) as accounts'))
+        $accounts = DebitCreditAccount::query()
+                // leftJoin('debit_credits', 'debit_credit_accounts.id', '=', 'debit_credits.account_id')
+                // ->select('debit_credit_accounts.*', DB::raw('COUNT(debit_credits.account_id) as accounts'))
+                ->select('debit_credit_accounts.*')
                 ->where('debit_credit_accounts.user_id', Auth::user()->id)
                 ->orWhereNull('debit_credit_accounts.user_id')
-                ->groupBy('debit_credit_accounts.id')
-                ->orderBy('accounts', 'DESC')
+                ->orderBy('debit_credit_accounts.account_category_id', 'ASC')
                 ->get();
         $cash_account_id = DebitCreditAccount::where('name','Cash in Hand')->first()->id;
         $lastDayCash = DebitCredit::where('account_id',$cash_account_id)->whereDate('sale_date',$day_before)->where('user_id',Auth::user()->id)->first();
+        $missing_debit_credits = DebitCredit::whereNull('account_id')->where('user_id',Auth::user()->id)->get();
         $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
-        return view('user.sale.create',compact('petrol','diesel','date','active_tab','accounts','products','cash_account_id','lastDayCash'));
+        return view('user.sale.create',compact('petrol','diesel','date','active_tab','accounts','products','cash_account_id','lastDayCash','missing_debit_credits'));
     }
 
     /**
@@ -81,6 +83,31 @@ class SaleController extends Controller
             if($request->current_reading)
             {
                 $product = Product::find($request->product_id);
+                if($request->testing == true)
+                {
+                    // if($request->testing_quantity > $product->availableStock())
+                    // {
+                    //     toastr()->error('Stock is not avaiable');
+                        
+                    //     if($product->name == 'PMG')
+                    //     {
+                    //         return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
+                    //     }else{
+                    //         return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
+                    //     }
+                    // }
+                    $total = $product->selling_amount * $request->testing_quantity;
+                    Sale::create([
+                        'user_id' => Auth::user()->id,
+                        'product_id' => $request->product_id,
+                        'price' => $product->selling_amount,
+                        'total_amount' => $total,
+                        'type' => 'test',
+                        'sale_date' => $request->sale_date,
+                        'qty' => $request->testing_quantity,
+                    ]);
+
+                }
                 foreach($request->current_reading as $key => $current_reading)
                 {
                     if($current_reading)
@@ -110,31 +137,6 @@ class SaleController extends Controller
                         $sale->machine->update(['meter_reading'=>$sale->current_reading]);
                     
                     }
-                }
-                if($request->testing == true)
-                {
-                    // if($request->testing_quantity > $product->availableStock())
-                    // {
-                    //     toastr()->error('Stock is not avaiable');
-                        
-                    //     if($product->name == 'PMG')
-                    //     {
-                    //         return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
-                    //     }else{
-                    //         return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
-                    //     }
-                    // }
-                    $total = $product->selling_amount * $request->testing_quantity;
-                    Sale::create([
-                        'user_id' => Auth::user()->id,
-                        'product_id' => $request->product_id,
-                        'price' => $product->selling_amount,
-                        'total_amount' => $total,
-                        'type' => 'test',
-                        'sale_date' => $request->sale_date,
-                        'qty' => $request->testing_quantity,
-                    ]);
-
                 }
                 if($request->whole_sale == true)
                 {
@@ -248,6 +250,53 @@ class SaleController extends Controller
             if($request->current_reading)
             {
                 $product = Product::find($request->product_id);
+                if($request->testing == true)
+                {
+                    if($request->testing_sale_id)
+                    {
+                        $sale = Sale::find($request->testing_sale_id);      
+                        $total_qty = $request->testing_quantity - $sale->qty;                  
+                        // if($total_qty > $product->availableStock())
+                        // {
+                        //     toastr()->error('Stock is not avaiable');  
+                        //     if($product->name == 'PMG')
+                        //     {
+                        //         return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
+                        //     }else{
+                        //         return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
+                        //     }  
+                        // }
+                        $total = $product->selling_amount * $request->testing_quantity;
+                        $sale->update([
+                            'price' => $product->selling_amount,
+                            'total_amount' => $total,
+                            'qty' => $request->testing_quantity,
+                        ]);
+                    }else{
+                                          
+                        // if($request->testing_quantity > $product->availableStock())
+                        // {
+                        //     toastr()->error('Stock is not avaiable');  
+                        //     if($product->name == 'PMG')
+                        //     {
+                        //         return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
+                        //     }else{
+                        //         return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
+                        //     }  
+                        // }
+                        $total = $product->selling_amount * $request->testing_quantity;
+                        Sale::create([
+                            'user_id' => Auth::user()->id,
+                            'product_id' => $request->product_id,
+                            'price' => $product->selling_amount,
+                            'total_amount' => $total,
+                            'type' => 'test',
+                            'sale_date' => $request->sale_date,
+                            'qty' => $request->testing_quantity,
+                        ]);
+
+                    }
+                }
                 foreach($request->current_reading as $key => $current_reading)
                 {
                     if($current_reading)
@@ -300,53 +349,6 @@ class SaleController extends Controller
                             ]);
                             $sale->machine->update(['meter_reading'=>$sale->current_reading]);
                         }
-                    }
-                }
-                if($request->testing == true)
-                {
-                    if($request->testing_sale_id)
-                    {
-                        $sale = Sale::find($request->testing_sale_id);      
-                        $total_qty = $request->testing_quantity - $sale->qty;                  
-                        // if($total_qty > $product->availableStock())
-                        // {
-                        //     toastr()->error('Stock is not avaiable');  
-                        //     if($product->name == 'PMG')
-                        //     {
-                        //         return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
-                        //     }else{
-                        //         return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
-                        //     }  
-                        // }
-                        $total = $product->selling_amount * $request->testing_quantity;
-                        $sale->update([
-                            'price' => $product->selling_amount,
-                            'total_amount' => $total,
-                            'qty' => $request->testing_quantity,
-                        ]);
-                    }else{
-                                          
-                        // if($request->testing_quantity > $product->availableStock())
-                        // {
-                        //     toastr()->error('Stock is not avaiable');  
-                        //     if($product->name == 'PMG')
-                        //     {
-                        //         return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->sale_date);
-                        //     }else{
-                        //         return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->sale_date);
-                        //     }  
-                        // }
-                        $total = $product->selling_amount * $request->testing_quantity;
-                        Sale::create([
-                            'user_id' => Auth::user()->id,
-                            'product_id' => $request->product_id,
-                            'price' => $product->selling_amount,
-                            'total_amount' => $total,
-                            'type' => 'test',
-                            'sale_date' => $request->sale_date,
-                            'qty' => $request->testing_quantity,
-                        ]);
-
                     }
                 }
                 if($request->whole_sale == true)

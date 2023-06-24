@@ -61,7 +61,7 @@
     <div class="row" id="petrol_testing_fields" style="display:none;">
         <div class="form-group col-md-6">
             <label>Qty</label>
-            <input type="number" class="form-control" name="testing_quantity" id="">
+            <input type="number" class="form-control" name="testing_quantity" id="petrol_testing_quantity">
         </div>
     </div>
     <div class="row">

@@ -138,6 +138,34 @@
         });
     });
     $(document).ready(function(){
+        $('#testing_quantity').change(function(){
+            qty = parseFloat(this.value);
+            var diesel_sales = $('#diesel_sales').html();
+            diesel_sales = parseFloat(diesel_sales);
+            diesel_sales_qty = diesel_sales - qty;
+            $('#diesel_sales').html(diesel_sales_qty);
+        });
+        $('#diesel_testing_quantity').change(function(){
+            qty = parseFloat(this.value);
+            var diesel_sales = $('#diesel_sales').html();
+            diesel_sales = parseFloat(diesel_sales);
+            diesel_sales_qty = diesel_sales - qty;
+            $('#diesel_sales').html(diesel_sales_qty);
+        });
+        $('#petrol_testing_quantity').change(function(){
+            qty = parseFloat(this.value);
+            var petrol_sales = $('#petrol_sales').html();
+            petrol_sales = parseFloat(petrol_sales);
+            petrol_sales_qty = petrol_sales - qty;
+            $('#petrol_sales').html(petrol_sales_qty);
+        });
+        $('#petrol_testing_quantity_update').change(function(){
+            qty = parseFloat(this.value);
+            var petrol_sales = $('#petrol_sales').html();
+            petrol_sales = parseFloat(petrol_sales);
+            petrol_sales_qty = petrol_sales - qty;
+            $('#petrol_sales').html(petrol_sales_qty);
+        });
         $('#testing').change(function(){
             if (this.checked) {
                 $('#testing_fields').show();
@@ -241,10 +269,14 @@
             $('#total_amount').val(total_amount.toFixed(2));
         });
         $('#petrol_wholesale_quantity').change(function(){
-            qty = this.value;
+            qty = parseFloat(this.value);
             price = $('#petrol_wholesale_price').val();
             total_amount = parseFloat(price*qty);
             $('#petrol_wholesale_total_amount').val(total_amount.toFixed(2));
+            var petrol_sales = $('#petrol_sales').html();
+            petrol_sales = parseFloat(petrol_sales);
+            petrol_sales_qty = petrol_sales + qty;
+            $('#petrol_sales').html(petrol_sales_qty);
         });
         $('#petrol_wholesale_price').change(function(){
             price = this.value;
@@ -253,10 +285,14 @@
             $('#petrol_wholesale_total_amount').val(total_amount.toFixed(2));
         });
         $('#diesel_wholesale_quantity').change(function(){
-            qty = this.value;
+            qty = parseFloat(this.value);
             price = $('#diesel_wholesale_price').val();
             total_amount = parseFloat(price*qty);
             $('#diesel_wholesale_total_amount').val(total_amount.toFixed(2));
+            var diesel_sales = $('#diesel_sales').html();
+            diesel_sales = parseFloat(diesel_sales);
+            diesel_sales_qty = diesel_sales + qty;
+            $('#diesel_sales').html(diesel_sales_qty);
         });
         $('#diesel_wholesale_price').change(function(){
             price = this.value;

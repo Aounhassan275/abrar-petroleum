@@ -30,6 +30,7 @@
                     <li class="nav-item"><a href="#top-tab3" @if($active_tab == 'misc') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Misc. Products</a></li>
                     <li class="nav-item"><a href="#top-tab4" @if($active_tab == 'sale_detail') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Sales Detail</a></li>
                     <li class="nav-item"><a href="#top-tab5" @if($active_tab == 'debit_credit') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Debit Credit</a></li>
+                    <li class="nav-item"><a href="#top-tab6" @if($active_tab == 'debit_credit_missing') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Debit Credit Missing ({{$missing_debit_credits->count()}})</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -90,6 +91,9 @@
                         @else 
                             @include('user.sale.partials.debit_credit_store')
                         @endif
+                    </div>
+                    <div @if($active_tab == 'debit_credit_missing')  class="tab-pane fade show active" @else class="tab-pane fade" @endif id="top-tab6">
+                            @include('user.sale.partials.debit_credit_missing')
                     </div>
                 </div>
             </div>

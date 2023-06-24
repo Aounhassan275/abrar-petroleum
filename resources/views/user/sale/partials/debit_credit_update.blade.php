@@ -95,8 +95,9 @@
         </div>
         <div class="form-group col-md-2">
             <select name="account_id[]" 
-            {{-- style="color:{{$debit_credit->account->accountCategory->color}};"  --}}
+            @if($debit_credit->account_id == null) style="color:red;" @endif
             class="form-control" required @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly @endif>
+                <option >Select Account</option>
                 @if($debit_credit->account_id == 42)
                     <option selected value="42">Sale</option>
                 @elseif($debit_credit->account_id == $cash_account_id)

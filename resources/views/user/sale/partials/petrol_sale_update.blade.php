@@ -68,7 +68,7 @@
         <div class="form-group col-md-6">
             <label>Qty</label>
             <input type="hidden" name="testing_sale_id" value="{{Auth::user()->getTestSale($date,$petrol)?Auth::user()->getTestSale($date,$petrol)->id:null}}">
-            <input type="number" class="form-control" value="{{Auth::user()->getTestSale($date,$petrol)?Auth::user()->getTestSale($date,$petrol)->qty:''}}" name="testing_quantity" id="">
+            <input type="number" class="form-control" value="{{Auth::user()->getTestSale($date,$petrol)?Auth::user()->getTestSale($date,$petrol)->qty:''}}" name="testing_quantity" id="petrol_testing_quantity_update">
         </div>
         @if(Auth::user()->getTestSale($date,$petrol))
         <div class="form-group col-md-6">
