@@ -26,7 +26,7 @@ class ReportsController extends Controller
         }
         $inital_start_date = DebitCredit::where('user_id',Auth::user()->id)->first()->sale_date;
         $inital_start_date = $inital_start_date?Carbon::parse($inital_start_date):Carbon::today();
-        $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
+        $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->orderBy('display_order','ASC')->get();
         $test_sales = Sale::where('user_id',Auth::user()->id)
             ->where('total_amount','>',0)
             ->where('type','test')
