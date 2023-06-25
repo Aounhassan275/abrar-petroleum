@@ -129,6 +129,7 @@ class Product extends Model
     {
         $total_amount = Sale::where('user_id',Auth::user()->id)
                         ->where('product_id',$this->id)
+                        ->where('type','!=','test')
                         ->whereDate('sale_date',$date)
                         ->sum('total_amount'); 
         return round($total_amount);

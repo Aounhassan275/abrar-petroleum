@@ -581,6 +581,14 @@ class SaleController extends Controller
                 ]);
             }
         }
+        $debit_credit = DebitCredit::where('account_id','42')->where('user_id',Auth::user()->id)->where('sale_date',$request->change_rate_date)->first();
+        $new_sale_amount = round(Auth::user()->todaySaleAmount($request->change_rate_date));
+        if($debit_credit)
+        {
+            $debit_credit->update([
+                'credit' => $new_sale_amount
+            ]);
+        }
         toastr()->success('Sale Updated successfully');
         return response([
             'date' => $request->change_rate_date,
