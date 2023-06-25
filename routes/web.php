@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Sale;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
@@ -174,5 +175,15 @@ Route::get('/cache_clear', function() {
   Artisan::call('view:clear');
   Artisan::call('cache:clear');
   return 'Cache Clear DOne';
+});
+Route::get('/round_figure', function() {
+  $sales =  Sale::all();
+  foreach($sales as $sale)
+  {
+    $sale->update([
+      'total_amount' => round($sale->total_amount)
+    ]);
+  }
+  return 'Sale DOne';
 });
 
