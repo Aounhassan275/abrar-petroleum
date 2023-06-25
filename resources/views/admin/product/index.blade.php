@@ -36,6 +36,10 @@
                             <label>Product Selling Price</label>
                             <input name="selling_price" type="text" value="{{old('selling_price')}}" class="form-control" placeholder="Enter Product Selling Price" required>
                         </div>
+                        <div class="form-group col-md-6">
+                            <label>Product Display Order</label>
+                            <input name="display_order" type="number" value="{{old('display_order')}}" class="form-control" placeholder="Enter Product Display Order" required>
+                        </div>
                     </div>
                     <div class="text-right">
                         <button type="submit" class="btn btn-primary">Create <i class="icon-paperplane ml-2"></i></button>
@@ -59,20 +63,22 @@
                 <th>Product Purchasing Price</th>
                 <th>Product Selling Price</th>
                 <th>Site Rates</th>
+                <th>Display Order</th>
                 <th>Action</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (App\Models\Product::whereNull('user_id')->get() as $key => $product)
+            @foreach (App\Models\Product::whereNull('user_id')->orderBy('display_order','ASC')->get() as $key => $product)
             <tr>
                 <td>{{$key+1}}</td>
                 <td>{{$product->name}}</td>
                 <td>{{$product->purchasing_price}}</td>
                 <td>{{$product->selling_price}}</td>
                 <td><a href="{{route('admin.product.show',$product->id)}}" target="_blank">Site Rate</a></td>
+                <td>{{$product->display_order}}</td>
                 <td>
-                    <button data-toggle="modal" data-target="#edit_modal" name="{{$product->name}}"
+                    <button data-toggle="modal" data-target="#edit_modal" name="{{$product->name}}" display_order="{{$product->display_order}}"
                         purchasing_price="{{$product->purchasing_price}}" selling_price="{{$product->selling_price}}" id="{{$product->id}}" class="edit-btn btn btn-primary">Edit</button>
                 </td>
                 <td>
@@ -115,6 +121,10 @@
                         <label>Product Change Date</label>
                         <input name="date" id="date" type="date" class="form-control" placeholder="Enter Product Selling Price" required>
                     </div>
+                    <div class="form-group">
+                        <label>Product Display Order</label>
+                        <input name="display_order" id="display_order" type="number" class="form-control" placeholder="Enter Product Display Order" required>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Cancel</button>
@@ -134,6 +144,8 @@
             let name = $(this).attr('name');
             let purchasing_price = $(this).attr('purchasing_price');
             let selling_price = $(this).attr('selling_price');
+            let display_order = $(this).attr('display_order');
+            $('#display_order').val(display_order);
             $('#purchasing_price').val(purchasing_price);
             $('#selling_price').val(selling_price);
             $('#name').val(name);

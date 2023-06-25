@@ -44,48 +44,22 @@
                             @if(Auth::user()->haveSupplierSale($date)->count() > 0)
                                 @include('supplier.sale.partials.sale_update')
                             @else 
-                                @include('supplier.sale.partials.diesel_sale')
+                                @include('supplier.sale.partials.sale_store')
                             @endif
                         </div>
 
                     </div>
 
-                    <div @if($active_tab == 'misc')  class="tab-pane fade show active" @else class="tab-pane fade" @endif id="top-tab3">
-                        
-                        @if(Auth::user()->haveSale($date)->count() > 0)
-                            @include('user.sale.partials.misc_sale_update')
-                        @else 
-                            @include('user.sale.partials.misc_sale')
-                        @endif
-                    </div>
-
-                    <div @if($active_tab == 'sale_detail')  class="tab-pane fade show active" @else class="tab-pane fade" @endif class="tab-pane fade" id="top-tab4">
-                        <div class="form-group col-4">
-                            <label>
-                                Date
-                                <input type="text"  id="sale_detail_date" class="daterange-single form-control pull-right dates" style="height: 35px; "
-                                       value="{{ date('m/d/Y', strtotime(@$date))}}">
-                            </label>   
-                        </div>
-                        <div id="sale-detail">
-                            @include('user.sale.partials.sale_detail',[
-                                'petrol' => $petrol,
-                                'diesel' => $diesel,
-                                'date' => $date,
-                            ])
-                        </div>
-                    </div>
-
-                    <div @if($active_tab == 'debit_credit')  class="tab-pane fade show active" @else class="tab-pane fade" @endif id="top-tab5">
+                    <div @if($active_tab == 'debit_credit')  class="tab-pane fade show active" @else class="tab-pane fade" @endif id="top-tab3">
                         
                         @if(Auth::user()->haveDebitCredit($date)->count() > 0)
-                            @include('user.sale.partials.debit_credit_update')
+                            @include('supplier.sale.partials.debit_credit_update')
                         @else 
-                            @include('user.sale.partials.debit_credit_store')
+                            @include('supplier.sale.partials.debit_credit_store')
                         @endif
                     </div>
-                    <div @if($active_tab == 'debit_credit_missing')  class="tab-pane fade show active" @else class="tab-pane fade" @endif id="top-tab6">
-                            @include('user.sale.partials.debit_credit_missing')
+                    <div @if($active_tab == 'debit_credit_missing')  class="tab-pane fade show active" @else class="tab-pane fade" @endif id="top-tab4">
+                            @include('supplier.sale.partials.debit_credit_missing')
                     </div>
                 </div>
             </div>

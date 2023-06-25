@@ -137,6 +137,8 @@
             let name = $(this).attr('name');
             let purchasing_price = $(this).attr('purchasing_price');
             let selling_price = $(this).attr('selling_price');
+            let display_order = $(this).attr('display_order');
+            $('#display_order').val(display_order);
             $('#purchasing_price').val(purchasing_price);
             $('#selling_price').val(selling_price);
             $('#name').val(name);

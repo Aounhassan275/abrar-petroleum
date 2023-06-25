@@ -54,11 +54,16 @@
     function saleDetailPrice(index)
     {
         var qty = $('#change_sale_quantity_' + index).html();
+        var test_qty = $('#test_sale_quantity_' + index).html();
         var price = $('#change_sale_rate_' + index).val();
         price = parseFloat(price);
         qty = parseFloat(qty);
+        test_qty = parseFloat(test_qty);
         total_amount = parseFloat(price*qty);
         $('#change_sale_amount_' + index).html(total_amount.toFixed(0));
+        total_qty = parseFloat(test_qty+qty);
+        total_cummulative_amount = parseFloat(price*total_qty);
+        $('#cummulative_sale_amount_'+ index).html(total_cummulative_amount.toFixed(0));
         $('#change_sale_rate_button').show();
     }
     function dieselCurrentReading(index)

@@ -26,7 +26,7 @@
     <thead>
         <tr>
             <th>Account</th>
-            <th>Account Category</th>
+            {{-- <th>Account Category</th> --}}
             <th>Debit</th>
             <th>Credit</th>
         </tr>
@@ -39,45 +39,45 @@
         @endphp
         @foreach($accounts as $key => $account)
         @if($account->account_category_id == $product_account_category_id)
-        @if(($account->getProductBalance($start_date,$end_date) < 0 || $account->getProductBalance($start_date,$end_date) > 0))
+        @if(($account->getProductBalance($inital_start_date,$end_date) < 0 || $account->getProductBalance($inital_start_date,$end_date) > 0))
         <tr>
-            <td>{{@$account->name}}</td>
-            <td>{{@$account->accountCategory->name}}</td>
+            <td>{{@$account->name}} @if($account->designation) ({{$account->designation}}) @endif</td>
+            {{-- <td>{{@$account->accountCategory->name}}</td> --}}
             <td>
-                @if($account->getProductBalance($start_date,$end_date) < 0)
-                {{abs($account->getProductBalance($start_date,$end_date))}}
+                @if($account->getProductBalance($inital_start_date,$end_date) < 0)
+                {{abs($account->getProductBalance($inital_start_date,$end_date))}}
                 @endif
             </td>
             <td>
-                @if($account->getProductBalance($start_date,$end_date) > 0)
-                {{$account->getProductBalance($start_date,$end_date)}}
+                @if($account->getProductBalance($inital_start_date,$end_date) > 0)
+                {{$account->getProductBalance($inital_start_date,$end_date)}}
                 @endif
             </td>
         </tr>
         
         @php 
-        if($account->getProductBalance($start_date,$end_date) < 0)
+        if($account->getProductBalance($inital_start_date,$end_date) < 0)
         {
-            $totalDebit += abs($account->getProductBalance($start_date,$end_date));
+            $totalDebit += abs($account->getProductBalance($inital_start_date,$end_date));
         }else{
-            $totalCredit += abs($account->getProductBalance($start_date,$end_date));
+            $totalCredit += abs($account->getProductBalance($inital_start_date,$end_date));
         }
         @endphp
         @endif
-        @elseif($account->name != 'Sale' && ($account->debitCredits($start_date,$end_date) < 0 || $account->debitCredits($start_date,$end_date) > 0))
+        @elseif($account->name != 'Sale' && ($account->debitCredits($inital_start_date,$end_date) < 0 || $account->debitCredits($inital_start_date,$end_date) > 0))
         <tr>
-            <td>{{@$account->name}}</td>
-            <td>{{@$account->accountCategory->name}}</td>
+            <td>{{@$account->name}} @if($account->designation) ({{$account->designation}}) @endif</td>
+            {{-- <td>{{@$account->accountCategory->name}}</td> --}}
             <td>
                 @if($account->name == "Cash in Hand")
                 {{abs(@$lastDayCash->debit)}}
-                @elseif($account->debitCredits($start_date,$end_date) < 0)
-                {{abs($account->debitCredits($start_date,$end_date))}}
+                @elseif($account->debitCredits($inital_start_date,$end_date) < 0)
+                {{abs($account->debitCredits($inital_start_date,$end_date))}}
                 @endif
             </td>
             <td>
-                @if($account->debitCredits($start_date,$end_date) > 0)
-                {{$account->debitCredits($start_date,$end_date)}}
+                @if($account->debitCredits($inital_start_date,$end_date) > 0)
+                {{$account->debitCredits($inital_start_date,$end_date)}}
                 @endif
             </td>
         </tr>
@@ -92,11 +92,11 @@
             }
 
         }else{
-            if($account->debitCredits($start_date,$end_date) < 0)
+            if($account->debitCredits($inital_start_date,$end_date) < 0)
             {
-                $totalDebit += abs($account->debitCredits($start_date,$end_date));
+                $totalDebit += abs($account->debitCredits($inital_start_date,$end_date));
             }else{
-                $totalCredit += abs($account->debitCredits($start_date,$end_date));
+                $totalCredit += abs($account->debitCredits($inital_start_date,$end_date));
             }
         }
         if($account->name == "Working Capital")
@@ -126,7 +126,7 @@
         @endphp
         @endif
         <tr>
-            <td colspan="2" class="text-center">Total Balance</td>
+            <td class="text-center">Total Balance</td>
             <td>{{$totalDebit}}</td>
             <td>{{$totalCredit}}</td>
         </tr>

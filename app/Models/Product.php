@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Auth;
 class Product extends Model
 {
     protected $fillable = [
-        'name','purchasing_price','selling_price','user_id','supplier_purchasing_price','supplier_id'
+        'name','purchasing_price','selling_price','user_id','supplier_purchasing_price','supplier_id',
+        'display_order'
     ];
     
 	protected $appends = [
