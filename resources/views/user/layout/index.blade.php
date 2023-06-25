@@ -187,12 +187,14 @@
 								<span>Accounts</span>
 							</a>
 						</li>
+						@if(Auth::user()->machines->count() < 4)
 						<li class="nav-item">
 							<a href="{{route('user.machine.index')}}" class="nav-link {{Request::is('user/machine') ?'active':''}}">
 								<i class="icon-home4"></i>
 								<span>Machines</span>
 							</a>
 						</li>
+						@endif
 						<li class="nav-item">
 							<a href="{{route('user.reports.index')}}" class="nav-link {{Request::is('user/reports') ?'active':''}}">
 								<i class="icon-home4"></i>
