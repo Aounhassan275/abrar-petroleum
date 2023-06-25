@@ -72,8 +72,8 @@
                 $quantityBalance = $quantityBalance + Auth::user()->getTodayPurchase($date,$product);
                 $quantityBalance = $quantityBalance - Auth::user()->getTodaySale($date,$product);
                 $totalCredit = $totalCredit + Auth::user()->getTodaySaleTotalAmount($date,$product);
-                $amountBalance = round($amountBalance + Auth::user()->getTodaySaleTotalAmount($date,$product));
-                $amountBalance = round($amountBalance - Auth::user()->getTodayPurchaseTotalAmount($date,$product));
+                $amountBalance = $amountBalance + Auth::user()->getTodaySaleTotalAmount($date,$product);
+                $amountBalance = $amountBalance - Auth::user()->getTodayPurchaseTotalAmount($date,$product);
                 $totalDebit = $totalDebit + Auth::user()->getTodayPurchaseTotalAmount($date,$product);
                 $totalSale = $totalSale + Auth::user()->getTodaySale($date,$product);
             @endphp
