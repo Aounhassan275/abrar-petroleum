@@ -181,7 +181,7 @@ Route::get('/round_figure', function() {
   foreach($sales as $sale)
   {
     $sale->update([
-      'total_amount' => round($sale->total_amount)
+      'total_amount' => $sale->qty * $sale->price
     ]);
   }
   return 'Sale DOne';
