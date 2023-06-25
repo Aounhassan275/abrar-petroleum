@@ -109,7 +109,7 @@
         @if($is_working_captial == false && $workingCaptial)
         <tr>
             <td>Working Capital</td>
-            <td>Primary Account</td>
+            {{-- <td>Primary Account</td> --}}
             <td>
                 
             <td>

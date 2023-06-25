@@ -59,4 +59,19 @@ class Supplier extends Authenticatable
     {
         return $this->hasMany(Employee::class);
     }
+    public function haveSale($date,$product = null)
+    {   
+        if($product == null)
+        {
+            $sales = Sale::where('user_id',$this->id)
+                            ->whereDate('sale_date',$date)
+                            ->get();  
+        }else{
+            $sales = Sale::where('user_id',$this->id)
+                            ->where('product_id',$product->id)
+                            ->whereDate('sale_date',$date)
+                            ->get();  
+        }
+        return $sales;
+    }
 }

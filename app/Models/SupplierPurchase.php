@@ -8,8 +8,13 @@ class SupplierPurchase extends Model
 {
     protected $fillable = [
         'price', 'qty','total_amount','status','product_id','supplier_id','supplier_vehicle_id',
-        'supplier_terminal_id','access' 
+        'supplier_terminal_id','access','date'
     ];
+
+    protected $casts = [
+        'date' => 'date',
+    ];
+
     public function supplier()
     {
         return $this->belongsTo('App\Models\Suppliers','supplier_id');

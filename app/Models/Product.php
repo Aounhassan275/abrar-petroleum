@@ -207,4 +207,9 @@ class Product extends Model
             return $selling_amount->selling_price;
 		return @$this->selling_price;
 	}
+    public function getSaleForSupplier($date)
+    {
+        $sale = Purchase::where('product_id',$this->id)->whereDate('date',$date)->first();
+        return $sale;
+    }
 }

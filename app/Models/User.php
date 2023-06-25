@@ -175,13 +175,13 @@ class User extends Authenticatable
                         ->where('type','test')
                         ->whereDate('sale_date',$date)
                         ->sum('total_amount');
-        return $todaySale - $testSale;
+        return round($todaySale - $testSale);
         return $todaySale;
     }
     public function getTodayPurchaseTotalAmount($date,$product)
     {
         $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('date',$date)->sum('total_amount');
-        return $todayPurchase;
+        return round($todayPurchase);
     }
     public function getTodayPurchasePrice($date,$product)
     {

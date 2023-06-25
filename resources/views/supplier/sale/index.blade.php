@@ -4,71 +4,7 @@
     Manage Sale
 @endsection
 @section('content')
-<div class="row">
-    <div class="col-md-12">
-        
-        <div class="card">
-            <div class="card-header header-elements-inline">
-                <h6 class="card-title">Product Sales</h6>
-                <div class="header-elements">
-                    <div class="list-icons">
-                        <a class="list-icons-item" data-action="collapse"></a>
-                        <a class="list-icons-item" data-action="reload"></a>
-                        <a class="list-icons-item" data-action="remove"></a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card-body">
-                <ul class="nav nav-tabs nav-tabs-top">
-                    <li class="nav-item"><a href="#top-tab1" @if($active_tab == 'purchase') class="nav-link active" @else class="nav-link" @endif data-toggle="tab">Purchase</a></li>
-                    <li class="nav-item"><a href="#top-tab2" @if($active_tab == 'sale') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Sale</a></li>
-                    <li class="nav-item"><a href="#top-tab3" @if($active_tab == 'debit_credit') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Debit Credit</a></li>
-                    <li class="nav-item"><a href="#top-tab4" @if($active_tab == 'debit_credit_missing') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Debit Credit Missing ({{$missing_debit_credits->count()}})</a></li>
-                </ul>
-
-                <div class="tab-content">
-                    <div @if($active_tab == 'purchase')  class="tab-pane fade show active" @else class="tab-pane fade" @endif id="top-tab1">
-                        <div class="card-body">
-                            @if(Auth::user()->haveSupplierPurchase($date)->count() > 0)
-                                @include('supplier.sale.partials.purchase_update')
-                            @else 
-                                @include('supplier.sale.partials.purchase_store')
-                            @endif
-                        </div>
-
-                    </div>
-
-                    <div  @if($active_tab == 'sale')  class="tab-pane fade show active" @else class="tab-pane fade" @endif id="top-tab2">
-                        <div class="card-body">
-                            @if(Auth::user()->haveSupplierSale($date)->count() > 0)
-                                @include('supplier.sale.partials.sale_update')
-                            @else 
-                                @include('supplier.sale.partials.sale_store')
-                            @endif
-                        </div>
-
-                    </div>
-
-                    <div @if($active_tab == 'debit_credit')  class="tab-pane fade show active" @else class="tab-pane fade" @endif id="top-tab3">
-                        
-                        @if(Auth::user()->haveDebitCredit($date)->count() > 0)
-                            @include('supplier.sale.partials.debit_credit_update')
-                        @else 
-                            @include('supplier.sale.partials.debit_credit_store')
-                        @endif
-                    </div>
-                    <div @if($active_tab == 'debit_credit_missing')  class="tab-pane fade show active" @else class="tab-pane fade" @endif id="top-tab4">
-                            @include('supplier.sale.partials.debit_credit_missing')
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Basic layout-->
-
-    </div>
-</div>
-{{-- <div class="card">
+<div class="card">
     <div class="card-header header-elements-inline text-right">
         <a href="{{route('supplier.sale.create')}}" class="btn btn-primary btn-sm text-right">Add New Sale</a>
     </div>
@@ -95,7 +31,7 @@
                 <td>{{$sale->price}}</td>
                 <td>{{$sale->qty}}</td>
                 <td>{{$sale->total_amount}}</td>
-                <td>{{$sale->created_at->format('d M,Y')}}</td>
+                <td>{{$sale->created_at?$sale->created_at->format('d M,Y'):''}}</td>
                 <td>
                     <a href="{{route('supplier.sale.edit',$sale->id)}}" class="btn btn-primary btn-sm">Edit</a>
                 </td>
@@ -110,7 +46,7 @@
             @endforeach
         </tbody>
     </table>
-</div> --}}
+</div>
 
 @endsection
 @section('scripts')
