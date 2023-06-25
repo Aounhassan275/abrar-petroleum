@@ -125,6 +125,14 @@ class Product extends Model
                         ->sum('total_amount'); 
         return round($total_amount - $total_sale_amount);
     }
+    public function totalCommulativeSaleAmount($date)
+    {
+        $total_amount = Sale::where('user_id',Auth::user()->id)
+                        ->where('product_id',$this->id)
+                        ->whereDate('sale_date',$date)
+                        ->sum('total_amount'); 
+        return round($total_amount);
+    }
     public function totalDrAmount($start_date,$end_date)
     {
         $total_sales = Sale::where('user_id',Auth::user()->id)

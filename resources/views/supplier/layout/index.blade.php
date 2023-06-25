@@ -168,6 +168,12 @@
 							</a>
 						</li>
 						<li class="nav-item">
+							<a href="{{route('supplier.sale.index')}}" class="nav-link {{Request::is('supplier/sale') || Request::is('supplier/sale/*')?'active':''}}">
+								<i class="icon-home4"></i>
+								<span>Sale</span>
+							</a>
+						</li>
+						<li class="nav-item">
 							<a href="{{route('supplier.terminal.index')}}" class="nav-link {{Request::is('supplier/terminal') ?'active':''}}">
 								<i class="icon-home4"></i>
 								<span>Terminal</span>
@@ -179,22 +185,16 @@
 								<span>Vehicle</span>
 							</a>
 						</li>
-						<li class="nav-item">
+						{{-- <li class="nav-item">
 							<a href="{{route('supplier.product.index')}}" class="nav-link {{Request::is('supplier/product') ?'active':''}}">
 								<i class="icon-home4"></i>
 								<span>Product</span>
 							</a>
-						</li>
+						</li> --}}
 						<li class="nav-item">
 							<a href="{{route('supplier.purchase.index')}}" class="nav-link {{Request::is('supplier/purchase') || Request::is('supplier/purchase/*')?'active':''}}">
 								<i class="icon-home4"></i>
 								<span>Purchase</span>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="{{route('supplier.sale.index')}}" class="nav-link {{Request::is('supplier/sale') || Request::is('supplier/sale/*')?'active':''}}">
-								<i class="icon-home4"></i>
-								<span>Sale</span>
 							</a>
 						</li>
 					</ul>

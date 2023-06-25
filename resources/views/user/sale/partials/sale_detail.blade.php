@@ -8,6 +8,7 @@
                 <th>Test</th>
                 <th>Whole Sale</th>
                 <th class="text-left">Price</th>
+                <th>Total Commulative Amount</th>
                 <th>Total Amount</th>
             </tr>
         </thead>
@@ -21,6 +22,9 @@
                 <td> 
                     <input type="hidden" name="change_product_id[]" value="{{$petrol->id}}">
                     <input type="text" class="form-control" id="change_sale_rate_petrol"  style="width:30%;" onchange="saleDetailPrice('petrol')" name="change_sale_rate[]" required value="{{$petrol->getSaleRate($date)}}">
+                </td>
+                <td>
+                    {{$petrol->totalCommulativeSaleAmount($date)}}
                 </td>
                 <td id="change_sale_amount_petrol">
                     {{$petrol->totalSaleAmount($date)}}
@@ -38,6 +42,7 @@
                     <input type="hidden" name="change_product_id[]" value="{{$diesel->id}}">
                     <input type="text" class="form-control" id="change_sale_rate_diesel" style="width:30%;" onchange="saleDetailPrice('diesel')" name="change_sale_rate[]" required value="{{$diesel->getSaleRate($date)}}">
                 </td>
+                <td id="">{{$diesel->totalCommulativeSaleAmount($date)}}</td>
                 <td id="change_sale_amount_diesel">{{$diesel->totalSaleAmount($date)}}</td>
             </tr>
             @endif
@@ -52,6 +57,7 @@
                     <input type="hidden" name="change_product_id[]" value="{{$misc_product->id}}">
                     <input type="text" class="form-control" id="change_sale_rate_{{$misc_product_index}}" onchange="saleDetailPrice('{{$misc_product_index}}')"   style="width:30%;" name="change_sale_rate[]" required value="{{$misc_product->getSaleRate($date)}}">
                 </td>
+                <td id="}">{{$misc_product->totalCommulativeSaleAmount($date)}}</td>
                 <td id="change_sale_amount_{{$misc_product_index}}">{{$misc_product->totalSaleAmount($date)}}</td>
             </tr>
             @endif
