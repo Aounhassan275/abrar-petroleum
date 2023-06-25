@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Purchase;
 use App\Models\Sale;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -177,12 +178,20 @@ Route::get('/cache_clear', function() {
   return 'Cache Clear DOne';
 });
 Route::get('/round_figure', function() {
-  $sales =  Sale::all();
-  foreach($sales as $sale)
+  $purchases =  Purchase::all();
+  foreach($purchases as $purchase)
   {
-    $sale->update([
-      'total_amount' => $sale->qty * $sale->price
-    ]);
+    if($purchase->access > 0)
+    {
+      $purchase->update([
+        'total_amount' => $purchase->access * $purchase->price,
+        'access_total_amount' => $purchase->access * $purchase->price
+      ]);
+    }else{
+      $purchase->update([
+        'total_amount' => $purchase->qty * $purchase->price,
+      ]);
+    }
   }
   return 'Sale DOne';
 });
