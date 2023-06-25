@@ -564,24 +564,21 @@ class SaleController extends Controller
         foreach($request->change_product_id  as $key => $change_product_id)
         {
             $product = Product::find($change_product_id);
-            if($product->getSaleRate($request->change_rate_date) != $request->change_sale_rate[$key])
+            if($product->user_id)
             {
-                if($product->user_id)
-                {
-                    $sales = Sale::where('user_id',Auth::user()->id)->whereDate('sale_date',$request->change_rate_date)
-                    ->where('product_id',$product->id)->where('type','misc_sale')->get();
+                $sales = Sale::where('user_id',Auth::user()->id)->whereDate('sale_date',$request->change_rate_date)
+                ->where('product_id',$product->id)->where('type','misc_sale')->get();
 
-                }else{
-                    $sales = Sale::where('user_id',Auth::user()->id)->whereDate('sale_date',$request->change_rate_date)
-                    ->where('product_id',$product->id)->where('type','retail_sale')->get();
-                }
-                foreach($sales as $sale)
-                {
-                    $sale->update([
-                        'price' => $request->change_sale_rate[$key],
-                        'total_amount' => $request->change_sale_rate[$key] * $sale->qty,
-                    ]);
-                }
+            }else{
+                $sales = Sale::where('user_id',Auth::user()->id)->whereDate('sale_date',$request->change_rate_date)
+                ->where('product_id',$product->id)->where('type','!=','misc_sale')->get();
+            }
+            foreach($sales as $sale)
+            {
+                $sale->update([
+                    'price' => $request->change_sale_rate[$key],
+                    'total_amount' => $request->change_sale_rate[$key] * $sale->qty,
+                ]);
             }
         }
         toastr()->success('Sale Updated successfully');
