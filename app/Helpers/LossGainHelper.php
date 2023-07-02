@@ -48,7 +48,7 @@ class LossGainHelper
                     'credit' => @$credit,
                     'account_id' => $account->id,
                     'description' => $description,
-                    'sale_date' => Carbon::today(),
+                    'sale_date' => $date,
                 ]);
             }
         }
