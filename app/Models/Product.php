@@ -137,6 +137,7 @@ class Product extends Model
     }
     public function totalDrAmount($start_date,$end_date)
     {
+        $amountBalance = -(Auth::user()->getPurchasePrice($start_date,$this) * Auth::user()->getOpeningBalance($start_date,$this));
         $total_sales = Sale::where('user_id',Auth::user()->id)
                         ->where('product_id',$this->id)
                         ->whereBetween('sale_date', [$start_date,$end_date])
@@ -152,7 +153,9 @@ class Product extends Model
                         ->where('product_id',$this->id)
                         ->whereBetween('date', [$start_date,$end_date])
                         ->sum('total_amount'); 
-        return round($sales - $total_purchases);
+        $amountBalance = $amountBalance - $total_purchases;
+        $amountBalance = $amountBalance + $sales;
+        return round($amountBalance);
     }
     public function getSaleRate($date)
     {

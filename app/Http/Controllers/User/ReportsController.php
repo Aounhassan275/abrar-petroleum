@@ -21,7 +21,8 @@ class ReportsController extends Controller
             $start_date = Carbon::parse($request->start_date);
             $end_date = Carbon::parse($request->end_date);
         }else{
-            $start_date = Carbon::now()->startOfMonth();
+            $inital_debit_credit = DebitCredit::where('user_id',Auth::user()->id)->first();
+            $inital_start_date = $start_date =  $inital_debit_credit?Carbon::parse($inital_debit_credit->sale_date):Carbon::today();
             $last_debit_credit = DebitCredit::where('user_id',Auth::user()->id)->orderBy('sale_date','DESC')->first();
             $end_date = $last_debit_credit?Carbon::parse($last_debit_credit->sale_date):Carbon::today();
         }

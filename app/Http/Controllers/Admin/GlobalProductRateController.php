@@ -85,9 +85,12 @@ class GlobalProductRateController extends Controller
      * @param  \App\Models\GlobalProductRate  $globalProductRate
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, GlobalProductRate $globalProductRate)
+    public function update(Request $request, $id)
     {
-        //
+        $globalProductRate = GlobalProductRate::find($id);
+        $globalProductRate->update($request->all());
+        toastr()->success('Global Product Rate Informations Updated successfully');
+        return redirect()->back();
     }
 
     /**
@@ -96,8 +99,11 @@ class GlobalProductRateController extends Controller
      * @param  \App\Models\GlobalProductRate  $globalProductRate
      * @return \Illuminate\Http\Response
      */
-    public function destroy(GlobalProductRate $globalProductRate)
+    public function destroy($id)
     {
-        //
+        $globalProductRate = GlobalProductRate::find($id);
+        $globalProductRate->delete();
+        toastr()->success('Global Product Rate Deleted Successfully');
+        return redirect()->back();
     }
 }

@@ -30,8 +30,8 @@
             <th>Stock</th>
             <th>Rate</th>
             <th>Stock Value</th>
-            {{-- <th>Dr Balance</th>
-            <th>Cr Balance</th> --}}
+            <th>Dr Balance</th>
+            <th>Cr Balance</th>
             <th>Revenue</th>
         </tr>
     </thead>
@@ -43,8 +43,8 @@
         @php 
             $price = round($product->availableStock() * $product->purchasing_price);
             $totalAmount = $product->totalDrAmount($start_date,$end_date);
-            // $revenue = abs($totalAmount);
-            $totalRevenue += abs($totalAmount);
+            $revenue = $price - abs($totalAmount);
+            $totalRevenue += abs($revenue);
         @endphp
         <tr>
             <td>{{$key+1}}</td>
@@ -55,14 +55,14 @@
             <td>
                 @if($totalAmount < 0) 
                 Dr ({{abs($totalAmount)}})
-                @else 
+                @endif
+            </td>
+            <td>
+                @if($totalAmount > 0) 
                 Cr ({{abs($totalAmount)}})
                 @endif
             </td>
-            {{-- <td>@if($totalAmount > 0) 
-                @endif
-            </td>
-            <td>{{round($revenue)}}</td> --}}
+            <td>{{round($revenue)}}</td>
         </tr>
         @endforeach
     </tbody>

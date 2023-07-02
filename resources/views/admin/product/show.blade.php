@@ -64,16 +64,16 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (App\Models\GlobalProductRate::where('product_id',$product->id)->get() as $key => $product)
+            @foreach (App\Models\GlobalProductRate::where('product_id',$product->id)->get() as $key => $global_product)
             <tr>
                 <td>{{$key+1}}</td>
-                <td>{{$product->user->username}}</td>
-                <td>{{$product->selling_price}}</td>
+                <td>{{$global_product->user->username}}</td>
+                <td>{{$global_product->selling_price}}</td>
                 <td>
-                    <button data-toggle="modal" data-target="#edit_modal" selling_price="{{$product->selling_price}}" id="{{$product->id}}" class="edit-btn btn btn-primary">Edit</button>
+                    <button data-toggle="modal" data-target="#edit_modal" selling_price="{{$global_product->selling_price}}" id="{{$global_product->id}}" class="edit-btn btn btn-primary">Edit</button>
                 </td>
                 <td>
-                    <form action="{{route('admin.product.destroy',$product->id)}}" method="POST">
+                    <form action="{{route('admin.global_product_rate.destroy',$product->id)}}" method="POST">
                         @method('DELETE')
                         @csrf
                     <button class="btn btn-danger">Delete</button>
@@ -123,7 +123,7 @@
             $('#selling_price').val(selling_price);
             $('#name').val(name);
             $('#id').val(id);
-            $('#updateForm').attr('action','{{route('admin.product.update','')}}' +'/'+id);
+            $('#updateForm').attr('action','{{route('admin.global_product_rate.update','')}}' +'/'+id);
         });
     });
 </script>
