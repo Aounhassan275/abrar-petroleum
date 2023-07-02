@@ -16,18 +16,17 @@ class ReportsController extends Controller
 {
     public function index(Request $request)
     {
+        $inital_debit_credit = DebitCredit::where('user_id',Auth::user()->id)->whereNotNull('sale_date')->orderBy('sale_date','ASC')->first();
+        $inital_start_date = $inital_debit_credit?Carbon::parse($inital_debit_credit->sale_date):Carbon::today();     
         if($request->start_date)
         {
             $start_date = Carbon::parse($request->start_date);
             $end_date = Carbon::parse($request->end_date);
         }else{
-            $inital_debit_credit = DebitCredit::where('user_id',Auth::user()->id)->first();
-            $inital_start_date = $start_date =  $inital_debit_credit?Carbon::parse($inital_debit_credit->sale_date):Carbon::today();
+            $start_date = $inital_start_date;
             $last_debit_credit = DebitCredit::where('user_id',Auth::user()->id)->orderBy('sale_date','DESC')->first();
             $end_date = $last_debit_credit?Carbon::parse($last_debit_credit->sale_date):Carbon::today();
-        }
-        $inital_debit_credit = DebitCredit::where('user_id',Auth::user()->id)->first();
-        $inital_start_date = $inital_debit_credit?Carbon::parse($inital_debit_credit->sale_date):Carbon::today();
+        } 
         $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->orderBy('display_order','ASC')->get();
         $test_sales = Sale::where('user_id',Auth::user()->id)
             ->where('total_amount','>',0)
