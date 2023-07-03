@@ -25,7 +25,7 @@ class SaleController extends Controller
     {
         $diesel = Product::where('name','HSD')->first();
         $petrol = Product::where('name','PMG')->first();
-        $sale_date = Sale::all()->last()->sale_date;
+        $sale_date = Sale::orderBy('sale_date','DESC')->first()->sale_date;
         if($request->date)
         {
             $sale_date->addDay();    

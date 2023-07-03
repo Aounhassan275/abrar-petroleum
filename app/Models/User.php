@@ -282,6 +282,24 @@ class User extends Authenticatable
             ->sum('debit');
         return $credit - $debit;
     }
+    public function totalExpenseForIncomeReport($start_date,$end_date)
+    {
+        $category_id = AccountCategory::where('name','Expenses & Income')->first()->id;
+        $credit = DebitCredit::select('debit_credits.*','debit_credit_accounts.account_category_id as account_category_id')
+            ->join('debit_credit_accounts', 'debit_credits.account_id', 'debit_credit_accounts.id')
+            ->where('debit_credits.user_id',Auth::user()->id)
+            ->where('debit_credit_accounts.account_category_id',$category_id)
+            ->whereBetween('debit_credits.sale_date', [$start_date,$end_date])->sum('credit');
+        $debit = DebitCredit::select('debit_credits.*','debit_credit_accounts.account_category_id as account_category_id')
+            ->join('debit_credit_accounts', 'debit_credits.account_id', 'debit_credit_accounts.id')
+            ->where('debit_credits.user_id',Auth::user()->id)
+            ->where('debit_credit_accounts.account_category_id',$category_id)
+            ->whereBetween('debit_credits.sale_date', [$start_date,$end_date])
+            ->sum('debit');
+        $loss_gain_amount = LossGainTranscation::where('user_id',Auth::user()->id)->whereBetween('date', [$start_date,$end_date])->sum('amount');
+        $total_amount = $credit - $debit;
+        return abs($total_amount)  - $loss_gain_amount;
+    }
     public function getDieselOpeningBalance($date)
     {
         $product = Product::where('name','HSD')->first();
