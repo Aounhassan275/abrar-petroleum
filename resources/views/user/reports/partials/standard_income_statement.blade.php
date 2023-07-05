@@ -29,7 +29,12 @@ foreach($products as $key => $product)
 {
     $price = round($product->availableStock() * $product->purchasing_price);
     $totalAmount = $product->totalDrAmount($start_date,$end_date);
-    $revenue = $price - abs($totalAmount);
+    if($totalAmount > 0)
+    {
+        $revenue = $price + abs($totalAmount);
+    }else{
+        $revenue = $price - abs($totalAmount);
+    }
     $totalRevenue += abs($revenue);
 }
 @endphp

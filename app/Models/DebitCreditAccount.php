@@ -55,6 +55,24 @@ class DebitCreditAccount extends Model
             ->sum('debit');
         return round($credit - $debit);
     }
+    public function getExpenseDebitCredits($start_date,$end_date)
+    {
+        $credit = DebitCredit::select('debit_credits.*','debit_credit_accounts.account_category_id as account_category_id')
+            ->join('debit_credit_accounts', 'debit_credits.account_id', 'debit_credit_accounts.id')
+            ->where('debit_credits.user_id',Auth::user()->id)
+            ->where('debit_credit_accounts.id',$this->id)
+            ->whereBetween('debit_credits.sale_date', [$start_date,$end_date])->sum('credit');
+        $debit = DebitCredit::select('debit_credits.*','debit_credit_accounts.account_category_id as account_category_id')
+            ->join('debit_credit_accounts', 'debit_credits.account_id', 'debit_credit_accounts.id')
+            ->where('debit_credits.user_id',Auth::user()->id)
+            ->where('debit_credit_accounts.id',$this->id)
+            ->whereBetween('debit_credits.sale_date', [$start_date,$end_date])
+            ->sum('debit');
+        $month_profit = MonthProfit::where('type','Expense')->whereDate('end_date',$end_date)
+                            ->where('user_id',Auth::user()->id)->sum('amount');
+        $total_amount = $credit - $debit;
+        return round(abs($total_amount) - $month_profit);
+    }
     public function getProductBalance($start_date,$end_date)
     {
         
@@ -72,6 +90,8 @@ class DebitCreditAccount extends Model
         $sale = $total_sale - $testSale;
         $product = Product::find($this->product_id);
         $amount = -(Auth::user()->getPurchasePrice($start_date,$product) * Auth::user()->getOpeningBalance($start_date,$product));
-        return round($amount + $sale - $purchase);
+        $month_profit = MonthProfit::where('product_id',$product->id)->whereDate('end_date',$end_date)
+                            ->where('user_id',Auth::user()->id)->sum('amount');
+        return round($amount + $sale - $purchase - $month_profit);
     }
 }

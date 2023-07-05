@@ -1,6 +1,6 @@
 <form method="GET">
     <div class="row">
-        <input type="hidden" name="active_tab" value="testing_sale">
+        <input type="hidden" name="active_tab" value="whole_sale">
         <div class="form-group col-2">
             <label>
                 Start Date
@@ -45,7 +45,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach($test_sales as $key => $sale)
+        @foreach($whole_sales as $key => $sale)
         <tr>
             <td>{{$key+1}}</td>
             <td>{{$sale->product->name}}</td>

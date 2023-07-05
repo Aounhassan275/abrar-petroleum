@@ -64,6 +64,31 @@
         }
         @endphp
         @endif
+        @elseif($account->account_category_id == $category_id)
+        @if($account->debitCredits($inital_start_date,$end_date) < 0 || $account->debitCredits($inital_start_date,$end_date) > 0)
+        <tr>
+            <td>{{@$account->name}} @if($account->designation) ({{$account->designation}}) @endif</td>
+            {{-- <td>{{@$account->accountCategory->name}}</td> --}}
+            <td>
+                @if($account->getExpenseDebitCredits($inital_start_date,$end_date) < 0)
+                {{abs($account->getExpenseDebitCredits($inital_start_date,$end_date))}}
+                @endif
+            </td>
+            <td>
+                @if($account->getExpenseDebitCredits($inital_start_date,$end_date) > 0)
+                {{$account->getExpenseDebitCredits($inital_start_date,$end_date)}}
+                @endif
+            </td>
+        </tr>
+        @php 
+            if($account->getExpenseDebitCredits($inital_start_date,$end_date) < 0)
+            {
+                $totalDebit += abs($account->getExpenseDebitCredits($inital_start_date,$end_date));
+            }else{
+                $totalCredit += abs($account->getExpenseDebitCredits($inital_start_date,$end_date));
+            }
+        @endphp
+        @endif
         @elseif($account->name != 'Sale' && ($account->debitCredits($inital_start_date,$end_date) < 0 || $account->debitCredits($inital_start_date,$end_date) > 0))
         <tr>
             <td>{{@$account->name}} @if($account->designation) ({{$account->designation}}) @endif</td>

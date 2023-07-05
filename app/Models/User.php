@@ -192,7 +192,7 @@ class User extends Authenticatable
     {
         $todaySale = Sale::where('user_id',$this->id)
                         ->where('product_id',$product->id)
-                        ->where('type','retail_sale')
+                        ->whereNotIn('type',['test','whole_sale'])
                         ->whereDate('sale_date',$date)
                         ->first();
         return $todaySale?$todaySale->price:0;
@@ -202,7 +202,7 @@ class User extends Authenticatable
         $product = Product::where('name','PMG')->first();
         $todaySale = Sale::where('user_id',$this->id)
                         ->where('product_id',$product->id)
-                        ->where('type','retail_sale')
+                        ->where('type','!=','test')
                         ->whereDate('sale_date',$date)
                         ->sum('qty');
         $testSale = Sale::where('user_id',$this->id)
@@ -217,7 +217,7 @@ class User extends Authenticatable
         $product = Product::where('name','PMG')->first();
         $todaySale = Sale::where('user_id',$this->id)
                         ->where('product_id',$product->id)
-                        ->where('type','retail_sale')
+                        ->where('type','!=','test')
                         ->whereDate('sale_date',$date)
                         ->sum('total_amount');
         return $todaySale;
@@ -227,7 +227,7 @@ class User extends Authenticatable
         $product = Product::where('name','PMG')->first();
         $todaySale = Sale::where('user_id',$this->id)
                         ->where('product_id',$product->id)
-                        ->where('type','retail_sale')
+                        ->where('type','!=','test')
                         ->whereDate('sale_date',$date)
                         ->first();
         return $todaySale?$todaySale->price:0;
@@ -254,11 +254,11 @@ class User extends Authenticatable
     public function getPurchasePrice($date,$product)
     {
         $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('date',$date)->first();
-        if(!$todayPurchase)
-        {
-            $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('date','<',$date)->orderBy('date','DESC')->first();
-        }
-        return $todayPurchase ? $todayPurchase->price : 0;
+        // if(!$todayPurchase)
+        // {
+        //     $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('date','<',$date)->orderBy('date','DESC')->first();
+        // }
+        return $todayPurchase ? $todayPurchase->price : $product->purchasing_price;
     }
     public function getTodayPurchase($date,$product)
     {
@@ -329,7 +329,7 @@ class User extends Authenticatable
         $product = Product::where('name','HSD')->first();
         $todaySale = Sale::where('user_id',$this->id)
                         ->where('product_id',$product->id)
-                        ->where('type','retail_sale')
+                        ->where('type','!=','test')
                         ->whereDate('sale_date',$date)
                         ->sum('qty');
         $todayTestSale = Sale::where('user_id',$this->id)

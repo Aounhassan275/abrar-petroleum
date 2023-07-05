@@ -18,6 +18,12 @@
         </div>
         <div class="form-group col-2">
             <br>
+            <label>
+                <input type="checkbox" name="post_month_profit" class=""> Post Month Profit
+            </label>   
+        </div>
+        <div class="form-group col-2">
+            <br>
             <button type="submit" class="btn btn-primary">Search</button>
         </div>
     </div>
@@ -43,7 +49,12 @@
         @php 
             $price = round($product->availableStock() * $product->purchasing_price);
             $totalAmount = $product->totalDrAmount($start_date,$end_date);
-            $revenue = $price - abs($totalAmount);
+            if($totalAmount > 0)
+            {
+                $revenue = $price + abs($totalAmount);
+            }else{
+                $revenue = $price - abs($totalAmount);
+            }
             $totalRevenue += abs($revenue);
         @endphp
         <tr>
