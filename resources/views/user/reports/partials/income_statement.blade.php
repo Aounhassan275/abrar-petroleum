@@ -100,7 +100,7 @@
         <div class="card card-body bg-success-400 has-bg-image">
             <div class="media">
                 <div class="media-body align-self-center ">
-                    <h3 class="mb-0">{{abs(Auth::user()->totalExpenseForIncomeReport($start_date,$end_date))}}</h3>
+                    <h3 class="mb-0">{{abs(Auth::user()->totalExpense($start_date,$end_date))}}</h3>
                     <span class="text-uppercase font-size-xs">Total Expense</span>
                 </div>
                 <div class="ml-3 text-right">
@@ -116,7 +116,7 @@
                     <i class="icon-stack-picture icon-3x opacity-75"></i>
                 </div>
                 <div class="media-body text-right">
-                    <h3 class="mb-0">{{abs(abs($totalRevenue) - abs(Auth::user()->totalExpenseForIncomeReport($start_date,$end_date)))}}</h3>
+                    <h3 class="mb-0">{{abs(abs($totalRevenue) - abs(Auth::user()->totalExpense($start_date,$end_date)))}}</h3>
                     <span class="text-uppercase font-size-xs">Net Profit</span>
                 </div>
             </div>

@@ -108,7 +108,7 @@ class ReportsController extends Controller
         }
         if($totalRevenue > 0)
         {
-            $expense_amount = abs(Auth::user()->totalExpenseForIncomeReport($start_date,$end_date));
+            $expense_amount = abs(Auth::user()->totalExpense($start_date,$end_date));
             $totalExpense = $totalRevenue - $expense_amount;
             $month_profit_account_id = DebitCreditAccount::where('name','Month Profit')->first()->id;
             $debit_credit = DebitCredit::where('user_id',Auth::user()->id)->where('account_id',$month_profit_account_id)

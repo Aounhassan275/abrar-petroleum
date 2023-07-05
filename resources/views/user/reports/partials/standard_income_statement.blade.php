@@ -71,7 +71,7 @@ foreach($products as $key => $product)
         <p><b>Total Expense</b></p>
     </div>
     <div class="col-md-6 text-center">
-        <p><b>{{abs(Auth::user()->totalExpenseForIncomeReport($start_date,$end_date))}}</b></p>
+        <p><b>{{abs(Auth::user()->totalExpense($start_date,$end_date))}}</b></p>
     </div>
 </div>
 <div class="row" style="border-style: inset;">
@@ -79,6 +79,6 @@ foreach($products as $key => $product)
         <p><b>Total Net Profit</b></p>
     </div>
     <div class="col-md-6 text-center">
-        <p><b>{{abs($totalRevenue - abs(Auth::user()->totalExpenseForIncomeReport($start_date,$end_date)))}}</b></p>
+        <p><b>{{abs($totalRevenue - abs(Auth::user()->totalExpense($start_date,$end_date)))}}</b></p>
     </div>
 </div>
