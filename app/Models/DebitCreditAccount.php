@@ -13,7 +13,7 @@ class DebitCreditAccount extends Model
 {
     protected $fillable = [
         'customer_id','vendor_id','supplier_id','user_id','expense_id','name','account_category_id',
-        'employee_id','phone','address','designation','product_id'
+        'employee_id','phone','address','designation','product_id','is_hide'
     ];
     public function customer()
     {

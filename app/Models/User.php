@@ -379,8 +379,11 @@ class User extends Authenticatable
     }
     public function haveDebitCredit($date)
     {   
-        $sales = DebitCredit::where('user_id',$this->id)
-                            ->whereDate('sale_date',$date)
+        $sales = DebitCredit::query()->select('debit_credits.*')
+                            ->join('debit_credit_accounts','debit_credit_accounts.id','debit_credits.account_id')
+                            ->where('debit_credit_accounts.is_hide',0)
+                            ->where('debit_credits.user_id',$this->id)
+                            ->whereDate('debit_credits.sale_date',$date)
                             ->get();  
         return $sales;
     }
