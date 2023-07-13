@@ -215,4 +215,33 @@ class Product extends Model
         $sale = Purchase::where('product_id',$this->id)->whereDate('date',$date)->first();
         return $sale;
     }
+    public function getTodayPurchase($date)
+    {
+        $todayPurchase = Purchase::where('user_id',Auth::user()->id)->where('product_id',$this->id)->whereDate('date',$date)->sum('qty');
+        $todayAccessPurchase = Purchase::where('user_id',Auth::user()->id)->where('product_id',$this->id)->whereDate('date',$date)->sum('access');
+        return $todayPurchase + $todayAccessPurchase;
+    }
+    public function getClosingBalance($date)
+    {
+        $totalQtyStock = Purchase::where('user_id',Auth::user()->id)->where('product_id',$this->id)
+                            ->whereDate('date','<',$date)
+                            ->sum('qty');
+        $totalAccessStock = Purchase::where('user_id',Auth::user()->id)->where('product_id',$this->id)
+                            ->whereDate('date','<',$date)
+                            ->sum('access');
+        $totalStock = $totalQtyStock + $totalAccessStock;
+        $totalSale = Sale::where('user_id',Auth::user()->id)
+                        ->where('product_id',$this->id)
+                        ->where('type','!=','test')
+                        ->whereDate('sale_date','<',$date)
+                        ->sum('qty');       
+        $testSale = Sale::where('user_id',Auth::user()->id)
+                        ->where('product_id',$this->id)
+                        ->where('type','test')
+                        ->whereDate('sale_date','<',$date)
+                        ->sum('qty');
+        $sale = $totalSale - $testSale;
+        $avaiableStock = $totalStock - $sale;
+        return $this->getTodayPurchase($date) + $avaiableStock;
+    }
 }

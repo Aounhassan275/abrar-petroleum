@@ -68,6 +68,10 @@ class ReportsController extends Controller
         $working_captial_id = DebitCreditAccount::where('name','Working Capital')->first()->id;
         $workingCaptial = DebitCredit::where('account_id',$working_captial_id)->where('user_id',Auth::user()->id)->orderBy('sale_date','DESC')->first();
         $expenseAccounts = DebitCreditAccount::where('account_category_id',$category_id)->get();
+        // if($request->import_pdf && $active_tab == 'trail_balance')
+        // {
+        // return $this->trailPdf($products,$start_date,$end_date,$accounts,$expenseAccounts,$lastDayCash,$workingCaptial,$product_account_category_id,$test_sales,$inital_start_date,$whole_sales,$category_id);
+        // }
         return view('user.reports.index',compact('active_tab','start_date','end_date','products','accounts','expenseAccounts','lastDayCash','workingCaptial','product_account_category_id','test_sales','inital_start_date','whole_sales','category_id'));   
     }
     public function postMonthPorfit($products,$start_date,$end_date)
@@ -149,5 +153,24 @@ class ReportsController extends Controller
                 }
             }
         }
+    }
+    public function trailPdf($products,$start_date,$end_date,$accounts,$expenseAccounts,$lastDayCash,$workingCaptial,$product_account_category_id,$test_sales,$inital_start_date,$whole_sales,$category_id)
+    {
+        // $pdf = PDF::loadView('user.pdf.trail_balance', [
+        //     'products' => $products,
+        //     'start_date' =>$start_date,
+        //     'end_date' =>$end_date,
+        //     'accounts' =>$accounts,
+        //     'expenseAccounts' =>$expenseAccounts,
+        //     'lastDayCash' =>$lastDayCash,
+        //     'workingCaptial' =>$workingCaptial,
+        //     'product_account_category_id' =>$product_account_category_id,
+        //     'test_sales' =>$test_sales,
+        //     'inital_start_date' =>$inital_start_date,
+        //     'whole_sales' =>$whole_sales,
+        //     'category_id' =>$category_id,
+        // ]);
+        // // dd($pdf);
+        // return $pdf->download('sample.pdf');
     }
 }
