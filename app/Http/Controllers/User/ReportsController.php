@@ -136,7 +136,6 @@ class ReportsController extends Controller
                     'sale_date' => $end_date,
                     'user_id' => Auth::user()->id,
                     'credit' => $totalExpense,
-                    'sale_date' => $end_date,
                     'is_hide' => true,
                 ]);
             }else{
@@ -145,7 +144,6 @@ class ReportsController extends Controller
                     'sale_date' => $end_date,
                     'user_id' => Auth::user()->id,
                     'debit' => $totalExpense,
-                    'sale_date' => $end_date,
                     'is_hide' => true,
                 ]);
             }
