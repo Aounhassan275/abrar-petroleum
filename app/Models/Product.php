@@ -215,14 +215,10 @@ class Product extends Model
         $sale = Purchase::where('product_id',$this->id)->whereDate('date',$date)->first();
         return $sale;
     }
-    public function getTodayPurchase($date)
+    public function getClosingBalance($last_date)
     {
-        $todayPurchase = Purchase::where('user_id',Auth::user()->id)->where('product_id',$this->id)->whereDate('date',$date)->sum('qty');
-        $todayAccessPurchase = Purchase::where('user_id',Auth::user()->id)->where('product_id',$this->id)->whereDate('date',$date)->sum('access');
-        return $todayPurchase + $todayAccessPurchase;
-    }
-    public function getClosingBalance($date)
-    {
+        $date = Carbon::parse($last_date);
+        $date->addDay();
         $totalQtyStock = Purchase::where('user_id',Auth::user()->id)->where('product_id',$this->id)
                             ->whereDate('date','<',$date)
                             ->sum('qty');
@@ -242,6 +238,6 @@ class Product extends Model
                         ->sum('qty');
         $sale = $totalSale - $testSale;
         $avaiableStock = $totalStock - $sale;
-        return $this->getTodayPurchase($date) + $avaiableStock;
+        return $avaiableStock;
     }
 }
