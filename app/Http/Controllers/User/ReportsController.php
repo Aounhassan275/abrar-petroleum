@@ -77,9 +77,9 @@ class ReportsController extends Controller
     public function postMonthPorfit($products,$start_date,$end_date)
     {
         $totalRevenue = 0;
-        foreach($products as$product)
+        foreach($products as $product)
         {
-            $price = round($product->availableStock() * $product->purchasing_price);
+            $price = round($product->getClosingBalance($end_date) * $product->purchasing_price);
             $totalAmount = $product->totalDrAmount($start_date,$end_date);
             if($totalAmount > 0)
             {
