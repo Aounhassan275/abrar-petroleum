@@ -79,6 +79,31 @@ class DebitCreditAccount extends Model
             return round($credit - $debit);
         }
     }
+    public function getProfitDebitCredits($start_date,$end_date)
+    {
+        
+        $month_profit = MonthProfit::where('type','Total Net Profit')->whereDate('end_date',$end_date)
+                            ->where('user_id',Auth::user()->id)->sum('amount');
+       
+        $credit = DebitCredit::select('debit_credits.*','debit_credit_accounts.account_category_id as account_category_id')
+            ->join('debit_credit_accounts', 'debit_credits.account_id', 'debit_credit_accounts.id')
+            ->where('debit_credits.user_id',Auth::user()->id)
+            ->where('debit_credit_accounts.id',$this->id)
+            ->whereBetween('debit_credits.sale_date', [$start_date,$end_date])->sum('credit');
+        $debit = DebitCredit::select('debit_credits.*','debit_credit_accounts.account_category_id as account_category_id')
+            ->join('debit_credit_accounts', 'debit_credits.account_id', 'debit_credit_accounts.id')
+            ->where('debit_credits.user_id',Auth::user()->id)
+            ->where('debit_credit_accounts.id',$this->id)
+            ->whereBetween('debit_credits.sale_date', [$start_date,$end_date])
+            ->sum('debit');
+        if($month_profit > 0)
+        {
+            $total_amount = $credit - $debit;
+            return round($month_profit + $total_amount);
+        }else{
+            return round($credit - $debit);
+        }
+    }
     public function getProductBalance($start_date,$end_date)
     {
         

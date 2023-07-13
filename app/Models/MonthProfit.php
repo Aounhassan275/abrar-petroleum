@@ -13,4 +13,8 @@ class MonthProfit extends Model
         'start_date' => 'date',
         'end_date' => 'date',
     ];
+    public function product()
+    {
+        return $this->belongsTo('App\Models\Product','product_id');
+    }
 }
