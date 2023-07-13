@@ -115,7 +115,7 @@ class ReportsController extends Controller
         
         $month_profit_account_id = DebitCreditAccount::where('name','Month Profit')->first()->id;
         $debit_credit = DebitCredit::where('user_id',Auth::user()->id)->where('account_id',$month_profit_account_id)
-                        ->whereDate('sale_date',$end_date)->first();
+                        ->whereDate('sale_date',$end_date)->where('is_hide',1)->first();
         if($debit_credit)
         {
             if($totalExpense > 0)
