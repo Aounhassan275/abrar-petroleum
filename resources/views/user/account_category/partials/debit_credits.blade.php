@@ -29,7 +29,7 @@
             <td>{{$debitCredit->qty}}</td>
             <td>{{$debitCredit->debit}}</td>
             <td>{{$debitCredit->credit}}</td>
-            <td>@if($debitCredit->credit > 0) 
+            <td>@if($balance > 0) 
                 ({{abs($balance)}}) Cr 
                 @else
                 ({{abs($balance)}}) Dr 
