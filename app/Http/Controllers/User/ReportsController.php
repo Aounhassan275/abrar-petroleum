@@ -56,7 +56,6 @@ class ReportsController extends Controller
         
         $monthlyProfits = MonthProfit::whereBetween('end_date', [$start_date,$end_date])
                     ->where('user_id',Auth::user()->id)->get();
-        $month_profit_account_id = DebitCreditAccount::where('name','Month Profit')->first()->id;
         if($request->post_month_profit)
         {
             $this->postMonthPorfit($products,$start_date,$end_date);
@@ -75,7 +74,7 @@ class ReportsController extends Controller
         // {
         // return $this->trailPdf($products,$start_date,$end_date,$accounts,$expenseAccounts,$lastDayCash,$workingCaptial,$product_account_category_id,$test_sales,$inital_start_date,$whole_sales,$category_id);
         // }
-        return view('user.reports.index',compact('active_tab','start_date','end_date','products','accounts','expenseAccounts','lastDayCash','workingCaptial','product_account_category_id','test_sales','inital_start_date','whole_sales','category_id','monthlyProfits','month_profit_account_id'));   
+        return view('user.reports.index',compact('active_tab','start_date','end_date','products','accounts','expenseAccounts','lastDayCash','workingCaptial','product_account_category_id','test_sales','inital_start_date','whole_sales','category_id','monthlyProfits'));   
     }
     public function postMonthPorfit($products,$start_date,$end_date)
     {
@@ -101,62 +100,76 @@ class ReportsController extends Controller
                     'end_date' => $end_date,
                 ]);
             }else{
-                if($revenue > 0)
-                {
-                    MonthProfit::create([
-                        'user_id' => Auth::user()->id,
-                        'product_id' => $product->id,
-                        'amount' => $revenue,
-                        'start_date' => $start_date,
-                        'end_date' => $end_date,
-                        'type' => 'Product Revenue',
-                    ]);
-                }
-            }
-        }
-        if($totalRevenue > 0)
-        {
-            $expense_amount = abs(Auth::user()->totalExpense($start_date,$end_date));
-            $totalExpense = $totalRevenue - $expense_amount;
-            $profit = MonthProfit::where('type','Total Net Profit')->whereDate('end_date',$end_date)
-                                ->where('user_id',Auth::user()->id)->first();
-            if($profit)
-            {
-                $profit->update([
-                    'amount' => $totalExpense,
-                    'start_date' => $start_date,
-                    'end_date' => $end_date,
-                ]);
-            }else{
                 MonthProfit::create([
                     'user_id' => Auth::user()->id,
-                    'amount' => $totalExpense,
+                    'product_id' => $product->id,
+                    'amount' => $revenue,
                     'start_date' => $start_date,
                     'end_date' => $end_date,
-                    'type' => 'Total Net Profit',
+                    'type' => 'Product Revenue',
                 ]);
             }
-            $month_profit = MonthProfit::where('type','Expense')->whereDate('end_date',$end_date)
-                                ->where('user_id',Auth::user()->id)->first();
-            if($month_profit)
+        }
+        $expense_amount = abs(Auth::user()->totalExpense($start_date,$end_date));
+        $totalExpense = $totalRevenue - $expense_amount;
+        
+        $month_profit_account_id = DebitCreditAccount::where('name','Month Profit')->first()->id;
+        $debit_credit = DebitCredit::where('user_id',Auth::user()->id)->where('account_id',$month_profit_account_id)
+                        ->whereDate('sale_date',$end_date)->first();
+        if($debit_credit)
+        {
+            if($totalExpense > 0)
             {
-                $month_profit->update([
-                    'amount' => $expense_amount,
-                    'start_date' => $start_date,
-                    'end_date' => $end_date,
+                $debit_credit->update([
+                    'credit' => $totalExpense
                 ]);
             }else{
-                if($expense_amount > 0)
-                {
-                    MonthProfit::create([
-                        'user_id' => Auth::user()->id,
-                        'start_date' => $start_date,
-                        'end_date' => $end_date,
-                        'type' => 'Expense',
-                        'amount' => $expense_amount,
-                    ]);
-                    
-                }
+                $debit_credit->update([
+                    'debit' => $totalExpense
+                ]);
+            }
+        }else{
+            if($totalExpense > 0)
+            {
+                DebitCredit::create([
+                    'account_id' => $month_profit_account_id,
+                    'sale_date' => $end_date,
+                    'user_id' => Auth::user()->id,
+                    'credit' => $totalExpense,
+                    'sale_date' => $end_date,
+                    'is_hide' => true,
+                ]);
+            }else{
+                DebitCredit::create([
+                    'account_id' => $month_profit_account_id,
+                    'sale_date' => $end_date,
+                    'user_id' => Auth::user()->id,
+                    'debit' => $totalExpense,
+                    'sale_date' => $end_date,
+                    'is_hide' => true,
+                ]);
+            }
+        }
+        $month_profit = MonthProfit::where('type','Expense')->whereDate('end_date',$end_date)
+                            ->where('user_id',Auth::user()->id)->first();
+        if($month_profit)
+        {
+            $month_profit->update([
+                'amount' => $expense_amount,
+                'start_date' => $start_date,
+                'end_date' => $end_date,
+            ]);
+        }else{
+            if($expense_amount > 0)
+            {
+                MonthProfit::create([
+                    'user_id' => Auth::user()->id,
+                    'start_date' => $start_date,
+                    'end_date' => $end_date,
+                    'type' => 'Expense',
+                    'amount' => $expense_amount,
+                ]);
+                
             }
         }
     }

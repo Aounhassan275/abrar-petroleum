@@ -381,7 +381,7 @@ class User extends Authenticatable
     {   
         $sales = DebitCredit::query()->select('debit_credits.*')
                             ->join('debit_credit_accounts','debit_credit_accounts.id','debit_credits.account_id')
-                            // ->where('debit_credit_accounts.is_hide',0)
+                            ->where('debit_credits.is_hide',0)
                             ->where('debit_credits.user_id',$this->id)
                             ->whereDate('debit_credits.sale_date',$date)
                             ->get();  

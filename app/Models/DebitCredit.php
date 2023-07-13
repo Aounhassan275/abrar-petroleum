@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class DebitCredit extends Model
 {
     protected $fillable = [
-        'account_id','product_id','qty','user_id','description','debit','credit','sale_date'
+        'account_id','product_id','qty','user_id','description','debit','credit','sale_date',
+        'is_hide'
     ];
     protected $casts = [
         'sale_date' => 'date',

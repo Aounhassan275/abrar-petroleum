@@ -89,31 +89,6 @@
             }
         @endphp
         @endif
-        @elseif($account->id == $month_profit_account_id)
-        @if($account->getProfitDebitCredits($inital_start_date,$end_date) < 0 || $account->getProfitDebitCredits($inital_start_date,$end_date) > 0)
-        <tr>
-            <td>{{@$account->name}} @if($account->designation) ({{$account->designation}}) @endif</td>
-            {{-- <td>{{@$account->accountCategory->name}}</td> --}}
-            <td>
-                @if($account->getProfitDebitCredits($inital_start_date,$end_date) < 0)
-                {{abs($account->getProfitDebitCredits($inital_start_date,$end_date))}}
-                @endif
-            </td>
-            <td>
-                @if($account->getProfitDebitCredits($inital_start_date,$end_date) > 0)
-                {{$account->getProfitDebitCredits($inital_start_date,$end_date)}}
-                @endif
-            </td>
-        </tr>
-        @php 
-            if($account->getProfitDebitCredits($inital_start_date,$end_date) < 0)
-            {
-                $totalDebit += abs($account->getProfitDebitCredits($inital_start_date,$end_date));
-            }else{
-                $totalCredit += abs($account->getProfitDebitCredits($inital_start_date,$end_date));
-            }
-        @endphp
-        @endif
         @elseif($account->name != 'Sale' && ($account->debitCredits($inital_start_date,$end_date) < 0 || $account->debitCredits($inital_start_date,$end_date) > 0))
         <tr>
             <td>{{@$account->name}} @if($account->designation) ({{$account->designation}}) @endif</td>
