@@ -157,6 +157,29 @@ class Product extends Model
         $amountBalance = $amountBalance + $sales;
         return round($amountBalance);
     }
+    public function getTotalDrAmount($end_date)
+    {
+        $start_date = Carbon::parse('2023-05-31'); 
+        $amountBalance = Auth::user()->getPurchasePrice($start_date,$this) * Auth::user()->getOpeningBalance($start_date,$this);
+        $total_sales = Sale::where('user_id',Auth::user()->id)
+                        ->where('product_id',$this->id)
+                        ->where('sale_date','<', $end_date)
+                        ->where('type','!=','test')
+                        ->sum('total_amount'); 
+        $test_sale = Sale::where('user_id',Auth::user()->id)
+                        ->where('product_id',$this->id)
+                        ->where('sale_date','<', $end_date)
+                        ->where('type','test')
+                        ->sum('total_amount'); 
+        $sales = $total_sales - $test_sale;
+        $total_purchases = Purchase::where('user_id',Auth::user()->id)
+                        ->where('product_id',$this->id)
+                        ->where('date','<', $end_date)
+                        ->sum('total_amount'); 
+        $amountBalance = abs($amountBalance + $total_purchases);
+        $amountBalance = abs($amountBalance - $sales);
+        return round($amountBalance);
+    }
     public function getSaleRate($date)
     {
         $sale = Sale::where('user_id',Auth::user()->id)

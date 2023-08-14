@@ -12,7 +12,7 @@
     <div class="card-header header-elements-inline">
         <p>{{$product->name}} Ledger 
             <span class="badge badge-success">Opening Stock : {{Auth::user()->getOpeningBalance($start_date,$product)}}</span>
-            <span class="badge badge-info">Amount : {{Auth::user()->getPurchasePrice($start_date,$product) * Auth::user()->getOpeningBalance($start_date,$product)}}</span>
+            <span class="badge badge-info">Amount : {{$product->getTotalDrAmount($start_date)}}</span>
         </p>
     </div>
     <form method="GET">
@@ -61,7 +61,7 @@
             $quantityBalance = Auth::user()->getOpeningBalance($start_date,$product);
             $totalDebit = 0;
             $totalCredit = 0;
-            $amountBalance = -(Auth::user()->getPurchasePrice($start_date,$product) * Auth::user()->getOpeningBalance($start_date,$product));
+            $amountBalance = -($product->getTotalDrAmount($start_date));
             @endphp
             @foreach($dates as $key => $date)
             
