@@ -47,7 +47,7 @@
         @endphp
         @foreach($products as $key => $product)
         @php 
-            $price = round($product->getClosingBalance($end_date) * $product->purchasing_price);
+            $price = round($product->getClosingBalance($end_date) * Auth::user()->getPurchasePrice($end_date,$product));
             $totalAmount = $product->totalDrAmount($start_date,$end_date);
             if($totalAmount > 0)
             {
@@ -61,7 +61,7 @@
             <td>{{$key+1}}</td>
             <td>{{$product->name}}</td>
             <td>{{$product->getClosingBalance($end_date)}}</td>
-            <td>{{$product->purchasing_price}}</td>
+            <td>{{Auth::user()->getPurchasePrice($end_date,$product)}}</td>
             <td>{{($price)}}</td>
             <td>
                 @if($totalAmount < 0) 

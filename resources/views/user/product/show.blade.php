@@ -12,8 +12,7 @@
     <div class="card-header header-elements-inline">
         <p>{{$product->name}} Ledger 
             <span class="badge badge-success">Opening Stock : {{Auth::user()->getOpeningBalance($start_date,$product)}}</span>
-            <span class="badge badge-info">Amount : {{$product->getTotalDrAmount($start_date)}}</span>
-        </p>
+            <span class="badge badge-info">Amount : {{Auth::user()->getPurchasePrice($start_date,$product) * Auth::user()->getOpeningBalance($start_date,$product)}}</span>        </p>
     </div>
     <form method="GET">
         <div class="row col-md-12">
@@ -48,6 +47,7 @@
                 <th>Total</th>
                 <th>Sale</th>
                 <th>Balance</th>
+                <th>Profit / Loss</th>
                 <th>Debit</th>
                 <th>Credit</th>
                 <th>Balance</th>
@@ -61,7 +61,7 @@
             $quantityBalance = Auth::user()->getOpeningBalance($start_date,$product);
             $totalDebit = 0;
             $totalCredit = 0;
-            $amountBalance = -($product->getTotalDrAmount($start_date));
+            $amountBalance = -(Auth::user()->getPurchasePrice($start_date,$product) * Auth::user()->getOpeningBalance($start_date,$product));
             @endphp
             @foreach($dates as $key => $date)
             
@@ -76,6 +76,7 @@
                 $amountBalance = $amountBalance - Auth::user()->getTodayPurchaseTotalAmount($date,$product);
                 $totalDebit = $totalDebit + Auth::user()->getTodayPurchaseTotalAmount($date,$product);
                 $totalSale = $totalSale + Auth::user()->getTodaySale($date,$product);
+                $lossGainAmount = Auth::user()->productLossGainTranscation($date,$product->id);
             @endphp
             <tr>
                 <td>{{$key+1}}</td>
@@ -84,6 +85,16 @@
                 <td>{{@$totalQunatity}}</td>
                 <td>{{Auth::user()->getTodaySale($date,$product)}}  <span class="badge badge-sm badge-success">{{Auth::user()->getTodaySalePrice($date,$product)}}</span></td>
                 <td>{{$quantityBalance}}</td>
+                <td>
+                    @if($lossGainAmount ==  0)
+                    @else
+                    @if($lossGainAmount > 0) 
+                    ({{abs($lossGainAmount)}}) Cr 
+                    @else
+                    ({{abs($lossGainAmount)}}) Dr 
+                    @endif
+                    @endif
+                </td>
                 <td>{{Auth::user()->getTodayPurchaseTotalAmount($date,$product)}}</td>
                 <td>{{Auth::user()->getTodaySaleTotalAmount($date,$product)}}</td>
                 <td>

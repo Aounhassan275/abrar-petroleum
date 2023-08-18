@@ -254,10 +254,12 @@ class User extends Authenticatable
     public function getPurchasePrice($date,$product)
     {
         $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('date',$date)->first();
-        // if(!$todayPurchase)
-        // {
-        //     $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('date','<',$date)->orderBy('date','DESC')->first();
-        // }
+        if(!$todayPurchase && $product->id == 1 || $product->id == 2)
+        {
+            $price = LossGainTranscation::where('user_id',Auth::user()->id)->where('product_id', $product->id)->whereDate('date','<=', $date)->first();
+            if($price)
+                return $price->new_price; 
+        }
         return $todayPurchase ? $todayPurchase->price : $product->purchasing_price;
     }
     public function getTodayPurchase($date,$product)
@@ -299,6 +301,16 @@ class User extends Authenticatable
         $loss_gain_amount = LossGainTranscation::where('user_id',Auth::user()->id)->whereBetween('date', [$start_date,$end_date])->sum('amount');
         $total_amount = $credit - $debit;
         return abs($total_amount)  - $loss_gain_amount;
+    }
+    public function productLossGainTranscation($date,$product_id)
+    {
+        $loss_gain_amount = LossGainTranscation::where('user_id',Auth::user()->id)->where('product_id', $product_id)->whereDate('date', $date)->sum('amount');
+        return $loss_gain_amount;
+    }
+    public function getCurrentPrice($date,$product_id)
+    {
+        $price = LossGainTranscation::where('user_id',Auth::user()->id)->where('product_id', $product_id)->whereDate('date','<=', $date)->first()->new_price;
+        return $price;
     }
     public function getDieselOpeningBalance($date)
     {
