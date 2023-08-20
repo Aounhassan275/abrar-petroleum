@@ -256,7 +256,7 @@ class User extends Authenticatable
         $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('date',$date)->first();
         if(!$todayPurchase && $product->id == 1 || $product->id == 2)
         {
-            $price = LossGainTranscation::where('user_id',Auth::user()->id)->where('product_id', $product->id)->whereDate('date','<=', $date)->first();
+            $price = LossGainTranscation::where('user_id',Auth::user()->id)->where('product_id', $product->id)->whereDate('date','<=', $date)->orderBy('date','DESC')->first();
             if($price)
                 return $price->new_price; 
         }
