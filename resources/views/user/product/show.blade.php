@@ -82,8 +82,8 @@
                 $lossGainAmount = Auth::user()->productLossGainTranscation($date,$product->id);
                 $rateDifference = Auth::user()->getTodaySalePrice($date,$product) - Auth::user()->getPurchasePrice($date,$product);
                 $reveune = Auth::user()->getTodaySale($date,$product) * $rateDifference;
-                $totalRevenue = $totalRevenue + $reveune
-                $totallossGainAmount = $totallossGainAmount + $lossGainAmount
+                $totalRevenue = $totalRevenue + $reveune;
+                $totallossGainAmount = $totallossGainAmount + $lossGainAmount;
             @endphp
             <tr>
                 <td>{{$key+1}}</td>
