@@ -63,6 +63,7 @@
             $totalDebit = 0;
             $totalCredit = 0;
             $totalRevenue = 0;
+            $totallossGainAmount = 0;
             $amountBalance = -(Auth::user()->getPurchasePrice($start_date,$product) * Auth::user()->getOpeningBalance($start_date,$product));
             @endphp
             @foreach($dates as $key => $date)
@@ -82,6 +83,7 @@
                 $rateDifference = Auth::user()->getTodaySalePrice($date,$product) - Auth::user()->getPurchasePrice($date,$product);
                 $reveune = Auth::user()->getTodaySale($date,$product) * $rateDifference;
                 $totalRevenue = $totalRevenue + $reveune
+                $totallossGainAmount = $totallossGainAmount + $lossGainAmount
             @endphp
             <tr>
                 <td>{{$key+1}}</td>
@@ -186,6 +188,19 @@
                 <div class="media-body text-right">
                     <h3 class="mb-0">{{$totalRevenue}}</h3>
                     <span class="text-uppercase font-size-xs">Total Revenue</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3 col-xl-3">
+        <div class="card card-body bg-danger-400 has-bg-image">
+            <div class="media">
+                <div class="mr-3 align-self-center">
+                    <i class="icon-stack-picture icon-3x opacity-75"></i>
+                </div>
+                <div class="media-body text-right">
+                    <h3 class="mb-0">{{$totallossGainAmount}}</h3>
+                    <span class="text-uppercase font-size-xs">Gross Revenue</span>
                 </div>
             </div>
         </div>
