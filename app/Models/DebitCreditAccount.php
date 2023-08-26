@@ -81,7 +81,7 @@ class DebitCreditAccount extends Model
     }
     public function getProductBalance($start_date,$end_date)
     {
-        // $product = Product::find($this->product_id);
+        $product = Product::find($this->product_id);
         // $amountBalance = -(Auth::user()->getPurchasePrice($end_date,$product) * Auth::user()->getOpeningBalance($end_date,$product));
         // $amountBalance = $amountBalance + Auth::user()->getTodaySaleTotalAmount($end_date,$product);
         // $amountBalance = $amountBalance - Auth::user()->getTodayPurchaseTotalAmount($end_date,$product);
