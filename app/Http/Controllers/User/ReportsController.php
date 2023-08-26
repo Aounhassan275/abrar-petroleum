@@ -81,7 +81,7 @@ class ReportsController extends Controller
         $totalRevenue = 0;
         foreach($products as $product)
         {
-            $price = round($product->getClosingBalance($end_date) * $product->purchasing_price);
+            $price = round($product->getClosingBalance($end_date) * Auth::user()->getPurchasePrice($end_date,$product));
             $totalAmount = $product->totalDrAmount($start_date,$end_date);
             if($totalAmount > 0)
             {
