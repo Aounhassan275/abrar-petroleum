@@ -11,8 +11,8 @@
 <div class="card">
     <div class="card-header header-elements-inline">
         <p>{{$product->name}} Ledger 
-            <span class="badge badge-success">Opening Stock : {{Auth::user()->getOpeningBalance($start_date,$product)}}</span>
-            <span class="badge badge-info">Amount : {{Auth::user()->getPurchasePrice($start_date,$product) * Auth::user()->getOpeningBalance($start_date,$product)}}</span>        </p>
+        <span class="badge badge-success">Opening Stock : {{Auth::user()->getOpeningBalance($start_date,$product)}}</span>
+        <span class="badge badge-info">Amount : {{round(Auth::user()->getPurchasePrice($start_date,$product) * Auth::user()->getOpeningBalance($start_date,$product))}}</span>        </p>
     </div>
     <form method="GET">
         <div class="row col-md-12">
@@ -76,7 +76,7 @@
                 $quantityBalance = $quantityBalance - Auth::user()->getTodaySale($date,$product);
                 $totalCredit = $totalCredit + Auth::user()->getTodaySaleTotalAmount($date,$product);
                 $amountBalance = $amountBalance + Auth::user()->getTodaySaleTotalAmount($date,$product);
-                $amountBalance = $amountBalance - Auth::user()->getTodayPurchaseTotalAmount($date,$product);
+                $amountBalance = round($amountBalance - Auth::user()->getTodayPurchaseTotalAmount($date,$product));
                 $totalDebit = $totalDebit + Auth::user()->getTodayPurchaseTotalAmount($date,$product);
                 $totalSale = $totalSale + Auth::user()->getTodaySale($date,$product);
                 $lossGainAmount = Auth::user()->productLossGainTranscation($date,$product->id);
