@@ -57,7 +57,6 @@ class DebitCreditAccount extends Model
     }
     public function getExpenseDebitCredits($start_date,$end_date)
     {
-        
         $month_profit = MonthProfit::where('type','Expense')->whereDate('end_date',$end_date)
                             ->where('user_id',Auth::user()->id)->sum('amount');
         $credit = DebitCredit::select('debit_credits.*','debit_credit_accounts.account_category_id as account_category_id')
@@ -82,26 +81,26 @@ class DebitCreditAccount extends Model
     public function getProductBalance($start_date,$end_date)
     {
         $product = Product::find($this->product_id);
-        $amountBalance = -(Auth::user()->getPurchasePrice($end_date,$product) * Auth::user()->getOpeningBalance($end_date,$product));
-        $amountBalance = $amountBalance + Auth::user()->getTodaySaleTotalAmount($end_date,$product);
-        $amountBalance = $amountBalance - Auth::user()->getTodayPurchaseTotalAmount($end_date,$product);
-        return round($amountBalance);
+        // $amountBalance = -(Auth::user()->getPurchasePrice($end_date,$product) * Auth::user()->getOpeningBalance($end_date,$product));
+        // $amountBalance = $amountBalance + Auth::user()->getTodaySaleTotalAmount($end_date,$product);
+        // $amountBalance = $amountBalance - Auth::user()->getTodayPurchaseTotalAmount($end_date,$product);
+        // return round($amountBalance);
 
-        // $purchase = Purchase::where('user_id',Auth::user()->id)
-        //     ->where('product_id',$this->product_id)
-        //     ->whereBetween('date', [$start_date,$end_date])->sum('total_amount');
-        // $total_sale = Sale::where('user_id',Auth::user()->id)
-        //     ->where('product_id',$this->product_id)
-        //     ->where('type','!=','test')
-        //     ->whereBetween('sale_date', [$start_date,$end_date])->sum('total_amount');
-        // $testSale = Sale::where('user_id',Auth::user()->id)
-        //     ->where('product_id',$this->product_id)
-        //     ->where('type','test')
-        //     ->whereBetween('sale_date', [$start_date,$end_date])->sum('total_amount');
-        // $sale = $total_sale - $testSale;
-        // $amount = -(Auth::user()->getPurchasePrice($start_date,$product) * Auth::user()->getOpeningBalance($start_date,$product));
+        $purchase = Purchase::where('user_id',Auth::user()->id)
+            ->where('product_id',$this->product_id)
+            ->whereBetween('date', [$start_date,$end_date])->sum('total_amount');
+        $total_sale = Sale::where('user_id',Auth::user()->id)
+            ->where('product_id',$this->product_id)
+            ->where('type','!=','test')
+            ->whereBetween('sale_date', [$start_date,$end_date])->sum('total_amount');
+        $testSale = Sale::where('user_id',Auth::user()->id)
+            ->where('product_id',$this->product_id)
+            ->where('type','test')
+            ->whereBetween('sale_date', [$start_date,$end_date])->sum('total_amount');
+        $sale = $total_sale - $testSale;
+        $amount = -(Auth::user()->getPurchasePrice($start_date,$product) * Auth::user()->getOpeningBalance($start_date,$product));
         // $month_profit = MonthProfit::where('product_id',$product->id)->whereDate('end_date',$end_date)
         //                     ->where('user_id',Auth::user()->id)->sum('amount');
-        // return round($amount + $sale - $purchase - $month_profit);
+        return round($amount + $sale - $purchase);
     }
 }
