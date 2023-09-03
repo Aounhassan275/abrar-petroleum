@@ -186,9 +186,9 @@
             <td class="text-center">
                 Total Balance 
                 @if($difference >= 0)
-                <span style="color:green">{{abs($difference)}}</span>
+                <span style="color:green">({{abs($difference)}})</span>
                 @else 
-                <span style="color:red">{{abs($difference)}}</span>
+                <span style="color:red">({{abs($difference)}})</span>
                 @endif
             </td>
             <td>{{$totalDebit}}</td>
