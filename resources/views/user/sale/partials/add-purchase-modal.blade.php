@@ -21,7 +21,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label>Product Qty</label>
-                            <input name="qty" id="purchase_qty" type="text" value="{{old('qty')?old('qty'):0}}" class="form-control" placeholder="Enter Product Quantity" >
+                            <input name="qty" id="purchase_qty" type="number" value="{{old('qty')?old('qty'):0}}" class="form-control" placeholder="Enter Product Quantity" >
                         </div>
                         <div class="form-group col-md-6">
                             <label>Product Total Amount</label>
@@ -29,7 +29,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label>Product Access</label>
-                            <input name="access" id="access"  type="text" value="{{old('access')?old('access'):0}}" class="form-control" placeholder="Enter Product Access">
+                            <input name="access" id="access"  type="number" value="{{old('access')?old('access'):0}}" class="form-control" placeholder="Enter Product Access">
                         </div>
                         <div class="form-group col-md-6">
                             <label>Access Total Amount</label>

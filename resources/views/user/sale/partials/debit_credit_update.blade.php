@@ -52,7 +52,7 @@
 
         </div>
         <div class="form-group col-md-2">
-            <input type="text" name="last_day_cash" class="form-control" readonly value="{{round($lastDayCash->debit)}}">
+            <input type="number" name="last_day_cash" class="form-control" readonly value="{{round($lastDayCash->debit)}}">
         </div>
         <div class="form-group col-md-2">
             <input type="text" class="form-control" readonly value="">
@@ -127,18 +127,18 @@
             @endif
         </div>
         <div class="form-group col-md-1">
-            <input type="text" name="qty[]" 
+            <input type="number" name="qty[]" 
             {{-- style="color:{{$debit_credit->account->accountCategory->color}};"  --}}
             value="{{@$debit_credit->qty}}" class="form-control" id="credit_debit_qty_{{$key}}" onchange="debitQuantity('{{ @$key }}')" @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly @endif>
         </div>
         <div class="form-group col-md-2">
-            <input type="text" name="debit[]" 
+            <input type="number" name="debit[]" 
             {{-- style="color:{{$debit_credit->account->accountCategory->color}};"  --}}
             value="{{round(@$debit_credit->debit,0)}}"  id="credit_debit_debit_{{$key}}" class="form-control {{$debit_credit->account_id == $cash_account_id ? 'cash_debit_values' : ''}}" @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly  @endif>
 
         </div>
         <div class="form-group col-md-2">
-            <input type="text" name="credit[]" 
+            <input type="number" name="credit[]" 
             {{-- style="color:{{$debit_credit->account->accountCategory->color}};"  --}}
             value="{{round(@$debit_credit->credit)}}" id="credit_debit_credit_{{$key}}" class="form-control {{$debit_credit->account_id == $cash_account_id ? 'cash_credit_values' : ''}}"  @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly @endif>
         </div>
@@ -167,14 +167,14 @@
             <input type="text" name="product_id[]" class="form-control" readonly >
         </div>
         <div class="form-group col-md-1">
-            <input type="text" name="qty[]" class="form-control" readonly >
+            <input type="number" name="qty[]" class="form-control" readonly >
         </div>
         <div class="form-group col-md-2">
-            <input type="text" name="debit[]" class="form-control cash_debit_values" id="cash_debit_values" value="" readonly>
+            <input type="number" name="debit[]" class="form-control cash_debit_values" id="cash_debit_values" value="" readonly>
 
         </div>
         <div class="form-group col-md-2">
-            <input type="text" name="credit[]" class="form-control cash_credit_values" id="cash_credit_values"  readonly>
+            <input type="number" name="credit[]" class="form-control cash_credit_values" id="cash_credit_values"  readonly>
         </div>
         <div class="form-group col-md-2">
             <input type="text" name="description[]" class="form-control" readonly value="">

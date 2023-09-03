@@ -33,7 +33,7 @@
                 @if($product_index == 0)
                 <label>Qty</label>
                 @endif
-                <input name="qty[]" id="misc_qty_{{$product_index}}" type="text"  value="{{$product->getSale($date)?$product->getSale($date)->qty:''}}" class="form-control" placeholder="Enter Product Quantity"  onchange="miscQuantity('{{ @$product_index }}')">
+                <input name="qty[]" id="misc_qty_{{$product_index}}" type="number"  value="{{$product->getSale($date)?$product->getSale($date)->qty:''}}" class="form-control" placeholder="Enter Product Quantity"  onchange="miscQuantity('{{ @$product_index }}')">
             </div>
             <div class="form-group col-md-3">
                 @if($product_index == 0)
