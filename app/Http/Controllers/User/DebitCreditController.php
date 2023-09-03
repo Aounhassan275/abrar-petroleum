@@ -219,7 +219,7 @@ class DebitCreditController extends Controller
         $sale_date = $debitCredit->sale_date;
         $debitCredit->delete();
         toastr()->success('Debit Credit Deleted successfully');
-        return redirect()->to(route('user.sale.index').'?active_tab=debit_credit&date='.$sale_date);
+        return redirect()->to(route('user.sale.index').'?active_tab=debit_credit_missing');
     }
     public function delete(Request $request)
     {

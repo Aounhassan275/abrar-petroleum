@@ -79,6 +79,8 @@ class ReportsController extends Controller
     public function postMonthPorfit($products,$start_date,$end_date)
     {
         $totalRevenue = 0;
+        $new_date = $end_date;
+        $new_date = $new_date->addDays(1);
         foreach($products as $product)
         {
             $price = round($product->getClosingBalance($end_date) * Auth::user()->getPurchasePrice($end_date,$product));
@@ -115,7 +117,7 @@ class ReportsController extends Controller
         
         $month_profit_account_id = DebitCreditAccount::where('name','Month Profit')->first()->id;
         $debit_credit = DebitCredit::where('user_id',Auth::user()->id)->where('account_id',$month_profit_account_id)
-                        ->whereDate('sale_date',$end_date)->where('is_hide',1)->first();
+                        ->whereDate('sale_date',$new_date)->where('is_hide',1)->first();
         if($debit_credit)
         {
             if($totalExpense > 0)
@@ -133,7 +135,7 @@ class ReportsController extends Controller
             {
                 DebitCredit::create([
                     'account_id' => $month_profit_account_id,
-                    'sale_date' => $end_date,
+                    'sale_date' => $new_date,
                     'user_id' => Auth::user()->id,
                     'credit' => $totalExpense,
                     'is_hide' => true,
@@ -141,7 +143,7 @@ class ReportsController extends Controller
             }else{
                 DebitCredit::create([
                     'account_id' => $month_profit_account_id,
-                    'sale_date' => $end_date,
+                    'sale_date' => $new_date,
                     'user_id' => Auth::user()->id,
                     'debit' => $totalExpense,
                     'is_hide' => true,

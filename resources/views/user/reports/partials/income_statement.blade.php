@@ -19,12 +19,12 @@
         <div class="form-group col-2">
             <br>
             <label>
-                <input type="checkbox" name="post_month_profit" class=""> Post Month Profit
+                <input type="checkbox" name="post_month_profit" id="post_month_profit" class=""> Post Month Profit
             </label>   
         </div>
         <div class="form-group col-2">
             <br>
-            <button type="submit" class="btn btn-primary">Search</button>
+            <button type="submit" class="btn btn-primary" id="income-statment-button">Search</button>
         </div>
     </div>
 </form>

@@ -120,7 +120,7 @@
             {{-- <td>{{@$account->accountCategory->name}}</td> --}}
             <td>
                 @if($account->name == "Cash in Hand")
-                @if($lastDayCash->debit < 0)
+                @if(@$lastDayCash->debit < 0)
                 {{(abs(@$lastDayCash->debit))}}
                 @else 
                 {{abs(@$lastDayCash->debit)}}

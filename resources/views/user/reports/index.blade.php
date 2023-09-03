@@ -77,4 +77,16 @@
 </div>
 @endsection
 @section('scripts')
+<script>
+    $(document).ready(function(){
+        $('#post_month_profit').change(function(){
+            if(this.checked)
+            {
+                $('#income-statment-button').text('Post Month Profit');
+            }else{
+                $('#income-statment-button').text('Search');
+            }
+        });
+    });
+</script>
 @endsection
