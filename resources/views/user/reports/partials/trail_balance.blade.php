@@ -179,8 +179,18 @@
             }
         @endphp
         @endif
+        @php 
+        $difference = $totalDebit - $totalCredit;
+        @endphp
         <tr>
-            <td class="text-center">Total Balance</td>
+            <td class="text-center">
+                Total Balance 
+                @if($difference >= 0)
+                <span style="color:green">{{abs($difference)}}</span>
+                @else 
+                <span style="color:red">{{abs($difference)}}</span>
+                @endif
+            </td>
             <td>{{$totalDebit}}</td>
             <td>{{$totalCredit}}</td>
         </tr>
