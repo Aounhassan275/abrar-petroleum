@@ -126,6 +126,11 @@
     }
     function deleteDebitCredit(id)
     {
+        $("#delete_debit_credit_id").val(id);
+        $('#deletePopup').modal('show');
+    }
+    function deleteEntry(id)
+    {
         $.ajax({
             url: "{{route('user.debit_credit.delete')}}",
             method: 'post',

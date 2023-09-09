@@ -91,8 +91,8 @@ class ProductController extends Controller
         }
         $dateRange = CarbonPeriod::create($start_date, $end_date);
         $dates = array_map(fn ($date) => $date->format('Y-m-d'), iterator_to_array($dateRange));
-       
-        return view('user.product.show',compact('product','dates','start_date','end_date'));
+        $url = url('user/product/pdf?product_id='.$product->id.'&start_date='.$start_date->format('Y-m-d').'&end_date='.$end_date->format('Y-m-d'));
+        return view('user.product.show',compact('product','dates','start_date','end_date','url'));
     }
 
     /**
@@ -155,5 +155,22 @@ class ProductController extends Controller
             'purchasing_price' => $purchasing_price,
             'selling_price' => $selling_price
         ]);
+    }
+    public function generatePDF(Request $request)
+    {
+        $product = Product::find($request->product_id); 
+        if($request->start_date)
+        {
+            $start_date = Carbon::parse($request->start_date);
+            $end_date = Carbon::parse($request->end_date);
+        }else{
+            $start_date = Carbon::now()->startOfMonth();
+            $end_date = Carbon::today();
+        }
+        $dateRange = CarbonPeriod::create($start_date, $end_date);
+        $dates = array_map(fn ($date) => $date->format('Y-m-d'), iterator_to_array($dateRange));
+       
+        return view('user.pdf.product-ledger',compact('product','dates','start_date','end_date'));
+   
     }
 }
