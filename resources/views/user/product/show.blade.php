@@ -14,7 +14,7 @@
         <span class="badge badge-success">Opening Stock : {{Auth::user()->getOpeningBalance($start_date,$product)}}</span>
         <span class="badge badge-info">Amount : {{round(Auth::user()->getPurchasePrice($start_date,$product) * Auth::user()->getOpeningBalance($start_date,$product))}}</span>        </p>
         <a href="{{$url}}" target="_blank" class="btn btn-primary float-right">
-            Pdf
+            PDF
         </a>
     </div>
     <form method="GET">

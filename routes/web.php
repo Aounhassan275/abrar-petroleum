@@ -84,7 +84,7 @@ Route::group(['prefix' => 'user', 'as'=>'user.','namespace' => 'User'], function
     Route::resource('purchase_payment', 'PurchasePaymentController');  
     /******************Product ROUTES****************/
     Route::post('product/get_price','ProductController@getPrice')->name('product.get_price');
-    Route::get('product/pdf','ProductController@se')->name('product.pdf');
+    Route::get('product/pdf','ProductController@generatePDF')->name('product.pdf');
     Route::resource('product', 'ProductController');  
     /******************OWN BANK ACCOUNTS ROUTES****************/
     Route::resource('bank_account', 'BankAccountController');  
