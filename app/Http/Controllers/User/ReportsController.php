@@ -21,11 +21,12 @@ class ReportsController extends Controller
         $inital_start_date = $inital_debit_credit?Carbon::parse($inital_debit_credit->sale_date):Carbon::today();     
         if($request->start_date)
         {
-            $start_date = Carbon::parse($request->start_date);
+            $start_date =  Carbon::parse($request->end_date)->firstOfMonth();  
             $end_date = Carbon::parse($request->end_date);
         }else{
-            $start_date = $inital_start_date;
+            // $start_date = $inital_start_date;
             $last_debit_credit = DebitCredit::where('user_id',Auth::user()->id)->whereNotNull('sale_date')->orderBy('sale_date','DESC')->first();
+            $start_date =  $last_debit_credit?Carbon::parse($last_debit_credit->sale_date)->firstOfMonth():Carbon::today()->firstOfMonth();  
             $end_date = $last_debit_credit?Carbon::parse($last_debit_credit->sale_date):Carbon::today();
         } 
         $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->orderBy('display_order','ASC')->get();

@@ -42,7 +42,10 @@ class SaleController extends Controller
             $date =  $sale_date->addDay();
             $day_before = Sale::all()->last()->sale_date;
         }
+        $newDateForLastDay = $newDateForNextDay = $date; 
         $active_tab = $request->active_tab?$request->active_tab:'diesel';
+        $previousUrl = route('user.sale.index').'?active_tab='.$active_tab.'&date='.$newDateForLastDay->subDay(1)->format('Y-m-d');
+        $nextUrl = route('user.sale.index').'?active_tab='.$active_tab.'&date='.$newDateForNextDay->addDay(1)->format('Y-m-d');
         $accounts = DebitCreditAccount::query()
                 // leftJoin('debit_credits', 'debit_credit_accounts.id', '=', 'debit_credits.account_id')
                 // ->select('debit_credit_accounts.*', DB::raw('COUNT(debit_credits.account_id) as accounts'))
@@ -56,7 +59,12 @@ class SaleController extends Controller
         $lastDayCash = DebitCredit::where('account_id',$cash_account_id)->whereDate('sale_date',$day_before)->where('user_id',Auth::user()->id)->first();
         $missing_debit_credits = DebitCredit::whereNull('account_id')->where('user_id',Auth::user()->id)->get();
         $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
-        return view('user.sale.create',compact('petrol','diesel','date','active_tab','accounts','products','cash_account_id','lastDayCash','missing_debit_credits'));
+        return view('user.sale.create',compact(
+            'petrol','diesel','date','active_tab',
+            'accounts','products','cash_account_id',
+            'lastDayCash','missing_debit_credits',
+            'previousUrl','nextUrl'
+        ));
     }
 
     /**

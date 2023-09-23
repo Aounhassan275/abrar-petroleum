@@ -17,6 +17,9 @@
         $balance = 0;
         @endphp
         @foreach($account_category->debitCredits($start_date,$end_date,$sub_account,request()->type) as $key => $debitCredit)
+        @if($sub_account == 24)
+        @include('user.account_category.partials.cash_in_hand')
+        @else
         @php 
             $balance = $balance + $debitCredit->credit;
             $balance = $balance - $debitCredit->debit;
@@ -37,6 +40,7 @@
             </td>
             <td>{{$debitCredit->description}}</td>
         </tr>
+        @endif
         @endforeach
     </tbody>
 </table>

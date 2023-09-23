@@ -34,6 +34,12 @@
                 </ul>
 
                 <div class="tab-content">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a href="{{$nextUrl}}" class="btn btn-primary btn-sm float-right">Next Date</a>
+                            <a href="{{$previousUrl}}" class="btn btn-secondary btn-sm float-right mr-2">Previous Date</a>
+                        </div>
+                    </div>
                     <div @if($active_tab == 'petrol')  class="tab-pane fade show active" @else class="tab-pane fade" @endif id="top-tab1">
                         <div class="card-body">
                             @if(Auth::user()->haveSale($date,$petrol)->count() > 0)
