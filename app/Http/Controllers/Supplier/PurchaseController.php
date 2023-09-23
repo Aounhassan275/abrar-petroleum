@@ -31,16 +31,19 @@ class PurchaseController extends Controller
             {
                 toastr()->error('Not Allowed');
                 $date =  $sale_date;
-                $day_before = Purchase::all()->last()->sale_date;
+                $day_before = Purchase::all()->last()->date;
             }else{
                 $date =  Carbon::parse($request->date);
                 $day_before =  Carbon::parse($request->date)->subDay();
             }
         }else{
             $date =  $sale_date->addDay();
-            $day_before = Purchase::all()->last()->sale_date;
+            $day_before = Purchase::all()->last()->date;
         }
         $active_tab = $request->active_tab?$request->active_tab:'purchase';
+        $newDateForLastDay = $newDateForNextDay = $date; 
+        $previousUrl = route('user.sale.index').'?active_tab='.$active_tab.'&date='.$newDateForLastDay->subDay(1)->format('Y-m-d');
+        $nextUrl = route('user.sale.index').'?active_tab='.$active_tab.'&date='.$newDateForNextDay->addDay(1)->format('Y-m-d');
         $accounts = DebitCreditAccount::query()
                 ->select('debit_credit_accounts.*')
                 ->where('debit_credit_accounts.user_id', Auth::user()->id)
@@ -50,8 +53,12 @@ class PurchaseController extends Controller
         $cash_account_id = DebitCreditAccount::where('name','Cash in Hand')->first()->id;
         $lastDayCash = DebitCredit::where('account_id',$cash_account_id)->whereDate('sale_date',$day_before)->where('user_id',Auth::user()->id)->first();
         $missing_debit_credits = DebitCredit::whereNull('account_id')->where('user_id',Auth::user()->id)->get();
-        $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
-        return view('supplier.sale.index',compact('date','active_tab','accounts','products','cash_account_id','lastDayCash','missing_debit_credits'));
+        $products = Product::all();
+        return view('supplier.sale.index',compact(
+            'date','active_tab','accounts','products','cash_account_id',
+            'lastDayCash','missing_debit_credits',
+            'previousUrl','nextUrl'
+        ));
     }
 
     /**

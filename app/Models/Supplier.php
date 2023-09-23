@@ -63,13 +63,13 @@ class Supplier extends Authenticatable
     {   
         if($product == null)
         {
-            $sales = Sale::where('user_id',$this->id)
-                            ->whereDate('sale_date',$date)
+            $sales = Purchase::where('supplier_id',$this->id)
+                            ->whereDate('date',$date)
                             ->get();  
         }else{
-            $sales = Sale::where('user_id',$this->id)
+            $sales = Purchase::where('supplier_id',$this->id)
                             ->where('product_id',$product->id)
-                            ->whereDate('sale_date',$date)
+                            ->whereDate('date',$date)
                             ->get();  
         }
         return $sales;

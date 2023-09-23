@@ -1,53 +1,75 @@
 @extends('supplier.layout.index')
 
 @section('title')
-    Manage Sale
+    Add New Sale
+@endsection
+@section('css')
+<script src="{{asset('admin/global_assets/js/demo_pages/picker_date.js')}}"></script>
 @endsection
 @section('content')
-<div class="card">
-    <div class="card-header header-elements-inline text-right">
-        <a href="{{route('supplier.sale.create')}}" class="btn btn-primary btn-sm text-right">Add New Sale</a>
-    </div>
-    <table class="table datatable-button-html5-basic">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Site</th>
-                <th>Product</th>
-                <th>Price</th>
-                <th>Qty</th>
-                <th>Total Amount</th>
-                <th>Date</th>
-                <th>Action</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (Auth::user()->sales as $key => $sale)
-            <tr>
-                <td>{{$key+1}}</td>
-                <td>{{@$sale->site->username}}</td>
-                <td>{{@$sale->product->name}}</td>
-                <td>{{$sale->price}}</td>
-                <td>{{$sale->qty}}</td>
-                <td>{{$sale->total_amount}}</td>
-                <td>{{$sale->created_at?$sale->created_at->format('d M,Y'):''}}</td>
-                <td>
-                    <a href="{{route('supplier.sale.edit',$sale->id)}}" class="btn btn-primary btn-sm">Edit</a>
-                </td>
-                <td>
-                    <form action="{{route('supplier.sale.destroy',$sale->id)}}" method="POST">
-                        @method('DELETE')
-                        @csrf
-                    <button class="btn btn-danger btn-sm">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
+<div class="row">
+    <div class="col-md-12">
+        
+        <div class="card">
+            <div class="card-header header-elements-inline">
+                <h6 class="card-title">Product Sales</h6>
+                <div class="header-elements">
+                    <div class="list-icons">
+                        <a class="list-icons-item" data-action="collapse"></a>
+                        <a class="list-icons-item" data-action="reload"></a>
+                        <a class="list-icons-item" data-action="remove"></a>
+                    </div>
+                </div>
+            </div>
 
+            <div class="card-body">
+                <ul class="nav nav-tabs nav-tabs-top">
+                    <li class="nav-item"><a href="#top-tab1" @if($active_tab == 'products') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Products</a></li>
+                    <li class="nav-item"><a href="#top-tab4" @if($active_tab == 'sale_detail') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Sales Detail</a></li>
+                    <li class="nav-item"><a href="#top-tab5" @if($active_tab == 'debit_credit') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Debit Credit</a></li>
+                    <li class="nav-item"><a href="#top-tab6" @if($active_tab == 'debit_credit_missing') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Debit Credit Missing ({{$missing_debit_credits->count()}})</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a href="{{$nextUrl}}" class="btn btn-primary btn-sm float-right">Next Date</a>
+                            <a href="{{$previousUrl}}" class="btn btn-secondary btn-sm float-right mr-2">Previous Date</a>
+                        </div>
+                    </div>
+                    <div @if($active_tab == 'products')  class="tab-pane fade show active" @else class="tab-pane fade" @endif id="top-tab1">
+                        <div class="card-body">
+                            {{-- @if(Auth::user()->haveSale($date)->count() > 0)
+                                @include('supplier.sale.partials.sale_update')
+                            @else  --}}
+                                @include('supplier.sale.partials.sale_store')
+                            {{-- @endif --}}
+                        </div>
+
+                    </div>
+
+                    {{-- <div @if($active_tab == 'debit_credit')  class="tab-pane fade show active" @else class="tab-pane fade" @endif id="top-tab5">
+                        
+                        @if(Auth::user()->haveDebitCredit($date)->count() > 0)
+                            @include('user.sale.partials.debit_credit_update')
+                        @else 
+                            @include('user.sale.partials.debit_credit_store')
+                        @endif
+                    </div> --}}
+                    {{-- <div @if($active_tab == 'debit_credit_missing')  class="tab-pane fade show active" @else class="tab-pane fade" @endif id="top-tab6">
+                            @include('user.sale.partials.debit_credit_missing')
+                    </div> --}}
+                </div>
+            </div>
+        </div>
+        <!-- Basic layout-->
+
+    </div>
+</div>
+{{-- @include('user.sale.partials.add-purchase-modal')
+@include('user.sale.partials.delete-confirmation-modal') --}}
 @endsection
 @section('scripts')
+{{-- @include('user.sale.partials.js')
+@include('user.sale.partials.debit_credit_js') --}}
 @endsection

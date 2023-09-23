@@ -109,6 +109,9 @@
             </div>
         </div>
     </div>
+    @php 
+    $profitValue =  abs($totalRevenue) - abs(Auth::user()->totalExpense($start_date,$end_date));
+    @endphp
     <div class="col-sm-4 col-xl-4">
         <div class="card card-body bg-warning-400 has-bg-image">
             <div class="media">
@@ -116,8 +119,10 @@
                     <i class="icon-stack-picture icon-3x opacity-75"></i>
                 </div>
                 <div class="media-body text-right">
-                    <h3 class="mb-0">{{abs(abs($totalRevenue) - abs(Auth::user()->totalExpense($start_date,$end_date)))}}</h3>
-                    <span class="text-uppercase font-size-xs">Net Profit</span>
+                    <h3 class="mb-0">
+                        {{abs($profitValue)}}
+                    </h3>
+                    <span class="text-uppercase font-size-xs">{{$profitValue > 0 ? 'Net Profit' : 'Net Loss'}}</span>
                 </div>
             </div>
         </div>
