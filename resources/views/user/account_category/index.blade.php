@@ -36,15 +36,23 @@
                             <form method="GET" id="searchForm">
                                 <input type="hidden" name="active_tab" value="{{ $account_category->id}}">
                                 <div class="row">
-                                    <div class="form-group col-2">
+                                    <div class="form-group col-2" id="start_date_field"  @if(request()->type != 'Selected Month') hidden @endif>
                                         <label>Start Date</label> 
                                             <input type="text" name="start_date" class="daterange-single form-control pull-right dates" style="height: 35px; "
                                                 value="{{ date('m/d/Y', strtotime(@$start_date))}}">
                                           
                                     </div>
-                                    <div class="form-group col-2">
+                                    <div class="form-group col-2" id="end_date_field"  @if(request()->type != 'Selected Month') hidden @endif>
                                         <label>
                                             End Date
+                                        </label>   
+
+                                            <input type="text" name="end_date" class="daterange-single form-control pull-right dates" style="height: 35px; "
+                                                value="{{ date('m/d/Y', strtotime(@$end_date))}}">
+                                    </div>
+                                    <div class="form-group col-2" id="current_month_field" @if(request()->type == 'Selected Month') hidden @endif>
+                                        <label>
+                                            Date
                                         </label>   
 
                                             <input type="text" name="end_date" class="daterange-single form-control pull-right dates" style="height: 35px; "
@@ -61,9 +69,10 @@
                                     </div>
                                     <div class="form-group col-2">
                                         <label>Type</label> 
-                                        <select name="type" class="form-control select-search">
-                                            <option value="By Date">By Date</option>  
-                                            <option {{request()->type == "All"?'selected':''}} value="All">All</option>
+                                        <select name="type" id="type" class="form-control select-search">
+                                            <option value="By Date">Current Month</option>  
+                                            <option {{request()->type == "Selected Month"?'selected':''}} value="Selected Month">Selected Month</option>  
+                                            <option {{request()->type == "All"?'selected':''}} value="All">Initial Date</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-2">
@@ -72,50 +81,16 @@
                                     </div>
                                 </div>
                             </form>
+                            <div class="row">
+                                <div class="col-md-12 mb-2">
+                                    <a href="{{route('user.debit_credit_account.index')}}" class="btn btn-info btn-sm float-right">Manage Debit Credit Account</a>
+                                </div>
+                            </div>
                             @if($sub_account && $active_tab == $account_category->id)
                             @include('user.account_category.partials.debit_credits')
                             @endif
                             @if($account_category->name == "Products")
                                 @include('user.product.index')
-                            @else
-                            <div class="row" style="margin-top:20px!important;">
-                                <div class="col-md-12">
-                                    <a href="{{route('user.debit_credit_account.create')}}" class="btn btn-primary btn-sm text-right">Add New Account</a>
-                                    <table class="table datatable-button-html5-basic">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Phone</th>
-                                                <th>Address</th>
-                                                <th>Designation</th>
-                                                <th>Action</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (Auth::user()->debitCreditAccounts->where('account_category_id',$account_category->id) as  $account)
-                                            <tr>
-                                                <td>{{$account->name}}</td>
-                                                <td>{{$account->phone}}</td>
-                                                <td>{{$account->address}}</td>
-                                                <td>{{@$account->designation}}</td>
-                                                <td>
-                                                    <a href="{{route('user.debit_credit_account.edit',$account->id)}}" class="btn btn-primary btn-sm">Edit</a>
-                                                </td>
-                                                <td>
-                                                    <form action="{{route('user.debit_credit_account.destroy',$account->id)}}" method="POST">
-                                                        @method('DELETE')
-                                                        @csrf
-                                                    <button class="btn btn-danger btn-sm">Delete</button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-
-                                </div>
-                            </div>
                             @endif
                         </div>
 
@@ -152,6 +127,19 @@
             $('#amount').val(amount);
             $('#expense_type_id').val(expense_type_id);
             $('#updateForm').attr('action','{{route('user.expense.update','')}}' +'/'+id);
+        });
+        $('#type').change(function(){
+            let type = $(this).val();
+            if(type == 'Selected Month')
+            {
+                $("#current_month_field").attr('hidden',true);
+                $("#start_date_field").attr('hidden',false);
+                $("#end_date_field").attr('hidden',false);
+            }else{
+                $("#current_month_field").attr('hidden',false);
+                $("#start_date_field").attr('hidden',true);
+                $("#end_date_field").attr('hidden',true);
+            }
         });
     });
     

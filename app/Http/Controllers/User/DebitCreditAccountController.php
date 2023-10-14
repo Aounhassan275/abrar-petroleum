@@ -17,7 +17,7 @@ class DebitCreditAccountController extends Controller
      */
     public function index()
     {
-        //
+        return view('user.debit_credit_account.index');
     }
 
     /**

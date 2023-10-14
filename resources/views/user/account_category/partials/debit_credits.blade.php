@@ -1,3 +1,14 @@
+@if($account_category->debitCredits($start_date,$end_date,$sub_account,request()->type)->count() > 0)
+<div class="row">
+    <div class="col-md-12">
+        <a href="{{$url}}" target="_blank" class="btn btn-primary btn-sm float-right ">
+            PDF
+        </a>
+    </div>
+</div>
+@endif
+<p>Start Balance : {{$account_category->getOldDebitCredits($start_date,$end_date,$sub_account,request()->type)}}
+</p>
 <table class="table datatable-button-html5-basic">
     <thead>
         <tr>
@@ -14,7 +25,7 @@
     </thead>
     <tbody>
         @php 
-        $balance = 0;
+        $balance = $account_category->getOldDebitCredits($start_date,$end_date,$sub_account,request()->type);
         @endphp
         @foreach($account_category->debitCredits($start_date,$end_date,$sub_account,request()->type) as $key => $debitCredit)
         @if($sub_account == 24)

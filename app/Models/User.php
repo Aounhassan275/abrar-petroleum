@@ -20,7 +20,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'username', 'password','type','capital_amount'
+        'username', 'password','type','capital_amount','petrol_red_zone','diesel_red_zone',
+        'petrol_low_stock','diesel_low_stock'
     ];
 
     /**
@@ -442,5 +443,45 @@ class User extends Authenticatable
     public function globalProductRate()
     {
         return $this->belongsTo(GlobalProductRate::class,'user_id');
+    }
+    public function totalPetrolAchievedTarget()
+    {
+        $product = Product::where('name','PMG')->first();
+        $totalPurchase = $product->totalCurrentMonthPurchasesQty();
+        if($totalPurchase > $this->petrol_red_zone)
+        {
+            return $this->petrol_red_zone;
+        }
+        return $totalPurchase;
+    }
+    public function totalPetrolExtraAchieved()
+    {
+        $product = Product::where('name','PMG')->first();
+        $totalPurchase = $product->totalCurrentMonthPurchasesQty();
+        if($totalPurchase > $this->petrol_red_zone)
+        {
+            return $totalPurchase - $this->petrol_red_zone;
+        }
+        return 0;
+    }
+    public function totalDieselAchievedTarget()
+    {
+        $product = Product::where('name','HSD')->first();
+        $totalPurchase = $product->totalCurrentMonthPurchasesQty();
+        if($totalPurchase > $this->diesel_red_zone)
+        {
+            return $this->diesel_red_zone;
+        }
+        return $totalPurchase;
+    }
+    public function totalDieselExtraAchieved()
+    {
+        $product = Product::where('name','HSD')->first();
+        $totalPurchase = $product->totalCurrentMonthPurchasesQty();
+        if($totalPurchase > $this->diesel_red_zone)
+        {
+            return $totalPurchase - $this->diesel_red_zone;
+        }
+        return 0;
     }
 }

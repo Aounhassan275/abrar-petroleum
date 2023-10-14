@@ -114,6 +114,7 @@ Route::group(['prefix' => 'user', 'as'=>'user.','namespace' => 'User'], function
     Route::post('debit_credit/delete', 'DebitCreditController@delete')->name('debit_credit.delete');  
     Route::resource('debit_credit', 'DebitCreditController');  
     /******************Account Category ROUTES****************/
+    Route::get('account_category/pdf','AccountCategoryController@generatePDF')->name('account_category.pdf');
     Route::resource('account_category', 'AccountCategoryController');  
     /******************Employee ROUTES****************/
     Route::resource('employee', 'EmployeeController');  

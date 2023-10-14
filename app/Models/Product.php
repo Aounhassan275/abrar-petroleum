@@ -56,12 +56,38 @@ class Product extends Model
                         ->sum('qty'); 
         return $total_sale - $total_test_sale;
     }
+    public function totalCurrentMonthSales($user_id = null)
+    {
+        if(!$user_id)
+            $user_id = Auth::user()->id;
+        $total_sale = Sale::where('user_id',$user_id)
+                        ->where('type','!=','test')
+                        ->where('product_id',$this->id)
+                        ->whereBetween('sale_date',[Carbon::now()->startOfMonth(),Carbon::now()])
+                        ->sum('qty'); 
+        $total_test_sale = Sale::where('user_id',$user_id)
+                        ->where('type','test')
+                        ->whereBetween('sale_date',[Carbon::now()->startOfMonth(),Carbon::now()])
+                        ->where('product_id',$this->id)
+                        ->sum('qty'); 
+        // dd($total_sale);
+        return $total_sale - $total_test_sale;
+    }
     public function totaPurchasesQty($user_id = null)
     {
         if(!$user_id)
             $user_id = Auth::user()->id;
         return Purchase::where('user_id',$user_id)
                         ->where('product_id',$this->id)
+                        ->sum('qty'); 
+    }
+    public function totalCurrentMonthPurchasesQty($user_id = null)
+    {
+        if(!$user_id)
+            $user_id = Auth::user()->id;
+        return Purchase::where('user_id',$user_id)
+                        ->where('product_id',$this->id)
+                        ->whereBetween('date',[Carbon::now()->startOfMonth(),Carbon::now()])
                         ->sum('qty'); 
     }
     public function totaPurchasesAmount($user_id = null)

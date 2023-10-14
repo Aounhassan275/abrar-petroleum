@@ -1,16 +1,16 @@
 <form method="GET">
     <div class="row">
         <input type="hidden" name="active_tab" value="whole_sale">
-        <div class="form-group col-2">
+        {{-- <div class="form-group col-2">
             <label>
                 Start Date
                 <input type="text" name="start_date" class="daterange-single form-control pull-right dates" style="height: 35px; "
                     value="{{ date('m/d/Y', strtotime(@$start_date))}}">
             </label>   
-        </div>
+        </div> --}}
         <div class="form-group col-2">
             <label>
-                End Date
+                Date
 
                 <input type="text" name="end_date" class="daterange-single form-control pull-right dates" style="height: 35px; "
                     value="{{ date('m/d/Y', strtotime(@$end_date))}}">

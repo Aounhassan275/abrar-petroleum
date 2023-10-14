@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\AccountCategory;
+use App\Models\DebitCreditAccount;
 use App\Models\Product;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -18,10 +19,10 @@ class AccountCategoryController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->start_date)
+        if($request->end_date)
         {
-            $start_date = Carbon::parse($request->start_date);
             $end_date = Carbon::parse($request->end_date);
+            $start_date = Carbon::parse($request->end_date)->startOfMonth();
         }else{
             $start_date = Carbon::now()->startOfMonth();
             $end_date = Carbon::today();
@@ -31,7 +32,8 @@ class AccountCategoryController extends Controller
         $petrol = Product::where('name','PMG')->first();
         $active_tab = $request->active_tab?$request->active_tab:1;
         $sub_account = $request->sub_account?$request->sub_account:'';
-        return view('user.account_category.index',compact('active_tab','start_date','end_date','sub_account','dates','petrol'));
+        $url = url('user/account_category/pdf?sub_account='.$sub_account.'&type='.$request->type.'&account_category_id='.$active_tab.'&start_date='.$start_date->format('Y-m-d').'&end_date='.$end_date->format('Y-m-d'));
+        return view('user.account_category.index',compact('active_tab','start_date','end_date','sub_account','dates','petrol','url'));
     }
 
     /**
@@ -98,5 +100,22 @@ class AccountCategoryController extends Controller
     public function destroy(AccountCategory $accountCategory)
     {
         //
+    }
+    
+    public function generatePDF(Request $request)
+    {
+        $account_category = AccountCategory::find($request->account_category_id); 
+        $sub_account_id = $request->sub_account ? $request->sub_account : '';
+        $sub_account = DebitCreditAccount::find($request->sub_account); 
+        if($request->start_date)
+        {
+            $start_date = Carbon::parse($request->start_date);
+            $end_date = Carbon::parse($request->end_date);
+        }else{
+            $start_date = Carbon::now()->startOfMonth();
+            $end_date = Carbon::today();
+        }
+        return view('user.pdf.account-category',compact('start_date','end_date','account_category','sub_account','sub_account_id'));
+   
     }
 }

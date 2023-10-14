@@ -23,6 +23,8 @@ class PurchaseController extends Controller
      */
     public function index(Request $request)
     {
+        $diesel = Product::where('name','HSD')->first();
+        $petrol = Product::where('name','PMG')->first();
         $sale_date = Purchase::all()->last()->date;
         if($request->date)
         {
@@ -57,7 +59,7 @@ class PurchaseController extends Controller
         return view('supplier.sale.index',compact(
             'date','active_tab','accounts','products','cash_account_id',
             'lastDayCash','missing_debit_credits',
-            'previousUrl','nextUrl'
+            'previousUrl','nextUrl','diesel','petrol'
         ));
     }
 

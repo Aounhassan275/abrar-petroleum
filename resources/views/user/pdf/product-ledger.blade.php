@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>{{$product->name}} Ledger From {{$start_date->format('M d,Y')}} To {{$end_date->format('M d,Y')}}</title>
+    <title>{{Auth::user()->username}} - Products - {{$product->name}} Ledger</title>
 	<!-- Global stylesheets -->
 	<link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
 	<link href="{{asset('admin/global_assets/css/icons/icomoon/styles.min.css')}}" rel="stylesheet" type="text/css">
@@ -68,14 +68,17 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="row">
-                            <div class="col-md-12 text-center">
+                            <div class="col-md-4">
+                                <img src="{{asset('attock-logo.png')}}" alt="">
+                            </div>
+                            <div class="col-md-8 ">
                                 <h1>{{$product->name}} Ledger From {{$start_date->format('M d,Y')}} To {{$end_date->format('M d,Y')}}</h1>
+                                <p><b>Opening Stock : {{Auth::user()->getOpeningBalance($start_date,$product)}}</b></p>
+                                <p><b>Opening Stock Amount : {{round(Auth::user()->getPurchasePrice($start_date,$product) * Auth::user()->getOpeningBalance($start_date,$product))}}</b></p>
                             </div>
                         </div>
-                        <p><b>Opening Stock : {{Auth::user()->getOpeningBalance($start_date,$product)}}</b></p>
-                        <p><b>Opening Stock Amount : {{round(Auth::user()->getPurchasePrice($start_date,$product) * Auth::user()->getOpeningBalance($start_date,$product))}}</b></p>
                     </div>
-                    <table class="table">
+                    <table class="table" style="font-size:10px;">
                         <thead>
                             <tr>
                                 <th>#</th>
