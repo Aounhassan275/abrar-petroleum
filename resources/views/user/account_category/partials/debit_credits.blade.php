@@ -37,7 +37,7 @@
         @endphp
         <tr>
             <td>{{$key+1}}</td>
-            <td>{{@$debitCredit->sale_date->format('d M,Y')}}</td>
+            <td>{{@$debitCredit->sale_date ? $debitCredit->sale_date->format('d M,Y') : ''}}</td>
             <td>{{@$debitCredit->account->name}}</td>
             <td>{{@$debitCredit->product->name}}</td>
             <td>{{$debitCredit->qty}}</td>
