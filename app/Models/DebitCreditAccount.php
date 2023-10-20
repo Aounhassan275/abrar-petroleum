@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\Customer;
 use App\Models\Expense;
-use App\Models\User;
 use App\Models\Vendor;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;

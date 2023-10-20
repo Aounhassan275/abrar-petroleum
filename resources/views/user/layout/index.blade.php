@@ -213,12 +213,12 @@
 								<span>Purchase</span>
 							</a>
 						</li>
-						{{-- <li class="nav-item">
-							<a href="{{route('user.customer.index')}}" class="nav-link {{Request::is('user/customer') || Request::is('user/customer/*')?'active':''}}">
+						<li class="nav-item">
+							<a href="{{route('user.customer_vehicle.index')}}" class="nav-link {{Request::is('user/customer') || Request::is('user/customer/*')?'active':''}}">
 								<i class="icon-home4"></i>
-								<span>Customer</span>
+								<span>Customer Vehicle</span>
 							</a>
-						</li> --}}
+						</li>
 						{{-- <li class="nav-item">
 							<a href="{{route('user.expense.index')}}" class="nav-link {{Request::is('user/expense') || Request::is('user/expense/*')?'active':''}}">
 								<i class="icon-home4"></i>

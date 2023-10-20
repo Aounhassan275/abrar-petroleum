@@ -4,7 +4,7 @@
         <button type="button"  class="btn btn-sm btn-danger" onclick="removeFields('{{ @$key }}')">Remove</button>
     </div>
     <div class="form-group col-md-2">
-        <select name="account_id[]" id="credit_debit_account_{{$key}}" 
+        <select name="account_id[]" id="credit_debit_account_{{$key}}"  onchange="debitCreditAccount('{{ @$key }}','1')"
         {{-- onchange="checkColor('{{ @$key }}')"  --}}
         class="form-control select-search">
             <option value="">Select</option>
@@ -24,14 +24,24 @@
     <div class="form-group col-md-1">
         <input type="number" name="qty[]" id="credit_debit_qty_{{$key}}" onchange="debitQuantity('{{ @$key }}')" class="form-control" value="">
     </div>
-    <div class="form-group col-md-2">
-        <input type="number" name="debit[]" id="credit_debit_debit_{{$key}}" class="form-control debit_values" value="">
+    <div class="col-md-4">
+        <div class="row"> 
+            <div class="form-group col-md-4">
+                <input type="number" name="debit[]" id="credit_debit_debit_{{$key}}" class="form-control debit_values" value="">
+        
+            </div>
+            <div class="form-group col-md-4">
+                <input type="number" name="credit[]" id="credit_debit_credit_{{$key}}" class="form-control credit_values" value="">
+            </div>
+            <div class="form-group col-md-4">
+                <input type="text" name="description[]" id="credit_debit_description_{{$key}}" class="form-control" value="">
+            </div>
 
+        </div>
     </div>
     <div class="form-group col-md-2">
-        <input type="number" name="credit[]" id="credit_debit_credit_{{$key}}" class="form-control credit_values" value="">
-    </div>
-    <div class="form-group col-md-2">
-        <input type="text" name="description[]" id="credit_debit_description_{{$key}}" class="form-control" value="">
+        <select name="vehicle_id[]" id="credit_debit_vehicle_{{$key}}" class="form-control" readonly>
+            <option value="">Select Vehicle</option>
+        </select>
     </div>
 </div>

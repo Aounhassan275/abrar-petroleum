@@ -9,7 +9,7 @@
 @endif
 <p>Start Balance : {{$account_category->getOldDebitCredits($start_date,$end_date,$sub_account,request()->type)}}
 </p>
-<table class="table datatable-button-html5-basic">
+<table class="table">
     <thead>
         <tr>
             <th>#</th>
@@ -37,7 +37,7 @@
         @endphp
         <tr>
             <td>{{$key+1}}</td>
-            <td>{{$debitCredit->sale_date->format('d M,Y')}}</td>
+            <td>{{@$debitCredit->sale_date->format('d M,Y')}}</td>
             <td>{{@$debitCredit->account->name}}</td>
             <td>{{@$debitCredit->product->name}}</td>
             <td>{{$debitCredit->qty}}</td>

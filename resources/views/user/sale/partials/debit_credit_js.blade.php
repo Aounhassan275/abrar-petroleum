@@ -145,6 +145,46 @@
             }
         });
     }
+    function debitCreditAccount(key,is_append)
+    {
+        let account_id = '';
+        if(is_append == 1)
+        {
+            account_id = $('#credit_debit_account_'+key).val();
+        }else{
+            account_id = $('#credit_debit_account_id_'+key).val();
+        }
+        $.ajax({
+            url: "{{route('user.debit_credit.get_customer_vehicle')}}",
+            method: 'post',
+            data: {
+                account_id : account_id,
+            },
+            headers: {
+                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+            },
+            success: function(response){
+                vehicles = response.vehicles;
+                if(is_append == 1)
+                {
+                    account = 'credit_debit_vehicle_'+key;
+                }else{
+                    account = 'credit_debit_vehicle_id_'+key;
+                }
+                $('#'+account).empty();
+                $('#'+account).append('<option>Select Vehicle</option>');
+                if(vehicles.length > 0)
+                {
+                    $('#'+account).attr('readonly',false);
+                    for (i=0;i<vehicles.length;i++){
+                        $('#'+account).append('<option value="'+vehicles[i].id+'">'+vehicles[i].name+'</option>');
+                    }
+                }else{
+                    $('#'+account).attr('readonly',true);
+                }
+            }
+        });
+    }
     jQuery(document).ready(function ($) {
         $('#store-debit-credit-sale').on('click', function (event) {
             event.preventDefault();

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\CustomerVehicle;
 use App\Models\DebitCredit;
 use App\Models\DebitCreditAccount;
 use App\Models\Product;
@@ -63,6 +64,7 @@ class DebitCreditController extends Controller
                         'user_id' => Auth::user()->id,
                         'product_id' => @$request->product_id[$key],
                         'qty' => @$request->qty[$key],
+                        'customer_vehicle_id' => @$request->vehicle_id[$key],
                         'debit' => @$request->debit[$key],
                         'credit' => @$request->credit[$key],
                         'account_id' => $account_id,
@@ -123,6 +125,7 @@ class DebitCreditController extends Controller
                         'user_id' => Auth::user()->id,
                         'product_id' => @$request->product_id[$key],
                         'qty' => @$request->qty[$key],
+                        'customer_vehicle_id' => @$request->vehicle_id[$key],
                         'debit' => @$request->debit[$key],
                         'credit' => @$request->credit[$key],
                         'account_id' => $account_id,
@@ -138,6 +141,7 @@ class DebitCreditController extends Controller
                             'user_id' => Auth::user()->id,
                             'product_id' => @$request->product_id[$key],
                             'qty' => @$request->qty[$key],
+                            'customer_vehicle_id' => @$request->vehicle_id[$key],
                             'debit' => @$request->debit[$key],
                             'credit' => @$request->credit[$key],
                             'account_id' => $account_id,
@@ -172,6 +176,7 @@ class DebitCreditController extends Controller
                         'user_id' => Auth::user()->id,
                         'product_id' => @$request->product_id[$key],
                         'qty' => @$request->qty[$key],
+                        'customer_vehicle_id' => @$request->vehicle_id[$key],
                         'debit' => @$request->debit[$key],
                         'credit' => @$request->credit[$key],
                         'account_id' => $account_id,
@@ -187,6 +192,7 @@ class DebitCreditController extends Controller
                             'user_id' => Auth::user()->id,
                             'product_id' => @$request->product_id[$key],
                             'qty' => @$request->qty[$key],
+                            'customer_vehicle_id' => @$request->vehicle_id[$key],
                             'debit' => @$request->debit[$key],
                             'credit' => @$request->credit[$key],
                             'account_id' => $account_id,
@@ -272,6 +278,13 @@ class DebitCreditController extends Controller
             'totalDebit' => $totalDebit,
             'totalCredit' => $totalCredit,
             'difference' => $difference,
+        ], 200);
+    }
+    public function get_customer_vehicle(Request $request)
+    {
+        $vehicles = CustomerVehicle::where('debit_credit_account_id',$request->account_id)->get();
+        return response([
+            'vehicles' => $vehicles
         ], 200);
     }
 }

@@ -16,7 +16,7 @@ class CustomerVehicleController extends Controller
      */
     public function index()
     {
-        //
+        return view('user.customer_vehicle.index');
     }
 
     /**
@@ -26,7 +26,7 @@ class CustomerVehicleController extends Controller
      */
     public function create()
     {
-        //
+        return view('user.customer_vehicle.create');
     }
 
     /**
@@ -65,9 +65,10 @@ class CustomerVehicleController extends Controller
      * @param  \App\Models\CustomerVehicle  $customerVehicle
      * @return \Illuminate\Http\Response
      */
-    public function edit(CustomerVehicle $customerVehicle)
+    public function edit($id)
     {
-        //
+        $customer_vehicle = CustomerVehicle::find($id);
+        return view('user.customer_vehicle.edit',compact('customer_vehicle'));
     }
 
     /**

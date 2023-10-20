@@ -77,6 +77,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Expense::class);
     }
+    public function customerVehicles()
+    {
+        return $this->hasMany(CustomerVehicle::class);
+    }
     public function products()
     {
         return $this->hasMany(Product::class)->orderby('display_order','ASC');

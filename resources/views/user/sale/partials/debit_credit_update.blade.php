@@ -94,7 +94,8 @@
             <button onclick="deleteDebitCredit('{{$debit_credit->id}}')" type="button" class="btn btn-danger btn-sm">Delete</button>
         </div>
         <div class="form-group col-md-2">
-            <select name="account_id[]" 
+            <select name="account_id[]" onchange="debitCreditAccount('{{ @$key }}','0')"
+            id="credit_debit_account_id_{{$key}}"
             @if($debit_credit->account_id == null) style="color:red;" @endif
             class="form-control" required @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly @endif>
                 <option >Select Account</option>
@@ -131,21 +132,35 @@
             {{-- style="color:{{$debit_credit->account->accountCategory->color}};"  --}}
             value="{{@$debit_credit->qty}}" class="form-control" id="credit_debit_qty_{{$key}}" onchange="debitQuantity('{{ @$key }}')" @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly @endif>
         </div>
-        <div class="form-group col-md-2">
-            <input type="number" name="debit[]" 
-            {{-- style="color:{{$debit_credit->account->accountCategory->color}};"  --}}
-            value="{{round(@$debit_credit->debit,0)}}"  id="credit_debit_debit_{{$key}}" class="form-control {{$debit_credit->account_id == $cash_account_id ? 'cash_debit_values' : ''}}" @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly  @endif>
+        <div class="col-md-4">
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <input type="number" name="debit[]" 
+                    {{-- style="color:{{$debit_credit->account->accountCategory->color}};"  --}}
+                    value="{{round(@$debit_credit->debit,0)}}"  id="credit_debit_debit_{{$key}}" class="form-control {{$debit_credit->account_id == $cash_account_id ? 'cash_debit_values' : ''}}" @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly  @endif>
+        
+                </div>
+                <div class="form-group col-md-4">
+                    <input type="number" name="credit[]" 
+                    {{-- style="color:{{$debit_credit->account->accountCategory->color}};"  --}}
+                    value="{{round(@$debit_credit->credit)}}" id="credit_debit_credit_{{$key}}" class="form-control {{$debit_credit->account_id == $cash_account_id ? 'cash_credit_values' : ''}}"  @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly @endif>
+                </div>
+                <div class="form-group col-md-4">
+                    <input type="text" name="description[]" 
+                    {{-- style="color:{{$debit_credit->account->accountCategory->color}};"  --}}
+                    value="{{@$debit_credit->description}}"  class="form-control" readonly value="">
+                </div>
+
+            </div>
 
         </div>
         <div class="form-group col-md-2">
-            <input type="number" name="credit[]" 
-            {{-- style="color:{{$debit_credit->account->accountCategory->color}};"  --}}
-            value="{{round(@$debit_credit->credit)}}" id="credit_debit_credit_{{$key}}" class="form-control {{$debit_credit->account_id == $cash_account_id ? 'cash_credit_values' : ''}}"  @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly @endif>
-        </div>
-        <div class="form-group col-md-2">
-            <input type="text" name="description[]" 
-            {{-- style="color:{{$debit_credit->account->accountCategory->color}};"  --}}
-            value="{{@$debit_credit->description}}"  class="form-control" readonly value="">
+            <select name="vehicle_id[]" id="credit_debit_vehicle_id_{{$key}}" class="form-control" @if(!$debit_credit->customer_vehicle_id) readonly @endif>
+                <option value="">Select Vehicle</option>
+                @foreach(App\Models\CustomerVehicle::where('debit_credit_account_id',$debit_credit->account_id)->get() as $customer_vehicle)
+                <option {{$customer_vehicle->id == $debit_credit->customer_vehicle_id ? 'selected' : ''}} value="{{$customer_vehicle->id}}">{{$customer_vehicle->name}}</option>
+                @endforeach
+            </select>
         </div>
     </div>  
     @endforeach

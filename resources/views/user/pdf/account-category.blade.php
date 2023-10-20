@@ -71,14 +71,15 @@
                                 <img src="{{asset('attock-logo.png')}}" alt="">
                             </div>
                             <div class="col-md-8 ">
-                                <h1>{{$account_category->name}}</h1>
-                                <h3>{{$sub_account->name}} Ledger From {{$start_date->format('M d,Y')}} To {{$end_date->format('M d,Y')}}</h3>
+                                <h3><strong>Account Category :</strong> {{$account_category->name}}</h1>
+                                <h3><strong>Account Name :</strong> {{$sub_account->name}}</h3>
+                                <p>Ledger From {{$start_date->format('M d,Y')}} To {{$end_date->format('M d,Y')}}</p>
                                 {{-- <p><b>Opening Stock : {{Auth::user()->getOpeningBalance($start_date,$product)}}</b></p> --}}
                                 {{-- <p><b>Opening Stock Amount : {{round(Auth::user()->getPurchasePrice($start_date,$product) * Auth::user()->getOpeningBalance($start_date,$product))}}</b></p> --}}
                             </div>
                         </div>
                     </div>
-                    <table class="table" style="font-size:10px;">
+                    <table class="table">
                         <thead>
                             <tr>
                                 <th>#</th>
