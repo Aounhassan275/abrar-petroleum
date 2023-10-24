@@ -60,11 +60,17 @@ class DebitCreditController extends Controller
                 {    
                     // $totalDebit = $totalDebit + @$request->debit[$key];
                     // $totalCredit = $totalCredit + @$request->credit[$key];
+                    if(@$request->vehicle_id[$key] && is_numeric($request->vehicle_id[$key]))
+                    {
+                        $vehicle_id = $request->vehicle_id[$key];
+                    } else{
+                        $vehicle_id = null;
+                    }
                     DebitCredit::create([
                         'user_id' => Auth::user()->id,
                         'product_id' => @$request->product_id[$key],
                         'qty' => @$request->qty[$key],
-                        'customer_vehicle_id' => @$request->vehicle_id[$key],
+                        'customer_vehicle_id' => $vehicle_id,
                         'debit' => @$request->debit[$key],
                         'credit' => @$request->credit[$key],
                         'account_id' => $account_id,
@@ -120,12 +126,18 @@ class DebitCreditController extends Controller
             {
                 if($request->debit_credit_id[$key])
                 {
-                    $debitCredit = DebitCredit::find($request->debit_credit_id[$key]);       
+                    $debitCredit = DebitCredit::find($request->debit_credit_id[$key]); 
+                    if(@$request->vehicle_id[$key] && is_numeric($request->vehicle_id[$key]))
+                    {
+                        $vehicle_id = $request->vehicle_id[$key];
+                    } else{
+                        $vehicle_id = null;
+                    }      
                     $debitCredit->update([
                         'user_id' => Auth::user()->id,
                         'product_id' => @$request->product_id[$key],
                         'qty' => @$request->qty[$key],
-                        'customer_vehicle_id' => @$request->vehicle_id[$key],
+                        'customer_vehicle_id' => $vehicle_id,
                         'debit' => @$request->debit[$key],
                         'credit' => @$request->credit[$key],
                         'account_id' => $account_id,
@@ -137,11 +149,17 @@ class DebitCreditController extends Controller
                 {              
                     if($request->debit[$key] != null || $request->credit[$key] != null && $request->debit[$key] > 0 || $request->credit[$key] > 0)
                     {
+                        if(@$request->vehicle_id[$key] && is_numeric($request->vehicle_id[$key]))
+                        {
+                            $vehicle_id = $request->vehicle_id[$key];
+                        } else{
+                            $vehicle_id = null;
+                        }
                         DebitCredit::create([
                             'user_id' => Auth::user()->id,
                             'product_id' => @$request->product_id[$key],
                             'qty' => @$request->qty[$key],
-                            'customer_vehicle_id' => @$request->vehicle_id[$key],
+                            'customer_vehicle_id' => $vehicle_id,
                             'debit' => @$request->debit[$key],
                             'credit' => @$request->credit[$key],
                             'account_id' => $account_id,
@@ -171,12 +189,18 @@ class DebitCreditController extends Controller
             {
                 if($request->debit_credit_id[$key])
                 {
-                    $debitCredit = DebitCredit::find($request->debit_credit_id[$key]);       
+                    $debitCredit = DebitCredit::find($request->debit_credit_id[$key]); 
+                    if(@$request->vehicle_id[$key] && is_numeric($request->vehicle_id[$key]))
+                    {
+                        $vehicle_id = $request->vehicle_id[$key];
+                    } else{
+                        $vehicle_id = null;
+                    }
                     $debitCredit->update([
                         'user_id' => Auth::user()->id,
                         'product_id' => @$request->product_id[$key],
                         'qty' => @$request->qty[$key],
-                        'customer_vehicle_id' => @$request->vehicle_id[$key],
+                        'customer_vehicle_id' => $vehicle_id,
                         'debit' => @$request->debit[$key],
                         'credit' => @$request->credit[$key],
                         'account_id' => $account_id,
@@ -188,11 +212,17 @@ class DebitCreditController extends Controller
                 {              
                     if($request->debit[$key] != null || $request->credit[$key] != null && $request->debit[$key] > 0 || $request->credit[$key] > 0)
                     {
+                        if(@$request->vehicle_id[$key] && is_numeric($request->vehicle_id[$key]))
+                        {
+                            $vehicle_id = $request->vehicle_id[$key];
+                        } else{
+                            $vehicle_id = null;
+                        }
                         DebitCredit::create([
                             'user_id' => Auth::user()->id,
                             'product_id' => @$request->product_id[$key],
                             'qty' => @$request->qty[$key],
-                            'customer_vehicle_id' => @$request->vehicle_id[$key],
+                            'customer_vehicle_id' => @$vehicle_id,
                             'debit' => @$request->debit[$key],
                             'credit' => @$request->credit[$key],
                             'account_id' => $account_id,
