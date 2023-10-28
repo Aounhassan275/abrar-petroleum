@@ -52,6 +52,8 @@ Route::group(['prefix' => 'admin', 'as'=>'admin.','namespace' => 'Admin',], func
     Route::resource('debit_credit_account', 'DebitCreditAccountController');  
     /******************Global Product Rate ROUTES****************/
     Route::resource('global_product_rate', 'GlobalProductRateController');  
+
+    Route::get('remove-debit-entries-without-dates','AuthController@removeDebitEntriesWithoutDates')->name('remove-debit-entries-without-dates'); 
   });
 });
 
@@ -79,6 +81,7 @@ Route::group(['prefix' => 'user', 'as'=>'user.','namespace' => 'User'], function
     /******************Vendor Account ROUTES****************/
     Route::resource('vendor_account', 'VendorAccountController');  
     /******************PURCHASE ROUTES****************/
+    Route::post('purchase/get_product_price','PurchaseController@getProductPrice')->name('purchase.get_product_price');
     Route::resource('purchase', 'PurchaseController');  
     /******************PURCHASE PAYMENTS ROUTES****************/
     Route::resource('purchase_payment', 'PurchasePaymentController');  

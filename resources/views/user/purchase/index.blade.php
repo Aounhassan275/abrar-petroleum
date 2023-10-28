@@ -3,11 +3,40 @@
 @section('title')
     Manage Purchase or Add Access
 @endsection
+@section('css')
+<script src="{{asset('admin/global_assets/js/demo_pages/picker_date.js')}}"></script>
+@endsection
 @section('content')
 <div class="card">
     <div class="card-header header-elements-inline text-right">
         <a href="{{route('user.purchase.create')}}" class="btn btn-primary btn-sm text-right">Add New Purchase</a>
     </div>
+    <div class="card-body">
+        
+    <form method="GET" id="searchForm">
+        <div class="row">
+            <div class="form-group col-2" >
+                <label>
+                    Date
+                </label>   
+                <input type="text" name="date" class="daterange-single form-control pull-right dates" style="height: 35px; "
+                        value="{{ date('m/d/Y', strtotime(@$date))}}">
+            </div>
+            <div class="form-group col-3">
+                <label>Choose Product</label> 
+                <select name="product_id" class="form-control select-search">
+                    <option value="">Select</option>  
+                    @foreach(App\Models\Product::whereNull('user_id')->orWhere('user_id',Auth::user()->id)->get() as $product)    
+                    <option {{@request()->product_id == $product->id ? 'selected' : ''}} value="{{$product->id}}">{{$product->name}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group col-2">
+                <br>
+                <button type="submit" id="search-form-btn" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+    </form>
     <table class="table datatable-button-html5-basic">
         <thead>
             <tr>
@@ -23,7 +52,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (Auth::user()->purchases as $key => $purchase)
+            @foreach ($purchases as $key => $purchase)
             <tr>
                 <td>{{$key+1}}</td>
                 <td>{{@$purchase->product->name}}</td>
@@ -46,6 +75,7 @@
             @endforeach
         </tbody>
     </table>
+    </div>
 </div>
 
 @endsection

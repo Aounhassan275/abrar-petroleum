@@ -39,7 +39,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label> Date</label>
-                            <input name="date" type="date"  class="form-control"  required>
+                            <input name="date" type="date" id="date"  class="form-control"  required>
                         </div>
                     </div>
                     <div class="row">
@@ -139,6 +139,29 @@
             }else{
                 $('.local_vendor_fields').hide();
                 $('#supplier_field').show();
+            }
+        });
+        $('#date').change(function(){
+            let product_id = $('#product_id').val();
+            let date = $(this).val();
+            if(product_id == "" || product_id == null)
+            {
+                alert("Please Select Product First");
+            }else{
+                $.ajax({
+                    url: "{{route('user.purchase.get_product_price')}}",
+                    method: 'post',
+                    data: {
+                        product_id : product_id,
+                        date : date,
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    success: function(response){
+                        $('#price').val(response.price);
+                    }
+                });
             }
         });
     });

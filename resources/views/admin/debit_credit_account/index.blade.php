@@ -21,6 +21,13 @@
             </div>
 
             <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <a href="{{route('admin.remove-debit-entries-without-dates')}}" class="btn btn-primary btn-sm float-right">
+                            Remove Debit Credit  Without Dates Entries 
+                        </a>
+                    </div>
+                </div>
                 <form action="{{route('admin.debit_credit_account.store')}}" method="post" enctype="multipart/form-data" >
                     @csrf
                     <div class="row">
@@ -51,7 +58,6 @@
 </div>
 
 <div class="card">
-
     <table class="table datatable-button-html5-basic">
         <thead>
             <tr>

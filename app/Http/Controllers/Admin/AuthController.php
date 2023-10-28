@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\DebitCredit;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,5 +29,11 @@ class AuthController extends Controller
         Auth::logout();
         toastr()->success('You Logout Successfully');
         return redirect('/');
+    }
+    public function removeDebitEntriesWithoutDates()
+    {
+        DebitCredit::whereNull('sale_date')->delete();
+        toastr()->success('You Remove Debit Entries Without Dates Successfully!');
+        return redirect()->back();
     }
 }

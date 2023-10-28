@@ -7,6 +7,7 @@ use App\Models\CustomerVehicle;
 use App\Models\DebitCredit;
 use App\Models\DebitCreditAccount;
 use App\Models\Product;
+use App\Models\Purchase;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -253,6 +254,8 @@ class DebitCreditController extends Controller
     {
         $debitCredit = DebitCredit::find($id);
         $sale_date = $debitCredit->sale_date;
+        if($debitCredit->purchase_id)
+            Purchase::where('id',$debitCredit->purchase_id)->delete();
         $debitCredit->delete();
         toastr()->success('Debit Credit Deleted successfully');
         return redirect()->to(route('user.sale.index').'?active_tab=debit_credit_missing');
@@ -261,6 +264,8 @@ class DebitCreditController extends Controller
     {
         $debitCredit = DebitCredit::find($request->id);
         $sale_date = $debitCredit->sale_date;
+        if($debitCredit->purchase_id)
+            Purchase::where('id',$debitCredit->purchase_id)->delete();
         $debitCredit->delete();
         toastr()->success('Debit Credit Deleted successfully');
         return redirect()->to(route('user.sale.index').'?active_tab=debit_credit&date='.$sale_date->format('m/d/Y'));

@@ -10,7 +10,7 @@ class DebitCredit extends Model
     use SoftDeletes;
     protected $fillable = [
         'account_id','product_id','qty','user_id','description','debit','credit','sale_date',
-        'is_hide','customer_vehicle_id'
+        'is_hide','customer_vehicle_id','purchase_id'
     ];
     protected $casts = [
         'sale_date' => 'date',

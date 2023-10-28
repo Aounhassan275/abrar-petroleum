@@ -24,14 +24,21 @@
         <div class="form-group col-md-1">
             Qty
         </div>
-        <div class="form-group col-md-2">
-            Debit
+        <div class="col-md-4">
+            <div class="row"> 
+                <div class="form-group col-md-4">
+                    Debit
+                </div>
+                <div class="form-group col-md-4">
+                    Credit
+                </div>
+                <div class="form-group col-md-4">
+                    Description
+                </div>
+            </div>
         </div>
         <div class="form-group col-md-2">
-            Credit
-        </div>
-        <div class="form-group col-md-2">
-            Description
+            Vehicle
         </div>
     </div>      
         
@@ -47,15 +54,24 @@
         <div class="form-group col-md-1">
             <input type="text" class="form-control" readonly >
         </div>
-        <div class="form-group col-md-2">
-            <input type="text"class="form-control" value="" readonly>
+        <div class="col-md-4">
+            <div class="row"> 
+                <div class="form-group col-md-4">
+                    <input type="text"class="form-control" value="" readonly>
 
+                </div>
+                <div class="form-group col-md-4">
+                    <input type="number" name="last_day_cash" class="form-control" readonly value="{{round($lastDayCash->debit)}}">
+                </div>
+                <div class="form-group col-md-4">
+                    <input type="text" class="form-control" readonly value="">
+                </div>
+            </div>
         </div>
         <div class="form-group col-md-2">
-            <input type="number" name="last_day_cash" class="form-control" readonly value="{{round($lastDayCash->debit)}}">
-        </div>
-        <div class="form-group col-md-2">
-            <input type="text" class="form-control" readonly value="">
+            <select class="form-control" readonly>
+                <option value="">Select Vehicle</option>
+            </select>
         </div>
     </div>  
     @endif  

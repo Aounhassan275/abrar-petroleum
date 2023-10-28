@@ -5,9 +5,11 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\DebitCredit;
 use App\Models\DebitCreditAccount;
+use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\PurchasePayment;
 use App\Models\Supplier;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,9 +21,23 @@ class PurchaseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('user.purchase.index');
+        if($request->date)
+        {
+            $date = Carbon::parse($request->date);
+            $start_date = Carbon::parse($request->date)->startOfMonth();
+        }else{
+            $start_date = Carbon::now()->startOfMonth();
+            $date = Carbon::today();
+        }
+        $query = Purchase::query()->where('user_id',Auth::user()->id)
+                        ->whereDate('date','>=',$start_date)
+                        ->whereDate('date','<=',$date);
+        if($request->product_id)
+            $query = $query->where('product_id',$request->product_id);
+        $purchases = $query->get();
+        return view('user.purchase.index',compact('date','purchases'));
     }
 
     /**
@@ -44,12 +60,19 @@ class PurchaseController extends Controller
     {
         
         try{
+            if($request->qty > 0 && $request->access > 0)
+            {
+                
+                toastr()->error("Adding Qty and access at the same time is not allowed");
+                return back()->withInput($request->all());
+            }
             if(!$request->vendor_id)
             {
                 $request->merge([
                     'supplier_id' => Supplier::first()->id
                 ]);
             }
+
             if($request->access_total_amount)
             {
                 $request->merge([
@@ -78,6 +101,7 @@ class PurchaseController extends Controller
                     'credit' => @$purchase->access_total_amount,
                     'account_id' => $account_id,
                     'sale_date' => $purchase->date,
+                    'purchase_id' => $purchase->id,
                     'description' => $purchase->access.' litres '.$purchase->product->name,
                 ]);
                 $account_id  = DebitCreditAccount::where('product_id',$request->product_id)->first()->id;
@@ -86,10 +110,11 @@ class PurchaseController extends Controller
                     'debit' => @$purchase->access_total_amount,
                     'account_id' => $account_id,
                     'sale_date' => $purchase->date,
+                    'purchase_id' => $purchase->id,
                     'description' => $purchase->access.' litres '.$purchase->product->name,
                 ]);
             }
-            else if($request->total_amount > 0)
+            if($request->total_amount > 0)
             {
                 $account_id  = DebitCreditAccount::where('product_id',$request->product_id)->first()->id;
                 DebitCredit::create([
@@ -97,6 +122,7 @@ class PurchaseController extends Controller
                     'debit' => @$purchase->total_amount,
                     'account_id' => $account_id,
                     'sale_date' => $purchase->date,
+                    'purchase_id' => $purchase->id,
                 ]);
                 if($request->supplier_id)
                 {
@@ -106,6 +132,7 @@ class PurchaseController extends Controller
                         'credit' => @$purchase->total_amount,
                         'account_id' => $supplier_account_id,
                         'sale_date' => $purchase->date,
+                        'purchase_id' => $purchase->id,
                         'description' => $purchase->qty.' litres '.$purchase->product->name,
                     ]);
                 }
@@ -175,35 +202,18 @@ class PurchaseController extends Controller
     public function destroy($id)
     {
         $purchase = Purchase::find($id);
-        if($purchase->access > 0)
-        {
-            $account_id  = DebitCreditAccount::where('name','Product Excess')->first()->id;
-            DebitCredit::where('product_id',$purchase->product_id)->where('account_id',$account_id)
-                        ->where('sale_date',$purchase->date)->where('user_id',Auth::user()->id)->delete();
-            $product_account_id  = DebitCreditAccount::where('product_id',$purchase->product_id)->first()->id;
-            DebitCredit::where('user_id',Auth::user()->id)->where('account_id',$product_account_id)
-                        ->where('sale_date',$purchase->date)->delete();
-        }
-        else if($purchase->total_amount > 0)
-        {
-            $account_id  = DebitCreditAccount::where('product_id',$purchase->product_id)->first()->id;
-            DebitCredit::create([
-                'user_id' => Auth::user()->id,
-                'debit' => @$purchase->total_amount,
-                'account_id' => $account_id,                'sale_date' => $purchase->date,
-            ]);
-            DebitCredit::where('user_id',Auth::user()->id)->where('account_id',$account_id)
-                    ->where('sale_date',$purchase->date)->delete();
-            if($purchase->supplier_id)
-            {
-                $supplier_account_id  = DebitCreditAccount::where('supplier_id',$purchase->supplier_id)->first()->id;
-                DebitCredit::where('user_id',Auth::user()->id)->where('account_id',$supplier_account_id)
-                        ->where('sale_date',$purchase->date)->delete();
-            }
-        }
-        
+        DebitCredit::where('purchase_id',$purchase->id)->delete();
         $purchase->delete();
         toastr()->success('Purchase Deleted successfully');
         return redirect()->back();
+    }
+    public function getProductPrice(Request $request)
+    {
+        $product = Product::find($request->product_id);
+        $date = Carbon::parse($request->date);
+        $price =  Auth::user()->getPurchasePrice($date,$product);
+        return response()->json([
+            'price' => $price
+        ]);
     }
 }
