@@ -55,30 +55,41 @@ class DebitCreditController extends Controller
         try{
             // $totalDebit = 0;
             // $totalCredit = 0;
+            $totalEmptyAccount = 0;
             foreach($request->account_id as $key => $account_id)
             {
-                if($request->debit[$key] != null || $request->credit[$key] != null && $request->debit[$key] > 0 || $request->credit[$key] > 0)
-                {    
-                    // $totalDebit = $totalDebit + @$request->debit[$key];
-                    // $totalCredit = $totalCredit + @$request->credit[$key];
-                    if(@$request->vehicle_id[$key] && is_numeric($request->vehicle_id[$key]))
-                    {
-                        $vehicle_id = $request->vehicle_id[$key];
-                    } else{
-                        $vehicle_id = null;
+                if($account_id){
+                    if($request->debit[$key] != null || $request->credit[$key] != null && $request->debit[$key] > 0 || $request->credit[$key] > 0)
+                    {    
+                        // $totalDebit = $totalDebit + @$request->debit[$key];
+                        // $totalCredit = $totalCredit + @$request->credit[$key];
+                        if(@$request->vehicle_id[$key] && is_numeric($request->vehicle_id[$key]))
+                        {
+                            $vehicle_id = $request->vehicle_id[$key];
+                        } else{
+                            $vehicle_id = null;
+                        }
+                        DebitCredit::create([
+                            'user_id' => Auth::user()->id,
+                            'product_id' => @$request->product_id[$key],
+                            'qty' => @$request->qty[$key],
+                            'customer_vehicle_id' => $vehicle_id,
+                            'debit' => @$request->debit[$key],
+                            'credit' => @$request->credit[$key],
+                            'account_id' => $account_id,
+                            'description' => @$request->description[$key],
+                            'sale_date' => $request->sale_date,
+                        ]);
                     }
-                    DebitCredit::create([
-                        'user_id' => Auth::user()->id,
-                        'product_id' => @$request->product_id[$key],
-                        'qty' => @$request->qty[$key],
-                        'customer_vehicle_id' => $vehicle_id,
-                        'debit' => @$request->debit[$key],
-                        'credit' => @$request->credit[$key],
-                        'account_id' => $account_id,
-                        'description' => @$request->description[$key],
-                        'sale_date' => $request->sale_date,
-                    ]);
+                }else{
+                    $totalEmptyAccount += 1;
                 }
+            }
+            if($totalEmptyAccount > 0)
+            {
+                
+                toastr()->warning('You add '.$totalEmptyAccount.' Debit Credit Entry with no account.');
+                return redirect()->to(route('user.sale.index').'?active_tab=debit_credit&date='.$request->sale_date);       
             }
             $next_date = Carbon::parse($request->sale_date);
             $next_date->addDay(); 

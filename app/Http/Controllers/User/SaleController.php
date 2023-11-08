@@ -177,6 +177,7 @@ class SaleController extends Controller
                         'date' => $request->sale_date,
                     ]);
                 }   
+                $this->manageSale($request->sale_date);
                 toastr()->success('Sale is Created Successfully');
                 if($product->name == 'PMG')
                 {
@@ -205,6 +206,7 @@ class SaleController extends Controller
                             'sale_date' => $request->sale_date,
                         ]);}
                 }
+                $this->manageSale($request->sale_date);
                 toastr()->success('Sale is Created Successfully');
                 return redirect()->to(route('user.sale.index').'?active_tab=sale_detail&date='.$request->sale_date);
             }else{
@@ -423,6 +425,7 @@ class SaleController extends Controller
                         ]);
                     }
                 }
+                $this->manageSale($request->sale_date);
                 toastr()->success('Sale is Created Successfully');
                 if($product->name == 'PMG')
                 {
@@ -603,5 +606,17 @@ class SaleController extends Controller
             'date' => $request->change_rate_date,
             'success' => true,
         ], 200);
+    }
+    public function manageSale($date)
+    {
+        $date = Carbon::parse($date);
+        $debit_credit = DebitCredit::where('account_id','42')->where('user_id',Auth::user()->id)->whereDate('sale_date',$date)->first();
+        $new_sale_amount = round(Auth::user()->todaySaleAmount($date));
+        if($debit_credit)
+        {
+            $debit_credit->update([
+                'credit' => $new_sale_amount
+            ]);
+        }
     }
 }
