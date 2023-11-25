@@ -31,6 +31,10 @@
                             <input name="designation" type="text" value="{{old('designation')}}" class="form-control" placeholder="Enter Designation" >
                         </div>
                         <div class="form-group col-md-6">
+                            <label>Display Order</label>
+                            <input name="display_order" type="number" value="{{old('display_order')}}" class="form-control" placeholder="Enter Display Order" >
+                        </div>
+                        <div class="form-group col-md-6">
                             <label>Account Categories</label>
                             <select class="form-control select-search" name="account_category_id" required>
                                 <option value="">Choose Type</option>

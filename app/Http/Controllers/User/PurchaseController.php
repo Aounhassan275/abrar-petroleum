@@ -80,17 +80,18 @@ class PurchaseController extends Controller
                 ]);
             }
             $purchase = Purchase::create($request->all());
-            if($request->amount)
-            {
-                PurchasePayment::create(
-                [
-                    'amount' => $request->amount,
-                    'vendor_account_id' => $request->vendor_account_id,
-                    'date' => $request->date?$request->date:date('Y-m-d'),
-                    'purchase_id' => $purchase->id,
-                    'image' => @$request->image,
-                ]);
-            }
+            // We are not using it currently
+            // if($request->amount)
+            // {
+            //     PurchasePayment::create(
+            //     [
+            //         'amount' => $request->amount,
+            //         'vendor_account_id' => $request->vendor_account_id,
+            //         'date' => $request->date?$request->date:date('Y-m-d'),
+            //         'purchase_id' => $purchase->id,
+            //         'image' => @$request->image,
+            //     ]);
+            // }
             if($purchase->access > 0)
             {
                 $account_id  = DebitCreditAccount::where('name','Product Excess')->first()->id;
@@ -114,7 +115,7 @@ class PurchaseController extends Controller
                     'description' => $purchase->access.' litres '.$purchase->product->name,
                 ]);
             }
-            if($request->total_amount > 0)
+            if($request->total_amount > 0 && $purchase->qty > 0)
             {
                 $account_id  = DebitCreditAccount::where('product_id',$request->product_id)->first()->id;
                 DebitCredit::create([

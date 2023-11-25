@@ -6,9 +6,11 @@
         </a>
     </div>
 </div>
-@endif
+@endif 
+@if($account_category->id != 6)
 <p>Start Balance : {{$account_category->getOldDebitCredits($start_date,$end_date,$sub_account,request()->type)}}
 </p>
+@endif
 <table class="table">
     <thead>
         <tr>
@@ -25,7 +27,10 @@
     </thead>
     <tbody>
         @php 
-        $balance = $account_category->getOldDebitCredits($start_date,$end_date,$sub_account,request()->type);
+        if($account_category->id != 6)
+            $balance = $account_category->getOldDebitCredits($start_date,$end_date,$sub_account,request()->type);
+        else  
+            $balance = 0;
         @endphp
         @foreach($account_category->debitCredits($start_date,$end_date,$sub_account,request()->type) as $key => $debitCredit)
         @if($sub_account == 24)

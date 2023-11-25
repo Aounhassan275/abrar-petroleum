@@ -36,6 +36,10 @@
                             <input name="name" type="text" class="form-control" placeholder="Enter Name" required>
                         </div>
                         <div class="form-group col-md-6">
+                            <label>Display Order</label>
+                            <input name="display_order" type="number" class="form-control" placeholder="Enter Display Order" required>
+                        </div>
+                        <div class="form-group col-md-6">
                             <label>Account Categories</label>
                             <select class="form-control select-search" name="account_category_id" required>
                                 <option value="">Choose Type</option>
@@ -64,6 +68,7 @@
                 <th>#</th>
                 <th colspan="2">Name</th>
                 <th>Account Category</th>
+                <th>Display Order</th>
                 <th>Action</th>
                 <th>Action</th>
             
@@ -75,10 +80,13 @@
                 <td>{{$key+1}}</td>
                 <td colspan="2">{{$debit_credit_account->name}}</td>
                 <td>{{@$debit_credit_account->accountCategory->name}}</td>
+                <td>{{@$debit_credit_account->display_order}}</td>
                 
                 <td>
                     <button data-toggle="modal" data-target="#edit_modal" name="{{$debit_credit_account->name}}"
-                        account_category_id="{{$debit_credit_account->account_category_id}}" id="{{$debit_credit_account->id}}" class="edit-btn btn btn-primary">Edit</button>
+                        account_category_id="{{$debit_credit_account->account_category_id}}" id="{{$debit_credit_account->id}}" 
+                        display_order="{{$debit_credit_account->display_order}}"
+                        class="edit-btn btn btn-primary">Edit</button>
                 </td>
                 <td>
                     <form action="{{route('admin.debit_credit_account.destroy',$debit_credit_account->id)}}" method="POST">
@@ -110,6 +118,10 @@
                         <label for="name">Name</label>
                         <input class="form-control" type="text" id="name" name="name" placeholder="Enter Name" required>
                     </div>
+                    <div class="form-group ">
+                        <label>Display Order</label>
+                        <input name="display_order" id="display_order" type="number" class="form-control" placeholder="Enter Display Order" required>
+                    </div>
                     <div class="form-group">
                         <label>Account Categories</label>
                         <select class="form-control select-search" id="account_category_id" name="account_category_id" required>
@@ -137,6 +149,8 @@
             let id = $(this).attr('id');
             let name = $(this).attr('name');
             let account_category_id = $(this).attr('account_category_id');
+            let display_order = $(this).attr('display_order');
+            $('#display_order').val(display_order);
             $('#account_category_id').val(account_category_id);
             $('#name').val(name);
             $('#id').val(id);

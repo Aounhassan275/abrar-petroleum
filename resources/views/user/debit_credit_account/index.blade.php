@@ -38,6 +38,7 @@
                                     <th>Phone</th>
                                     <th>Address</th>
                                     <th>Designation</th>
+                                    <th>Display Order</th>
                                     <th>Action</th>
                                     <th>Action</th>
                                 </tr>
@@ -50,6 +51,7 @@
                                     <td>{{$account->phone}}</td>
                                     <td>{{$account->address}}</td>
                                     <td>{{@$account->designation}}</td>
+                                    <td>{{@$account->display_order}}</td>
                                     <td>
                                         <a href="{{route('user.debit_credit_account.edit',$account->id)}}" class="btn btn-primary btn-sm">Edit</a>
                                     </td>

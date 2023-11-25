@@ -401,7 +401,7 @@ class User extends Authenticatable
                             ->where('debit_credits.is_hide',0)
                             ->where('debit_credits.user_id',$this->id)
                             ->whereDate('debit_credits.sale_date',$date)
-                            ->orderBy('debit_credits.created_at','ASC')
+                            ->orderBy('debit_credit_accounts.display_order','ASC')
                             ->get();  
         return $sales;
     }
