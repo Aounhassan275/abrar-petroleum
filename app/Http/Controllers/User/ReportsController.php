@@ -139,11 +139,13 @@ class ReportsController extends Controller
             if($totalExpense > 0)
             {
                 $debit_credit->update([
-                    'credit' => $totalExpense
+                    'credit' => $totalExpense,
+                    'debit' => 0
                 ]);
             }else{
                 $debit_credit->update([
-                    'debit' => $totalExpense
+                    'debit' => $totalExpense,
+                    'credit' => 0
                 ]);
             }
         }else{

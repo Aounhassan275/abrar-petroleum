@@ -21,7 +21,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'username', 'password','type','capital_amount','petrol_red_zone','diesel_red_zone',
-        'petrol_low_stock','diesel_low_stock'
+        'petrol_low_stock','diesel_low_stock','user_id'
     ];
 
     /**
