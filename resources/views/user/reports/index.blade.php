@@ -30,6 +30,7 @@
                     <li class="nav-item"><a href="#top-tab4" @if($active_tab == 'testing_sale') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Tests</a></li>
                     <li class="nav-item"><a href="#top-tab5" @if($active_tab == 'whole_sale') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Whole Sales</a></li>
                     <li class="nav-item"><a href="#top-tab6" @if($active_tab == 'monthly_profit') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Month Profit</a></li>
+                    <li class="nav-item"><a href="#top-tab7" @if($active_tab == 'purchase_rate') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Purchase Rates</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -66,6 +67,11 @@
                     <div @if($active_tab == 'monthly_profit')  class="tab-pane fade show active" @else class="tab-pane fade" @endif id="top-tab6"> 
                         <div class="card-body">
                             @include('user.reports.partials.monthly_profits')
+                        </div>
+                    </div>
+                    <div @if($active_tab == 'purchase_rate')  class="tab-pane fade show active" @else class="tab-pane fade" @endif id="top-tab7"> 
+                        <div class="card-body">
+                            @include('user.reports.partials.purchase_rate')
                         </div>
                     </div>
                 </div>

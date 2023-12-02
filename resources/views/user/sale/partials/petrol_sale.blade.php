@@ -91,6 +91,27 @@
             <input type="number" class="form-control" name="wholesale_total_amount" id="petrol_wholesale_total_amount">
         </div>
     </div>
+    {{-- <div class="row" id="petrol_sale_detail_fields">
+        <p><strong>Day Sale</strong></p>
+        <input type="hidden" name="petrol_sale_detail_type[]" value="day">
+        <input type="hidden" name="petrol_sale_detail_product_id[]" value="2">
+        <div class="form-group col-md-4">
+            <label>Bulk</label>
+            <input type="number" class="form-control" name="petrol_sale_detail_bulk[]" id="petrol_sale_detail_bulk">
+        </div>
+        <div class="form-group col-md-4">
+            <label>Bulk</label>
+            <input type="number" class="form-control" name="petrol_sale_detail_bulk" id="petrol_sale_detail_bulk">
+        </div>
+        <div class="form-group col-md-4">
+            <label>Price</label>
+            <input type="number" class="form-control" name="wholesale_price" id="petrol_wholesale_price" value="{{App\Models\Product::petrolSellingPrice()}}">
+        </div>
+        <div class="form-group col-md-4">
+            <label>Total Amount</label>
+            <input type="number" class="form-control" name="wholesale_total_amount" id="petrol_wholesale_total_amount">
+        </div>
+    </div> --}}
     
     <div class="row">
         <div class="form-group col-md-2">

@@ -8,6 +8,7 @@ use App\Models\DebitCredit;
 use App\Models\DebitCreditAccount;
 use App\Models\MonthProfit;
 use App\Models\Product;
+use App\Models\Purchase;
 use App\Models\Sale;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -71,17 +72,31 @@ class ReportsController extends Controller
         $working_captial_id = DebitCreditAccount::where('name','Working Capital')->first()->id;
         $workingCaptial = DebitCredit::where('account_id',$working_captial_id)->where('user_id',Auth::user()->id)->orderBy('sale_date','DESC')->first();
         $expenseAccounts = DebitCreditAccount::where('account_category_id',$category_id)->get();
+        $query = Purchase::query()->where('user_id',Auth::user()->id);
+        if($request->product_id)
+            $query->where('product_id',$request->product_id);
+        else
+            $query->where('product_id',1);
+        $purchases = $query->get();
+        $lastPrice = 0;
+        $purchasesRates = [];
+        foreach($purchases as $purchase)
+        {
+            if($lastPrice != $purchase->price)
+                $purchasesRates[] = $purchase;
+            $lastPrice = $purchase->price;
+        }
         // if($request->import_pdf && $active_tab == 'trail_balance')
         // {
         // return $this->trailPdf($products,$start_date,$end_date,$accounts,$expenseAccounts,$lastDayCash,$workingCaptial,$product_account_category_id,$test_sales,$inital_start_date,$whole_sales,$category_id);
         // }
-        return view('user.reports.index',compact('active_tab','start_date','end_date','products','accounts','expenseAccounts','lastDayCash','workingCaptial','product_account_category_id','test_sales','inital_start_date','whole_sales','category_id','monthlyProfits'));   
+        return view('user.reports.index',compact('active_tab','start_date','end_date','products','accounts','expenseAccounts','lastDayCash','workingCaptial','product_account_category_id','test_sales','inital_start_date','whole_sales','category_id','monthlyProfits','purchasesRates'));   
     }
     public function postMonthPorfit($products,$start_date,$end_date)
     {
         $totalRevenue = 0;
         $new_date = $end_date;
-        $new_date = $new_date->addDays(1);
+        $newDateForMonthProfit = date('Y-m-d', strtotime($new_date . " +1 days"));
         foreach($products as $product)
         {
             $price = round($product->getClosingBalance($end_date) * Auth::user()->getPurchasePrice($end_date,$product));
@@ -118,7 +133,7 @@ class ReportsController extends Controller
         
         $month_profit_account_id = DebitCreditAccount::where('name','Month Profit')->first()->id;
         $debit_credit = DebitCredit::where('user_id',Auth::user()->id)->where('account_id',$month_profit_account_id)
-                        ->whereDate('sale_date',$new_date)->where('is_hide',1)->first();
+                        ->whereDate('sale_date',$newDateForMonthProfit)->where('is_hide',1)->first();
         if($debit_credit)
         {
             if($totalExpense > 0)
@@ -136,7 +151,7 @@ class ReportsController extends Controller
             {
                 DebitCredit::create([
                     'account_id' => $month_profit_account_id,
-                    'sale_date' => $new_date,
+                    'sale_date' => $newDateForMonthProfit,
                     'user_id' => Auth::user()->id,
                     'credit' => $totalExpense,
                     'is_hide' => true,
@@ -144,7 +159,7 @@ class ReportsController extends Controller
             }else{
                 DebitCredit::create([
                     'account_id' => $month_profit_account_id,
-                    'sale_date' => $new_date,
+                    'sale_date' => $newDateForMonthProfit,
                     'user_id' => Auth::user()->id,
                     'debit' => $totalExpense,
                     'is_hide' => true,
