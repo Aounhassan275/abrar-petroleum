@@ -37,8 +37,8 @@
         @include('user.account_category.partials.cash_in_hand')
         @else
         @php 
-            $balance = $balance + abs($debitCredit->credit);
-            $balance = $balance - abs($debitCredit->debit);
+            $balance = $balance + $debitCredit->credit;
+            $balance = $balance - $debitCredit->debit;
         @endphp
         <tr>
             <td>{{$key+1}}</td>
