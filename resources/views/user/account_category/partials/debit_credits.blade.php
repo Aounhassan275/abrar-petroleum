@@ -46,8 +46,8 @@
             <td>{{@$debitCredit->account->name}}</td>
             <td>{{@$debitCredit->product->name}}</td>
             <td>{{$debitCredit->qty}}</td>
-            <td>{{abs($debitCredit->debit)}}</td>
-            <td>{{abs($debitCredit->credit)}}</td>
+            <td>{{$debitCredit->debit}}</td>
+            <td>{{$debitCredit->credit}}</td>
             <td>@if($balance > 0) 
                 ({{abs($balance)}}) Cr 
                 @else

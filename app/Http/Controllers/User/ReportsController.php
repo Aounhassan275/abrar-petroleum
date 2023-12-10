@@ -139,12 +139,12 @@ class ReportsController extends Controller
             if($totalExpense > 0)
             {
                 $debit_credit->update([
-                    'credit' => $totalExpense,
+                    'credit' => abs($totalExpense),
                     'debit' => 0
                 ]);
             }else{
                 $debit_credit->update([
-                    'debit' => $totalExpense,
+                    'debit' => abs($totalExpense),
                     'credit' => 0
                 ]);
             }
@@ -155,7 +155,7 @@ class ReportsController extends Controller
                     'account_id' => $month_profit_account_id,
                     'sale_date' => $newDateForMonthProfit,
                     'user_id' => Auth::user()->id,
-                    'credit' => $totalExpense,
+                    'credit' => abs($totalExpense),
                     'is_hide' => true,
                 ]);
             }else{
@@ -163,7 +163,7 @@ class ReportsController extends Controller
                     'account_id' => $month_profit_account_id,
                     'sale_date' => $newDateForMonthProfit,
                     'user_id' => Auth::user()->id,
-                    'debit' => $totalExpense,
+                    'debit' => abs($totalExpense),
                     'is_hide' => true,
                 ]);
             }
