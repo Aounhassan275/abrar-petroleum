@@ -20,7 +20,7 @@ class CreateDebitCreditsTable extends Migration
             $table->string('qty')->nullable(); 
             $table->text('description')->nullable(); 
             $table->date('sale_date')->nullable();
-            $table->unsignedBigInteger('account_id')->nullable();
+            $table->unsignedBigInteger('account_id');
             $table->foreign('account_id')->references('id')->on('debit_credit_accounts')->onDelete('cascade');
             $table->unsignedBigInteger('product_id')->nullable();
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
