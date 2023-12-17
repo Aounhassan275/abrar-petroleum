@@ -365,4 +365,16 @@ class DebitCreditController extends Controller
             'vehicles' => $vehicles
         ], 200);
     }
+    public function deletedValues()
+    {
+        $debit_credits = DebitCredit::withTrashed()->whereNotNull('deleted_at')->get();
+        return view('user.debit_credit.deleted',compact('debit_credits'));
+    }
+    public function forceDelete($id)
+    {
+        $debitCredit = DebitCredit::withTrashed()->find($id);
+        $debitCredit->forceDelete();
+        toastr()->success('Debit Credit Deleted successfully');
+        return redirect()->back();
+    }
 }
