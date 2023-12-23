@@ -18,7 +18,12 @@
                 <td>{{$diesel->name}}</td>
                 <td id="change_sale_quantity_diesel">{{$diesel->totalSale($date)}}</td>
                 <td id="test_sale_quantity_diesel">{{$diesel->totalTestSale($date)}}</td>
-                <td>{{$diesel->totalWholeSale($date)}}</td>
+                <td>
+                    {{$diesel->totalWholeSale($date)}}
+                    @if($diesel->totalWholeSale($date))
+                        <span class="badge badge-success">{{$diesel->getWholeSaleRate($date)}}</span>
+                    @endif
+                </td>
                 {{-- <td>{{$diesel->getSaleRate($date)}}</td> --}}
                 <td> 
                     <input type="hidden" name="change_product_id[]" value="{{$diesel->id}}">
@@ -33,7 +38,12 @@
                 <td>{{$petrol->name}}</td>
                 <td id="change_sale_quantity_petrol">{{$petrol->totalSale($date)}}</td>
                 <td id="test_sale_quantity_petrol">{{$petrol->totalTestSale($date)}}</td>
-                <td>{{$petrol->totalWholeSale($date)}}</td>
+                <td>
+                    {{$petrol->totalWholeSale($date)}}
+                    @if($petrol->totalWholeSale($date))
+                        <span class="badge badge-success">{{$petrol->getWholeSaleRate($date)}}</span>
+                    @endif
+                </td>
                 <td> 
                     <input type="hidden" name="change_product_id[]" value="{{$petrol->id}}">
                     <input type="text" class="form-control" id="change_sale_rate_petrol"  style="width:30%;" onchange="saleDetailPrice('petrol')" name="change_sale_rate[]" required value="{{$petrol->getSaleRate($date)}}">

@@ -583,7 +583,7 @@ class SaleController extends Controller
 
             }else{
                 $sales = Sale::where('user_id',Auth::user()->id)->whereDate('sale_date',$request->change_rate_date)
-                ->where('product_id',$product->id)->where('type','!=','misc_sale')->get();
+                ->where('product_id',$product->id)->where('type','!=',['misc_sale','whole_sale'])->get();
             }
             foreach($sales as $sale)
             {

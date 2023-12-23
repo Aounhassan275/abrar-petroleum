@@ -116,7 +116,6 @@ class Product extends Model
                         ->where('product_id',$this->id)
                         ->where('type','test')
                         ->whereDate('sale_date',$date)
-                        ->where('product_id',$this->id)
                         ->sum('qty'); 
         return $total_sale - $test_sale;
     }
@@ -145,6 +144,7 @@ class Product extends Model
                         ->whereDate('sale_date',$date)
                         ->where('type','!=','test')
                         ->sum('total_amount'); 
+        // dd($total_amount);
         $total_sale_amount = Sale::where('user_id',Auth::user()->id)
                         ->where('product_id',$this->id)
                         ->whereDate('sale_date',$date)
@@ -210,7 +210,18 @@ class Product extends Model
     {
         $sale = Sale::where('user_id',Auth::user()->id)
                         ->where('product_id',$this->id)
-                        ->whereDate('sale_date',$date)->first(); 
+                        ->where('type','!=',['whole_sale','test'])
+                        ->whereDate('sale_date',$date)
+                        ->first(); 
+        return $sale?$sale->price:$this->selling_amount;
+    }
+    public function getWholeSaleRate($date)
+    {
+        $sale = Sale::where('user_id',Auth::user()->id)
+                        ->where('product_id',$this->id)
+                        ->where('type','whole_sale')
+                        ->whereDate('sale_date',$date)
+                        ->first(); 
         return $sale?$sale->price:$this->selling_amount;
     }
     public function getSale($date)

@@ -79,6 +79,7 @@ class DebitCreditController extends Controller
                             'account_id' => $account_id,
                             'description' => @$request->description[$key],
                             'sale_date' => $request->sale_date,
+                            'display_order' => $key + 1,
                         ]);
                     }
                 }
@@ -181,6 +182,7 @@ class DebitCreditController extends Controller
                                 'account_id' => $account_id,
                                 'description' => @$request->description[$key],
                                 'sale_date' => $request->sale_date,
+                                'display_order' => $key + 1,
                             ]);
                         }      
                     }
@@ -258,6 +260,7 @@ class DebitCreditController extends Controller
                                 'account_id' => $account_id,
                                 'description' => @$request->description[$key],
                                 'sale_date' => $request->sale_date,
+                                'display_order' => $key + 1,
                             ]);
                         }      
                     }
