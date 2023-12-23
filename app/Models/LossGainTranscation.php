@@ -14,4 +14,8 @@ class LossGainTranscation extends Model
         'date' => 'date',
     ];
     
+    public function product()
+    {
+        return $this->belongsTo('App\Models\Product','product_id');
+    }
 }

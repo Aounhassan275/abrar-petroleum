@@ -31,6 +31,8 @@
                     <li class="nav-item"><a href="#top-tab5" @if($active_tab == 'whole_sale') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Whole Sales</a></li>
                     <li class="nav-item"><a href="#top-tab6" @if($active_tab == 'monthly_profit') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Month Profit</a></li>
                     <li class="nav-item"><a href="#top-tab7" @if($active_tab == 'purchase_rate') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Purchase Rates</a></li>
+                    <li class="nav-item"><a href="#top-tab8" @if($active_tab == 'loss_gain_transcation') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Loss Gain Trasncation</a></li>
+                    <li class="nav-item"><a href="#top-tab9" @if($active_tab == 'expense_accounts') class="nav-link active" @else class="nav-link" @endif class="nav-link" data-toggle="tab">Expense</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -74,6 +76,16 @@
                             @include('user.reports.partials.purchase_rate')
                         </div>
                     </div>
+                    <div @if($active_tab == 'loss_gain_transcation')  class="tab-pane fade show active" @else class="tab-pane fade" @endif id="top-tab8"> 
+                        <div class="card-body">
+                            @include('user.reports.partials.loss_gain_transcation')
+                        </div>
+                    </div>
+                    <div @if($active_tab == 'expense_accounts')  class="tab-pane fade show active" @else class="tab-pane fade" @endif id="top-tab9"> 
+                        <div class="card-body">
+                            @include('user.reports.partials.expense_accounts')
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -83,6 +95,54 @@
 </div>
 @endsection
 @section('scripts')
+<script src="{{ url('chart/Chart.min.js') }}"></script>
+<script>
+
+    new Chart(document.getElementById("pie-chart"), {
+
+        type: 'doughnut',
+
+        data: {
+
+            labels: [{!! @$data['labels'] !!}],
+            datasets: [{
+
+                label: "Petrol Purchase",
+                backgroundColor: ["#990099","#109618","#ff9900", "#dc3912", "#3366cc","#33C4FF","#0C3343","#EC7063","#49BA98","#EC7063","#49BA98"],
+
+                data: [{!! $data['expense_amounts'] !!}],
+
+            }]
+        },
+
+        options: {
+
+            responsive: true,
+            title: {
+
+                display: true,
+
+                text: 'Total Expenses'
+            },
+            tooltips: {
+                enabled: true,
+                mode: 'single',
+                callbacks: {
+                    title: function(tooltipItem, data) {
+                        return tooltipItem[0].xLabel;
+                    },
+                    label: function(dataItems, data) {
+                        var category = data.labels[dataItems.index];
+                        var value = data.datasets[0].data[dataItems.index];
+
+
+                        return ' ' + category + ': $' +value;
+                    }
+                }
+            }
+        }
+    });
+</script>
 <script>
     $(document).ready(function(){
         $('#post_month_profit').change(function(){

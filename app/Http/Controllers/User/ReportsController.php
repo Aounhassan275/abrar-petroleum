@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AccountCategory;
 use App\Models\DebitCredit;
 use App\Models\DebitCreditAccount;
+use App\Models\LossGainTranscation;
 use App\Models\MonthProfit;
 use App\Models\Product;
 use App\Models\Purchase;
@@ -86,11 +87,33 @@ class ReportsController extends Controller
                 $purchasesRates[] = $purchase;
             $lastPrice = $purchase->price;
         }
+        $lossGainTranscationQuery = LossGainTranscation::query()
+            ->where('user_id',Auth::user()->id)
+            ->whereNotNull('date');
+        if($request->product_id)
+            $lossGainTranscationQuery->where('product_id',$request->product_id);
+        else
+            $lossGainTranscationQuery->where('product_id',1);
+        $loss_gain_transactions = $lossGainTranscationQuery->get();
+        $labelsArray = [];
+        $expenseAmounts = [];
+        foreach($expenseAccounts as $expense)
+        {
+            if(abs($expense->debitCredits($start_date,$end_date)) > 0)
+            {
+
+                array_push($labelsArray, $expense->name);
+                array_push($expenseAmounts, abs($expense->debitCredits($start_date,$end_date)));
+            }
+        }
+        $data['labels']      = "'".implode("', '", $labelsArray)."'";
+        $data['expense_amounts']      = "'".implode("', '", $expenseAmounts)."'";
+        // dd($data);
         // if($request->import_pdf && $active_tab == 'trail_balance')
         // {
         // return $this->trailPdf($products,$start_date,$end_date,$accounts,$expenseAccounts,$lastDayCash,$workingCaptial,$product_account_category_id,$test_sales,$inital_start_date,$whole_sales,$category_id);
         // }
-        return view('user.reports.index',compact('active_tab','start_date','end_date','products','accounts','expenseAccounts','lastDayCash','workingCaptial','product_account_category_id','test_sales','inital_start_date','whole_sales','category_id','monthlyProfits','purchasesRates'));   
+        return view('user.reports.index',compact('data','active_tab','start_date','end_date','products','accounts','expenseAccounts','lastDayCash','workingCaptial','product_account_category_id','test_sales','inital_start_date','whole_sales','category_id','monthlyProfits','purchasesRates','loss_gain_transactions'));   
     }
     public function postMonthPorfit($products,$start_date,$end_date)
     {
