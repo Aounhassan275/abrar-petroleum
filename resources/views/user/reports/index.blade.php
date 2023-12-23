@@ -136,7 +136,7 @@
                         var value = data.datasets[0].data[dataItems.index];
 
 
-                        return ' ' + category + ': $' +value;
+                        return ' ' + category + ': ' +value;
                     }
                 }
             }
