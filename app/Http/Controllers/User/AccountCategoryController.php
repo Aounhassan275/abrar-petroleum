@@ -19,7 +19,12 @@ class AccountCategoryController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->end_date)
+        if($request->type == 'Selected Month' && $request->start_date)
+        {
+            $end_date = Carbon::parse($request->end_date);
+            $start_date = Carbon::parse($request->start_date);
+        }
+        else if($request->end_date)
         {
             $end_date = Carbon::parse($request->end_date);
             $start_date = Carbon::parse($request->end_date)->startOfMonth();

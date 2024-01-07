@@ -74,6 +74,10 @@
                                 <h3><strong>Account Category :</strong> {{$account_category->name}}</h1>
                                 <h3><strong>Account Name :</strong> {{$sub_account->name}}</h3>
                                 <p>Ledger From {{$start_date->format('M d,Y')}} To {{$end_date->format('M d,Y')}}</p>
+                                @if($account_category->id != 6)
+                                <p>Start Balance : {{$account_category->getOldDebitCredits($start_date,$end_date,$sub_account->id,request()->type)}}
+                                </p>
+                                @endif
                                 {{-- <p><b>Opening Stock : {{Auth::user()->getOpeningBalance($start_date,$product)}}</b></p> --}}
                                 {{-- <p><b>Opening Stock Amount : {{round(Auth::user()->getPurchasePrice($start_date,$product) * Auth::user()->getOpeningBalance($start_date,$product))}}</b></p> --}}
                             </div>
@@ -94,8 +98,12 @@
                             </tr>
                         </thead>
                         <tbody>
+                            
                             @php 
-                            $balance = $account_category->getOldDebitCredits($start_date,$end_date,$sub_account,request()->type);
+                            if($account_category->id != 6)
+                                $balance = $account_category->getOldDebitCredits($start_date,$end_date,$sub_account->id,request()->type);
+                            else  
+                                $balance = 0;
                             @endphp
                             @foreach($account_category->debitCredits($start_date,$end_date,$sub_account_id,request()->type) as $key => $debitCredit)
                             @if($sub_account_id == 24)

@@ -36,6 +36,7 @@ class AccountCategory extends Model
                     ->where('debit_credits.user_id',Auth::user()->id)
                     ->where('debit_credit_accounts.id',$sub_account)
                     ->where('debit_credit_accounts.account_category_id',$this->id)
+                    ->whereNotNull('debit_credits.sale_date')
                     ->orderBy('debit_credits.sale_date', 'asc')->get();
             }else{
                 return DebitCredit::select('debit_credits.*','debit_credit_accounts.account_category_id as account_category_id')
@@ -53,6 +54,7 @@ class AccountCategory extends Model
                 ->join('debit_credit_accounts', 'debit_credits.account_id', 'debit_credit_accounts.id')
                 ->where('debit_credit_accounts.account_category_id',$this->id)
                 ->where('debit_credits.user_id',Auth::user()->id)
+                ->whereNotNull('debit_credits.sale_date')
                 ->orderBy('debit_credits.sale_date', 'asc')->get();
             }else{
                 return DebitCredit::select('debit_credits.*','debit_credit_accounts.account_category_id as account_category_id')
@@ -66,7 +68,7 @@ class AccountCategory extends Model
     }
     public function getOldDebitCredits($start_date,$end_date,$sub_account,$type = 'By Date')
     {
-       
+
         if($sub_account)
         {
             if($type != 'All')
