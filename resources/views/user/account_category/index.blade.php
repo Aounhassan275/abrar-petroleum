@@ -36,13 +36,13 @@
                             <form method="GET" id="searchForm">
                                 <input type="hidden" name="active_tab" value="{{ $account_category->id}}">
                                 <div class="row">
-                                    <div class="form-group col-2" id="start_date_field"  @if(request()->type != 'Selected Month') hidden @endif>
+                                    <div class="form-group col-2 start_date_field" @if(request()->type != 'Selected Month') hidden @endif>
                                         <label>Start Date</label> 
                                             <input type="text" name="start_date" class="daterange-single form-control pull-right dates" style="height: 35px; "
                                                 value="{{ date('m/d/Y', strtotime(@$start_date))}}">
                                           
                                     </div>
-                                    <div class="form-group col-2" id="end_date_field"  @if(request()->type != 'Selected Month') hidden @endif>
+                                    <div class="form-group col-2 end_date_field" @if(request()->type != 'Selected Month') hidden @endif>
                                         <label>
                                             End Date
                                         </label>   
@@ -50,7 +50,7 @@
                                             <input type="text" name="end_date" class="daterange-single form-control pull-right dates" style="height: 35px; "
                                                 value="{{ date('m/d/Y', strtotime(@$end_date))}}">
                                     </div>
-                                    <div class="form-group col-2" id="current_month_field" @if(request()->type == 'Selected Month') hidden @endif>
+                                    <div class="form-group col-2 current_month_field" @if(request()->type == 'Selected Month') hidden @endif>
                                         <label>
                                             Date
                                         </label>   
@@ -69,7 +69,7 @@
                                     </div>
                                     <div class="form-group col-2">
                                         <label>Type</label> 
-                                        <select name="type" id="type" class="form-control select-search">
+                                        <select name="type" onchange="changeMonth('{{ @$account_category->id }}')"  id="type_{{$account_category->id}}"  class="form-control select-search">
                                             <option value="By Date">Current Month</option>  
                                             <option {{request()->type == "Selected Month"?'selected':''}} value="Selected Month">Selected Month</option>  
                                             <option {{request()->type == "All"?'selected':''}} value="All">Initial Date</option>
@@ -105,7 +105,22 @@
 </div>
 @endsection
 @section('scripts')
+
 <script>
+    function changeMonth(index)
+    {
+        var type = $('#type_' + index).val();
+        if(type == 'Selected Month')
+        {
+            $(".current_month_field").attr('hidden',true);
+            $(".start_date_field").attr('hidden',false);
+            $(".end_date_field").attr('hidden',false);
+        }else{
+            $(".current_month_field").attr('hidden',false);
+            $(".start_date_field").attr('hidden',true);
+            $(".end_date_field").attr('hidden',true);
+        }
+    }
     $(document).ready(function(){
         $('.edit-btn').click(function(){
             let id = $(this).attr('id');
@@ -127,19 +142,6 @@
             $('#amount').val(amount);
             $('#expense_type_id').val(expense_type_id);
             $('#updateForm').attr('action','{{route('user.expense.update','')}}' +'/'+id);
-        });
-        $('#type').change(function(){
-            let type = $(this).val();
-            if(type == 'Selected Month')
-            {
-                $("#current_month_field").attr('hidden',true);
-                $("#start_date_field").attr('hidden',false);
-                $("#end_date_field").attr('hidden',false);
-            }else{
-                $("#current_month_field").attr('hidden',false);
-                $("#start_date_field").attr('hidden',true);
-                $("#end_date_field").attr('hidden',true);
-            }
         });
     });
     
