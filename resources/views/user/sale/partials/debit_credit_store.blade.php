@@ -11,6 +11,7 @@
     </div>
 
     <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
+    
     <div class="row">
         <div class="form-group col-md-1">
             
@@ -161,6 +162,11 @@
             <input type="text" value="" id="total_credit_amount" class="form-control total_credit_amount" readonly >
         </div>
     </div> 
+    <div class="row">
+        <div class="col-md-12">
+            <p id="error-message-reponse" style="color:red"></p> 
+        </div>
+    </div>
     <div class="text-right" style="margin-top:10px;">
         <button type="button" class="btn btn-success add-more-fields">Add More Fields</button>
         <button type="button" class="btn btn-primary calcluate-debit-credit-values">Calcluate</button>

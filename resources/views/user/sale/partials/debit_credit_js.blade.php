@@ -188,13 +188,80 @@
     jQuery(document).ready(function ($) {
         $('#store-debit-credit-sale').on('click', function (event) {
             event.preventDefault();
+            $('.error-fields').hide();
+            $('#error-message-reponse').html("");
             $('#store-debit-credit-sale').attr('disabled',true).text('Please wait...');
-            $('#debitCreditForm').submit();
+            data = $('#debitCreditForm').serialize();
+            $.ajax({
+                url: "{{route('user.debit_credit.store')}}",
+                method: 'post',
+                data: data,
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                success: function(response){
+                    console.log(response);
+                    if(response.success == true && response.totalEmptyAccount == 0)
+                    {
+                        window.location.href = response.url;
+                    }else{
+                        $('#error-message-reponse').html(missingText);
+                        $('#store-debit-credit-sale').attr('disabled',false).text('Post');
+                    }
+                },
+                error: function(xhr) {
+                    var errorMessages = 'An error occurred while processing your request.';
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        var errors = xhr.responseJSON.errors;
+                        $.each(errors, function(field, messages) {
+                            key_array = field.split(".");
+                            $('#error-'+key_array[0]+'-'+key_array[1]).show();
+                        });   
+                        errorMessages = Object.values(errors).join('<br>');
+                    }
+                    $('#error-message-reponse').html(errorMessages);
+                    $('#store-debit-credit-sale').attr('disabled',false).text('Post');
+                }
+            });
         });
         $('#update-debit-credit-sale').on('click', function (event) {
             event.preventDefault();
+            $('.error-fields').hide();
+            $('#error-message-reponse').html("");
             $('#update-debit-credit-sale').attr('disabled',true).text('Please wait...');
-            $('#debitCreditUpdateForm').submit();
+            data = $('#debitCreditUpdateForm').serialize();
+            $.ajax({
+                url: "{{route('user.debit_credit.update_form')}}",
+                method: 'post',
+                data: data,
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                success: function(response){
+                    console.log(response);
+                    if(response.success == true && response.totalEmptyAccount == 0)
+                    {
+                        window.location.href = response.url;
+                    }else{
+                        $('#error-message-reponse').html(missingText);
+                        $('#update-debit-credit-sale').attr('disabled',false).text('Post');
+                    }
+                },
+                error: function(xhr) {
+                    var errorMessages = 'An error occurred while processing your request.';
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        var errors = xhr.responseJSON.errors;
+                        $.each(errors, function(field, messages) {
+                            key_array = field.split(".");
+                            $('#error-'+key_array[0]+'-'+key_array[1]).show();
+                        });   
+                        errorMessages = Object.values(errors).join('<br>');
+                    }
+                    $('#error-message-reponse').html(errorMessages);
+                    $('#update-debit-credit-sale').attr('disabled',false).text('Post');
+                }
+            });
+            $('#update-debit-credit-sale').attr('disabled',true).text('Please wait...');
         });
     });
 </script>

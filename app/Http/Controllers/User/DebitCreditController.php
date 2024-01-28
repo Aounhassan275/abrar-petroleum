@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DebitCreditStoreRequest;
 use App\Models\CustomerVehicle;
 use App\Models\DebitCredit;
 use App\Models\DebitCreditAccount;
@@ -50,57 +51,98 @@ class DebitCreditController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(DebitCreditStoreRequest $request)
     {
         try{
             // $totalDebit = 0;
             // $totalCredit = 0;
             $totalEmptyAccount = 0;
+            $missingText = '';
             foreach($request->account_id as $key => $account_id)
             {
                 if($account_id && $account_id != null && $account_id != 0){
-                    if($request->debit[$key] != null || $request->credit[$key] != null && $request->debit[$key] > 0 || $request->credit[$key] > 0)
-                    {    
-                        // $totalDebit = $totalDebit + @$request->debit[$key];
-                        // $totalCredit = $totalCredit + @$request->credit[$key];
-                        if(@$request->vehicle_id[$key] && is_numeric($request->vehicle_id[$key]))
+                    if($account_id == 42)
+                    {
+                        if(DebitCredit::where('user_id',Auth::user()->id)->where('account_id',$account_id)->whereDate('sale_date',$request->sale_date)->count() == 0)
                         {
-                            $vehicle_id = $request->vehicle_id[$key];
-                        } else{
-                            $vehicle_id = null;
+                            DebitCredit::create([
+                                'user_id' => Auth::user()->id,
+                                'product_id' => @$request->product_id[$key],
+                                'qty' => @$request->qty[$key],
+                                'debit' => @$request->debit[$key],
+                                'credit' => @$request->credit[$key],
+                                'account_id' => $account_id,
+                                'description' => @$request->description[$key],
+                                'sale_date' => $request->sale_date,
+                                'display_order' => $key + 1,
+                            ]);
                         }
-                        DebitCredit::create([
-                            'user_id' => Auth::user()->id,
-                            'product_id' => @$request->product_id[$key],
-                            'qty' => @$request->qty[$key],
-                            'customer_vehicle_id' => $vehicle_id,
-                            'debit' => @$request->debit[$key],
-                            'credit' => @$request->credit[$key],
-                            'account_id' => $account_id,
-                            'description' => @$request->description[$key],
-                            'sale_date' => $request->sale_date,
-                            'display_order' => $key + 1,
-                        ]);
+                    }else{
+                        if(DebitCredit::where('user_id',Auth::user()->id)->where('account_id',$account_id)->whereDate('sale_date',$request->sale_date)->count() == 0)
+                        {
+                            if($request->debit[$key] != null || $request->credit[$key] != null && $request->debit[$key] > 0 || $request->credit[$key] > 0)
+                            {    
+                                // $totalDebit = $totalDebit + @$request->debit[$key];
+                                // $totalCredit = $totalCredit + @$request->credit[$key];
+                                if(@$request->vehicle_id[$key] && is_numeric($request->vehicle_id[$key]))
+                                {
+                                    $vehicle_id = $request->vehicle_id[$key];
+                                } else{
+                                    $vehicle_id = null;
+                                }
+                                DebitCredit::create([
+                                    'user_id' => Auth::user()->id,
+                                    'product_id' => @$request->product_id[$key],
+                                    'qty' => @$request->qty[$key],
+                                    'customer_vehicle_id' => $vehicle_id,
+                                    'debit' => @$request->debit[$key],
+                                    'credit' => @$request->credit[$key],
+                                    'account_id' => $account_id,
+                                    'description' => @$request->description[$key],
+                                    'sale_date' => $request->sale_date,
+                                    'display_order' => $key + 1,
+                                ]);
+                            }else{
+                                $totalEmptyAccount += 1;
+                                $account = DebitCreditAccount::find($account_id);
+                                $missingText .= "<p>Missing Entry For Account named ".$account->name." as No Debit / Credit Value entered.</p>";
+                            }
+                        }
                     }
                 }
                 else{
                     $totalEmptyAccount += 1;
+                    $missingText .= "<p>Missing Entry For Account For Data where Debit / Credit Value is ".$request->debit[$key] > 0 ? $request->debit[$key] : $request->credit[$key].".</p>";
                 }
             }
             if($totalEmptyAccount > 0)
             {
-                
-                toastr()->warning('You add '.$totalEmptyAccount.' Debit Credit Entry with no account.');
-                return redirect()->to(route('user.sale.index').'?active_tab=debit_credit&date='.$request->sale_date);       
+                $url = route('user.sale.index').'?active_tab=debit_credit&date='.$request->sale_date;
+                return response([
+                    'success' => false,
+                    'totalEmptyAccount' => $totalEmptyAccount,
+                    'missingText' => $missingText,
+                    'url' => $url,
+                ], 200);
             }
             $next_date = Carbon::parse($request->sale_date);
             $next_date->addDay(); 
-            toastr()->success('Debit Credit Entry is Created Successfully');
-            return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$next_date->format('Y-m-d'));
+            $url = route('user.sale.index').'?active_tab=diesel&date='.$next_date->format('Y-m-d');
+            toastr()->success('Debit Credit Added Successfully');
+            return response([
+                'success' => true,
+                'totalEmptyAccount' => $totalEmptyAccount,
+                'missingText' => $missingText,
+                'message' => "Debit Credit Added Successfully",
+                'url' => $url,
+            ], 200);
         }catch(Exception $e)
         {
-            toastr()->error($e->getMessage());
-            return redirect()->to(route('user.sale.index').'?active_tab=debit_credit&date='.$request->sale_date);
+            return response([
+                'success' => false,
+                'message' => $e->getMessage(),
+                'totalEmptyAccount' => 0,
+            ], 422);
         }
     }
 
@@ -209,12 +251,13 @@ class DebitCreditController extends Controller
             return redirect()->to(route('user.sale.index').'?active_tab=debit_credit&date='.$request->sale_date);
         }
     }
-    public function updateForm(Request $request)
+    public function updateForm(DebitCreditStoreRequest $request)
     {
         try{
             // $totalDebit = 0;
             // $totalCredit = 0;
             $totalEmptyAccount = 0;
+            $missingText = '';
             foreach($request->account_id as $key => $account_id)
             {
                 if($account_id && $account_id != null && $account_id != 0)
@@ -268,25 +311,39 @@ class DebitCreditController extends Controller
                 }
                 else{
                     $totalEmptyAccount += 1;
+                    $missingText .= "<p>Missing Entry For Account For Data where Debit / Credit Value is ".$request->debit[$key] > 0 ? $request->debit[$key] : $request->credit[$key].".</p>";
                 }
             }
             if($totalEmptyAccount > 0)
             {
-                
-                toastr()->warning('You add '.$totalEmptyAccount.' Debit Credit Entry with no account.');
-                return redirect()->to(route('user.sale.index').'?active_tab=debit_credit&date='.$request->sale_date);       
+                $url = route('user.sale.index').'?active_tab=debit_credit&date='.$request->sale_date;
+                return response([
+                    'success' => false,
+                    'totalEmptyAccount' => $totalEmptyAccount,
+                    'missingText' => $missingText,
+                    'url' => $url,
+                ], 200);
             }
             $next_date = Carbon::parse($request->sale_date);
             $next_date->addDay();    
             toastr()->success('Debit Credit Updated Successfully');
-            return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$next_date->format('Y-m-d'));      
+            $url = route('user.sale.index').'?active_tab=diesel&date='.$next_date->format('Y-m-d');
+            return response([
+                'success' => true,
+                'totalEmptyAccount' => $totalEmptyAccount,
+                'missingText' => $missingText,
+                'message' => "Debit Credit Added Successfully",
+                'url' => $url,
+            ], 200);
         }catch(Exception $e)
         {
-            toastr()->error($e->getMessage());
-            return redirect()->to(route('user.sale.index').'?active_tab=debit_credit&date='.$request->sale_date);
+            return response([
+                'success' => false,
+                'message' => $e->getMessage(),
+                'totalEmptyAccount' => 0,
+            ], 422);
         }
     }
-
     /**
      * Remove the specified resource from storage.
      *

@@ -125,6 +125,7 @@
                     @endforeach
                 @endif
             </select>
+            <p id="error-account_id-{{$key}}" class="error-fields" style="color:red;display:none;">Account ID is required.</p> 
         </div>
         <div class="form-group col-md-2">
             @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id)
@@ -142,11 +143,13 @@
             </select>
 
             @endif
+            <p id="error-product_id-{{$key}}" class="error-fields" style="color:red;display:none;">Product ID must be numeric.</p> 
         </div>
         <div class="form-group col-md-1">
             <input type="number" name="qty[]" 
             {{-- style="color:{{$debit_credit->account->accountCategory->color}};"  --}}
             value="{{@$debit_credit->qty}}" class="form-control" id="credit_debit_qty_{{$key}}" onchange="debitQuantity('{{ @$key }}')" @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly @endif>
+            <p id="error-qty-{{$key}}" class="error-fields" style="color:red;display:none;">Qty must be numeric.</p> 
         </div>
         <div class="col-md-4">
             <div class="row">
@@ -154,12 +157,13 @@
                     <input type="number" name="debit[]" 
                     {{-- style="color:{{$debit_credit->account->accountCategory->color}};"  --}}
                     value="{{round(@$debit_credit->debit,0)}}"  id="credit_debit_debit_{{$key}}" class="form-control {{$debit_credit->account_id == $cash_account_id ? 'cash_debit_values' : ''}}" @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly  @endif>
-        
+                    <p id="error-debit-{{$key}}" class="error-fields" style="color:red;display:none;">Debit must be numeric.</p> 
                 </div>
                 <div class="form-group col-md-4">
                     <input type="number" name="credit[]" 
                     {{-- style="color:{{$debit_credit->account->accountCategory->color}};"  --}}
                     value="{{round(@$debit_credit->credit)}}" id="credit_debit_credit_{{$key}}" class="form-control {{$debit_credit->account_id == $cash_account_id ? 'cash_credit_values' : ''}}"  @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly @endif>
+                    <p id="error-credit-{{$key}}" class="error-fields" style="color:red;display:none;">Credit must be numeric.</p> 
                 </div>
                 <div class="form-group col-md-4">
                     <input type="text" name="description[]" 
@@ -226,6 +230,11 @@
             <input type="text" value="" id="total_credit_amount" class="form-control total_credit_amount" readonly >
         </div>
     </div> 
+    <div class="row">
+        <div class="col-md-12">
+            <p id="error-message-reponse" style="color:red"></p> 
+        </div>
+    </div>
     <div class="text-right" style="margin-top:10px;"> 
         <button type="button" class="btn btn-success add-more-fields">Add More Fields</button>
         <button type="button" class="btn btn-primary calcluate-debit-credit-values-for-updates">Calcluate</button>
