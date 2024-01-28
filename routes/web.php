@@ -201,6 +201,8 @@ Route::get('/round_figure', function() {
       ]);
     }
   }
-  return 'Sale DOne';
+  return 'Sale Done';
 });
+
+
 
