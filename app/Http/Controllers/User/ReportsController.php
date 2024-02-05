@@ -163,12 +163,14 @@ class ReportsController extends Controller
             {
                 $debit_credit->update([
                     'credit' => abs($totalExpense),
-                    'debit' => 0
+                    'debit' => 0,
+                    'description' => "Profit of ".$end_date->format('F')." Month",
                 ]);
             }else{
                 $debit_credit->update([
                     'debit' => abs($totalExpense),
-                    'credit' => 0
+                    'credit' => 0,
+                    'description' => "Loss of ".$end_date->format('F')." Month",
                 ]);
             }
         }else{
@@ -180,6 +182,7 @@ class ReportsController extends Controller
                     'user_id' => Auth::user()->id,
                     'credit' => abs($totalExpense),
                     'is_hide' => true,
+                    'description' => "Profit of ".$end_date->format('F')." Month",
                 ]);
             }else{
                 DebitCredit::create([
@@ -188,6 +191,7 @@ class ReportsController extends Controller
                     'user_id' => Auth::user()->id,
                     'debit' => abs($totalExpense),
                     'is_hide' => true,
+                    'description' => "Loss of ".$end_date->format('F')." Month",
                 ]);
             }
         }
