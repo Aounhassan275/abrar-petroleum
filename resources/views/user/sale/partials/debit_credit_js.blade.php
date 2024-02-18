@@ -118,7 +118,7 @@
                 },
                 success: function(response){
                     var price = response.selling_price;
-                    total_amount = parseFloat(price*qty);
+                    total_amount = Math.round(parseFloat(price*qty));
                     $('#credit_debit_debit_' + index).val(total_amount.toFixed(2));
                 }
             });

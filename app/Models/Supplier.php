@@ -74,4 +74,16 @@ class Supplier extends Authenticatable
         }
         return $sales;
     }
+    public function haveDebitCredit($date)
+    {   
+        $sales = DebitCredit::query()->select('debit_credits.*')
+                            ->join('debit_credit_accounts','debit_credit_accounts.id','debit_credits.account_id')
+                            ->where('debit_credits.is_hide',0)
+                            ->where('debit_credits.supplier_id',$this->id)
+                            ->whereDate('debit_credits.sale_date',$date)
+                            ->orderBy('debit_credits.display_order','ASC')
+                            ->get();  
+        dd($sales);
+        return $sales;
+    }
 }

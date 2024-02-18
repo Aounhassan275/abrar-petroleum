@@ -64,15 +64,15 @@
 
                     <div @if($active_tab == 'misc')  class="tab-pane fade show active" @else class="tab-pane fade" @endif id="top-tab3">
                         
-                        @if(Auth::user()->haveSale($date)->count() > 0)
+                        {{-- @if(Auth::user()->haveSale($date)->count() > 0)
                             @include('supplier.sale.partials.misc_sale_update')
                         @else 
                             @include('supplier.sale.partials.misc_sale')
-                        @endif
+                        @endif --}}
                     </div>
 
                     <div @if($active_tab == 'sale_detail')  class="tab-pane fade show active" @else class="tab-pane fade" @endif class="tab-pane fade" id="top-tab4">
-                        <div class="form-group col-4">
+                        {{-- <div class="form-group col-4">
                             <label>
                                 Date
                                 <input type="text"  id="sale_detail_date" class="daterange-single form-control pull-right dates" style="height: 35px; "
@@ -85,7 +85,7 @@
                                 'diesel' => $diesel,
                                 'date' => $date,
                             ])
-                        </div>
+                        </div> --}}
                     </div>
 
                     <div @if($active_tab == 'debit_credit')  class="tab-pane fade show active" @else class="tab-pane fade" @endif id="top-tab5">

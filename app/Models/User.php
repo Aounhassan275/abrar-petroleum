@@ -21,7 +21,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'username', 'password','type','capital_amount','petrol_red_zone','diesel_red_zone',
-        'petrol_low_stock','diesel_low_stock','user_id'
+        'petrol_low_stock','diesel_low_stock','user_id','description','image'
     ];
 
     /**
@@ -42,6 +42,9 @@ class User extends Authenticatable
         if (!empty($value)){
             $this->attributes['password'] = Hash::make($value);
         }
+    }
+    public function setImageAttribute($value){
+        $this->attributes['image'] = ImageHelper::saveImage($value,'/uploaded_images/');
     }
     public static function site(){
         return (new static)::where('type','Site')->get();

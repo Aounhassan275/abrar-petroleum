@@ -48,6 +48,14 @@
                             <label>Diesel Low Stock</label>
                             <input name="diesel_low_stock" type="number" class="form-control" placeholder="Enter Diesel Low Stock" required>
                         </div>
+                        <div class="form-group col-md-6">
+                            <label>Image</label>
+                            <input name="image" type="file" class="form-control" placeholder="Enter Diesel Low Stock">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Detail</label>
+                            <textarea name="description" class="form-control"></textarea>
+                        </div>
                         {{-- <div class="form-group col-md-6">
                             <label>User Type</label>
                             <select class="form-control" name="type">
@@ -75,6 +83,7 @@
         <thead>
             <tr>
                 <th>#</th>
+                <th>User Image</th>
                 <th>User Name</th>
                 <th>User Petrol Red Zone</th>
                 <th>User Diesel Red Zone</th>
@@ -88,6 +97,11 @@
             @foreach (App\Models\User::all() as $key => $user)
             <tr>
                 <td>{{$key+1}}</td>
+                <td>
+                    @if($user->image)
+                    <img src="{{asset($user->image)}}" height="100" width="100" alt="">
+                    @endif
+                </td>
                 <td>{{$user->username}}</td>
                 <td>{{$user->petrol_red_zone}}</td>
                 <td>{{$user->diesel_red_zone}}</td>
@@ -98,7 +112,7 @@
                     <button data-toggle="modal" data-target="#edit_modal" username="{{$user->username}}"
                         petrol_red_zone="{{$user->petrol_red_zone}}" diesel_red_zone="{{$user->diesel_red_zone}}" 
                         petrol_low_stock="{{$user->petrol_low_stock}}" diesel_low_stock="{{$user->diesel_low_stock}}" 
-                        id="{{$user->id}}" class="edit-btn btn btn-primary">Edit</button>
+                        id="{{$user->id}}" description="{{$user->description}}" class="edit-btn btn btn-primary">Edit</button>
                 </td>
                 <td>
                     <form action="{{route('admin.user.destroy',$user->id)}}" method="POST">
@@ -148,6 +162,14 @@
                         <label>Diesel Low Stock</label>
                         <input name="diesel_low_stock" id="diesel_low_stock" type="number" class="form-control" placeholder="Enter Diesel Low Stock" required>
                     </div>
+                    <div class="form-group">
+                        <label>Image</label>
+                        <input name="image" type="file" class="form-control" placeholder="Enter Diesel Low Stock" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea name="description" id="description" class="form-control"></textarea>
+                    </div>
                     {{-- <div class="form-group">
                         <label>User Type</label>
                         <select class="form-control" id="type" name="type">
@@ -177,10 +199,12 @@
             let petrol_red_zone = $(this).attr('petrol_red_zone');
             let diesel_red_zone = $(this).attr('diesel_red_zone');
             let petrol_low_stock = $(this).attr('petrol_low_stock');
+            let description = $(this).attr('description');
             $('#petrol_low_stock').val(petrol_low_stock);
             $('#diesel_red_zone').val(diesel_red_zone);
             $('#petrol_red_zone').val(petrol_red_zone);
             $('#diesel_low_stock').val(diesel_low_stock);
+            $('#description').html(description);
             $('#username').val(username);
             $('#id').val(id);
             $('#updateForm').attr('action','{{route('admin.user.update','')}}' +'/'+id);
