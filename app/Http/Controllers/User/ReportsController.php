@@ -115,6 +115,26 @@ class ReportsController extends Controller
         // }
         return view('user.reports.index',compact('data','active_tab','start_date','end_date','products','accounts','expenseAccounts','lastDayCash','workingCaptial','product_account_category_id','test_sales','inital_start_date','whole_sales','category_id','monthlyProfits','purchasesRates','loss_gain_transactions'));   
     }
+    public function productAnalysis(Request $request)
+    {
+        $inital_debit_credit = DebitCredit::where('user_id',Auth::user()->id)->whereNotNull('sale_date')->orderBy('sale_date','ASC')->first();
+        $inital_start_date = $inital_debit_credit?Carbon::parse($inital_debit_credit->sale_date):Carbon::today();     
+        if($request->end_date)
+        {
+            $start_date =  Carbon::parse($request->end_date)->firstOfMonth();  
+            $end_date = Carbon::parse($request->end_date);
+        }else{
+            // $start_date = $inital_start_date;
+            $last_debit_credit = DebitCredit::where('user_id',Auth::user()->id)->whereNotNull('sale_date')->orderBy('sale_date','DESC')->first();
+            $start_date =  $last_debit_credit?Carbon::parse($last_debit_credit->sale_date)->firstOfMonth():Carbon::today()->firstOfMonth();  
+            $end_date = $last_debit_credit?Carbon::parse($last_debit_credit->sale_date):Carbon::today();
+        } 
+        $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->orderBy('display_order','ASC')->get();
+        $product_account_category_id = AccountCategory::where('name','Products')->first()->id;
+        $data['labels']      = "";
+        $data['expense_amounts']      = "";
+        return view('user.reports.product-analysis.index',compact('data','start_date','end_date','products'));   
+    }
     public function postMonthPorfit($products,$start_date,$end_date)
     {
         $totalRevenue = 0;

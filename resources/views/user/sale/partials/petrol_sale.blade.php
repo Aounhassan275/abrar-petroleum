@@ -41,7 +41,7 @@
             @if($index == 0)
             <label>Qty</label>
             @endif
-            <input name="qty[]" id="petrol_qty_{{$index}}" type="text" value="{{old('qty')}}" class="form-control" placeholder="Enter Product Quantity"  readonly>
+            <input name="qty[]" id="petrol_qty_{{$index}}" type="text" value="{{old('qty')}}" class="form-control petrol_sale_quantity" placeholder="Enter Product Quantity"  readonly>
         </div>
     </div>
     @endforeach
@@ -117,6 +117,21 @@
         <div class="form-group col-md-2">
             <label>Dip</label>
             <input type="number" class="form-control" name="dip">
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-3">
+            <label>Supply Sale</label>
+            <input type="number" class="form-control" min="0" id="petrol_supply_sale" name="supply_sale" required>
+            <p id="petrol-supply-sale-response" style="color:red;"></p>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Retail Sale</label>
+            <input type="number"  class="form-control" readonly min="0" id="petrol_retail_sale" name="retail_sale">
+        </div>
+        <div class="form-group col-md-3">
+            <label>Total Sale</label>
+            <input type="number" value="0" readonly class="form-control" min="0" id="petrol_total_sale" name="total_sale">
         </div>
     </div>
     <div class="row">

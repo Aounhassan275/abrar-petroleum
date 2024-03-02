@@ -434,6 +434,24 @@ class User extends Authenticatable
                         ->first();  
         return $dip;
     }
+    public function getSaleDetail($date,$product)
+    {   
+        $saleDetail = SaleDetail::where('user_id',$this->id)
+                        ->where('product_id',$product->id)
+                        ->whereDate('sale_date',$date)
+                        ->first();  
+        return $saleDetail;
+    }
+    public function getMachineSaleQuantity($date,$product)
+    {   
+        $qty = Sale::whereNotNull('machine_id')
+                    ->whereDate('sale_date',$date)
+                    ->where('product_id',$product->id)
+                    ->where('user_id',$this->id)
+                    ->sum('qty');
+
+        return $qty;
+    }
     public function todaySaleAmount($date)
     {
         $todaySale = Sale::where('user_id',$this->id)

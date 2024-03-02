@@ -42,7 +42,7 @@
             @if($key == 0)
             <label>Qty</label>
             @endif
-            <input name="qty[]" id="diesel_qty_{{$key}}" type="text" value="{{old('qty')}}" class="form-control desiel_qty" placeholder="Enter Product Quantity"  readonly>
+            <input name="qty[]" id="diesel_qty_{{$key}}" type="text" value="{{old('qty')}}" class="form-control diesel_sale_quantity" placeholder="Enter Product Quantity"  readonly>
         </div>
     </div>
     @endforeach
@@ -62,7 +62,7 @@
     <div class="row" id="testing_fields" style="display:none;">
         <div class="form-group col-md-6">
             <label>Qty</label>
-            <input type="number" class="form-control" name="testing_quantity" id="testing_quantity">
+            <input type="number" class="form-control" name="testing_quantity" id="diesel_testing_quantity">
         </div>
     </div>
     <div class="row">
@@ -96,6 +96,21 @@
         <div class="form-group col-md-2">
             <label>Dip</label>
             <input type="number" class="form-control" name="dip">
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-3">
+            <label>Supply Sale</label>
+            <input type="number" class="form-control" min="0" id="desiel_supply_sale" name="supply_sale" required>
+            <p id="supply-sale-response" style="color:red;"></p>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Retail Sale</label>
+            <input type="number"  class="form-control" readonly min="0" id="desiel_retail_sale" name="retail_sale">
+        </div>
+        <div class="form-group col-md-3">
+            <label>Total Sale</label>
+            <input type="number" value="0" readonly class="form-control" min="0" id="desiel_total_sale" name="total_sale">
         </div>
     </div>
     <div class="row">

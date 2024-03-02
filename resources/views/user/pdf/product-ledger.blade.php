@@ -72,6 +72,7 @@
                                 <img src="{{asset('attock-logo.png')}}" alt="">
                             </div>
                             <div class="col-md-8 ">
+                                <h1><strong>Site Name :</strong> {{Auth::user()->username}}</h1>
                                 <h1>{{$product->name}} Ledger From {{$start_date->format('M d,Y')}} To {{$end_date->format('M d,Y')}}</h1>
                                 <p><b>Opening Stock : {{Auth::user()->getOpeningBalance($start_date,$product)}}</b></p>
                                 <p><b>Opening Stock Amount : {{round(Auth::user()->getPurchasePrice($start_date,$product) * Auth::user()->getOpeningBalance($start_date,$product))}}</b></p>
@@ -91,7 +92,7 @@
                                 <th>Credit</th>
                                 <th>Balance</th>
                                 <th>Profit / Loss</th>
-                                <th>Revenue</th>
+                                {{-- <th>Revenue</th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -152,7 +153,7 @@
                                     @endif
                                     @endif
                                 </td>
-                                <td>{{$reveune}}  <span class="badge badge-sm badge-success">{{Auth::user()->getPurchasePrice($date,$product)}}</span></td>
+                                {{-- <td>{{$reveune}}  <span class="badge badge-sm badge-success">{{Auth::user()->getPurchasePrice($date,$product)}}</span></td> --}}
                             </tr>
                             @php 
                                 $totalQunatity = $quantityBalance;

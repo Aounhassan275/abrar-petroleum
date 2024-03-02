@@ -8,6 +8,7 @@ use App\Models\DebitCreditAccount;
 use App\Models\Dip;
 use App\Models\Product;
 use App\Models\Sale;
+use App\Models\SaleDetail;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -177,6 +178,28 @@ class SaleController extends Controller
                         'date' => $request->sale_date,
                     ]);
                 }   
+                if($request->supply_sale >= 0)
+                {
+                    if($request->supply_sale_id)
+                    {
+                        $saleDetail = SaleDetail::find($request->supply_sale_id);
+                        $saleDetail->update([
+                            'supply_sale' => $request->supply_sale,
+                            'retail_sale' => $request->retail_sale,
+                            'total_sale' => $request->total_sale,
+                            'product_id' => $request->product_id,
+                        ]);
+                    }else{
+                        SaleDetail::create([
+                            'user_id' => Auth::user()->id,
+                            'sale_date' => $request->sale_date,
+                            'supply_sale' => $request->supply_sale,
+                            'retail_sale' => $request->retail_sale,
+                            'total_sale' => $request->total_sale,
+                            'product_id' => $request->product_id,
+                        ]);
+                    }
+                }
                 $this->manageSale($request->sale_date);
                 toastr()->success('Sale is Created Successfully');
                 if($product->name == 'PMG')
@@ -422,6 +445,28 @@ class SaleController extends Controller
                             'product_id' => $request->product_id,
                             'access' => $request->dip,
                             'date' => $request->sale_date,
+                        ]);
+                    }
+                }
+                if($request->supply_sale >= 0 && $request->supply_sale != null)
+                {
+                    if($request->sale_detail_id)
+                    {
+                        $saleDetail = SaleDetail::find($request->sale_detail_id);
+                        $saleDetail->update([
+                            'supply_sale' => $request->supply_sale,
+                            'retail_sale' => $request->retail_sale,
+                            'total_sale' => $request->total_sale,
+                            'product_id' => $request->product_id,
+                        ]);
+                    }else{
+                        SaleDetail::create([
+                            'user_id' => Auth::user()->id,
+                            'sale_date' => Carbon::parse($request->sale_date)->format('Y-m-d'),
+                            'supply_sale' => $request->supply_sale,
+                            'retail_sale' => $request->retail_sale,
+                            'total_sale' => $request->total_sale,
+                            'product_id' => $request->product_id,
                         ]);
                     }
                 }

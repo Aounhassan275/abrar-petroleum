@@ -54,7 +54,7 @@
                 <th>Credit</th>
                 <th>Balance</th>
                 <th>Profit / Loss</th>
-                <th>Revenue</th>
+                {{-- <th>Revenue</th> --}}
             </tr>
         </thead>
         <tbody>
@@ -115,7 +115,7 @@
                     @endif
                     @endif
                 </td>
-                <td>{{$reveune}}  <span class="badge badge-sm badge-success">{{Auth::user()->getPurchasePrice($date,$product)}}</span></td>
+                {{-- <td>{{$reveune}}  <span class="badge badge-sm badge-success">{{Auth::user()->getPurchasePrice($date,$product)}}</span></td> --}}
             </tr>
             @php 
                 $totalQunatity = $quantityBalance;

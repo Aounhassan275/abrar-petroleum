@@ -71,7 +71,8 @@
                                 <img src="{{asset('attock-logo.png')}}" alt="">
                             </div>
                             <div class="col-md-8 ">
-                                <h3><strong>Account Category :</strong> {{$account_category->name}}</h1>
+                                <h3><strong>Site Name :</strong> {{Auth::user()->username}}</h3>
+                                <h3><strong>Account Category :</strong> {{$account_category->name}}</h3>
                                 <h3><strong>Account Name :</strong> {{$sub_account->name}}</h3>
                                 <p>Ledger From {{$start_date->format('M d,Y')}} To {{$end_date->format('M d,Y')}}</p>
                                 @if($account_category->id != 6)

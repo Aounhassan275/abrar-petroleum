@@ -44,7 +44,7 @@
             @if($index == 0)
             <label>Qty</label>
             @endif
-            <input name="qty[]" id="petrol_qty_{{$index}}" type="text" class="form-control" placeholder="Enter Product Quantity" value="{{$petrol_machine->getSale($date)?$petrol_machine->getSale($date)->qty:''}}"  readonly>
+            <input name="qty[]" id="petrol_qty_{{$index}}" type="text" class="form-control petrol_sale_quantity" placeholder="Enter Product Quantity" value="{{$petrol_machine->getSale($date)?$petrol_machine->getSale($date)->qty:''}}"  readonly>
         </div>
     </div>
     @endforeach
@@ -68,7 +68,7 @@
         <div class="form-group col-md-6">
             <label>Qty</label>
             <input type="hidden" name="testing_sale_id" value="{{Auth::user()->getTestSale($date,$petrol)?Auth::user()->getTestSale($date,$petrol)->id:null}}">
-            <input type="number" class="form-control" value="{{Auth::user()->getTestSale($date,$petrol)?Auth::user()->getTestSale($date,$petrol)->qty:''}}" name="testing_quantity" id="petrol_testing_quantity_update">
+            <input type="number" class="form-control" value="{{Auth::user()->getTestSale($date,$petrol)?Auth::user()->getTestSale($date,$petrol)->qty:''}}" name="testing_quantity" id="petrol_testing_quantity">
         </div>
         @if(Auth::user()->getTestSale($date,$petrol))
         <div class="form-group col-md-6">
@@ -120,6 +120,22 @@
         <div class="form-group col-md-2">
             <label>Dip</label>
             <input type="number" class="form-control" name="dip" value="{{Auth::user()->getDip($date,$petrol)?Auth::user()->getDip($date,$petrol)->access:''}}">
+        </div>
+    </div>
+    <div class="row">
+        <input type="hidden" name="sale_detail_id" value="{{Auth::user()->getSaleDetail($date,$petrol)?Auth::user()->getSaleDetail($date,$petrol)->id:''}}">
+        <div class="form-group col-md-3">
+            <label>Supply Sale</label>
+            <input type="number" class="form-control" min="0" required  id="petrol_supply_sale"  name="supply_sale" value="{{Auth::user()->getSaleDetail($date,$petrol)?Auth::user()->getSaleDetail($date,$petrol)->supply_sale:''}}" >
+            <p id="petrol-supply-sale-response" style="color:red;"></p>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Retail Sale</label>
+            <input type="number" class="form-control" min="0" id="petrol_retail_sale" name="retail_sale" value="{{Auth::user()->getSaleDetail($date,$petrol)?Auth::user()->getSaleDetail($date,$petrol)->retail_sale:''}}" readonly>
+        </div> 
+        <div class="form-group col-md-3">
+            <label>Total Sale</label>
+            <input type="number" class="form-control" min="0"  name="total_sale" id="petrol_total_sale"  value="{{Auth::user()->getSaleDetail($date,$petrol)?Auth::user()->getSaleDetail($date,$petrol)->total_sale:Auth::user()->getMachineSaleQuantity($date,$petrol)}}" readonly>
         </div>
     </div>
     <div class="row">

@@ -43,7 +43,7 @@
             @if($index == 0)
             <label>Qty</label>
             @endif
-            <input name="qty[]" id="diesel_qty_{{$index}}" type="text" class="form-control" placeholder="Enter Product Quantity" value="{{$diesel_machine->getSale($date)?$diesel_machine->getSale($date)->qty:''}}"  readonly>
+            <input name="qty[]" id="diesel_qty_{{$index}}" type="text" class="form-control diesel_sale_quantity" placeholder="Enter Product Quantity" value="{{$diesel_machine->getSale($date)?$diesel_machine->getSale($date)->qty:''}}"  readonly>
         </div>
     </div>
     @endforeach
@@ -118,6 +118,22 @@
         <div class="form-group col-md-2">
             <label>Dip</label>
             <input type="number" class="form-control" name="dip" value="{{Auth::user()->getDip($date,$diesel)?Auth::user()->getDip($date,$diesel)->access:''}}">
+        </div>
+    </div>
+    <div class="row">
+        <input type="hidden" name="sale_detail_id" value="{{Auth::user()->getSaleDetail($date,$diesel)?Auth::user()->getSaleDetail($date,$diesel)->id:''}}">
+        <div class="form-group col-md-3">
+            <label>Supply Sale</label>
+            <input type="number" class="form-control" min="0" required  id="desiel_supply_sale"  name="supply_sale" value="{{Auth::user()->getSaleDetail($date,$diesel)?Auth::user()->getSaleDetail($date,$diesel)->supply_sale:''}}" >
+            <p id="supply-sale-response" style="color:red;"></p>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Retail Sale</label>
+            <input type="number" class="form-control" min="0" id="desiel_retail_sale" name="retail_sale" value="{{Auth::user()->getSaleDetail($date,$diesel)?Auth::user()->getSaleDetail($date,$diesel)->retail_sale:''}}" readonly>
+        </div> 
+        <div class="form-group col-md-3">
+            <label>Total Sale</label>
+            <input type="number" class="form-control" min="0"  name="total_sale" id="desiel_total_sale"  value="{{Auth::user()->getSaleDetail($date,$diesel)?Auth::user()->getSaleDetail($date,$diesel)->total_sale:Auth::user()->getMachineSaleQuantity($date,$diesel)}}" readonly>
         </div>
     </div>
     
