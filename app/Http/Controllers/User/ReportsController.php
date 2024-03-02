@@ -11,6 +11,7 @@ use App\Models\MonthProfit;
 use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\Sale;
+use App\Models\SaleDetail;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -129,11 +130,148 @@ class ReportsController extends Controller
             $start_date =  $last_debit_credit?Carbon::parse($last_debit_credit->sale_date)->firstOfMonth():Carbon::today()->firstOfMonth();  
             $end_date = $last_debit_credit?Carbon::parse($last_debit_credit->sale_date):Carbon::today();
         } 
-        $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->orderBy('display_order','ASC')->get();
-        $product_account_category_id = AccountCategory::where('name','Products')->first()->id;
-        $data['labels']      = "";
-        $data['expense_amounts']      = "";
-        return view('user.reports.product-analysis.index',compact('data','start_date','end_date','products'));   
+        $labelsArray = [];
+        $sales = [];
+        if($request->product_id)
+        {
+            $product = Product::find($request->product_id);
+        }else{
+            $product = Product::find(1);
+        }
+            
+        $label = "Total Sales";
+        array_push($labelsArray, $label);
+        $total_sale = Sale::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->where('type','!=','test')
+                ->whereBetween('sale_date',[$start_date,$end_date])
+                ->sum('qty');
+        $test_sale = Sale::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->where('type','test')
+                ->whereBetween('sale_date',[$start_date,$end_date])
+                ->sum('qty');
+        $total_qty  = $total_sale - $test_sale;
+        array_push($sales, $total_qty);
+        $label = "Retail Sales";
+        array_push($labelsArray, $label);
+        $retail_sale = SaleDetail::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->whereBetween('sale_date',[$start_date,$end_date])
+                ->sum('retail_sale');
+        array_push($sales, $retail_sale);
+        $label = "Supply Sales";
+        array_push($labelsArray, $label);
+        $supply_sale = SaleDetail::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->whereBetween('sale_date',[$start_date,$end_date])
+                ->sum('supply_sale');
+        array_push($sales, $supply_sale);
+        $label = "Whole Sales";
+        array_push($labelsArray, $label);
+        $whole_sale = Sale::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->where('type','whole_sale')
+                ->whereBetween('sale_date',[$start_date,$end_date])
+                ->sum('qty');
+        array_push($sales, $whole_sale);
+        $data['labels']      = "'".implode("', '", $labelsArray)."'";
+        $data['sales']      = "'".implode("', '", $sales)."'";
+        return view('user.reports.product-analysis.index',compact('data','start_date','end_date','product'));   
+    }
+    public function supply(Request $request)
+    {
+        $inital_debit_credit = DebitCredit::where('user_id',Auth::user()->id)->whereNotNull('sale_date')->orderBy('sale_date','ASC')->first();
+        $inital_start_date = $inital_debit_credit?Carbon::parse($inital_debit_credit->sale_date):Carbon::today();     
+        if($request->end_date)
+        {
+            $start_date =  Carbon::parse($request->end_date)->firstOfMonth();  
+            $end_date = Carbon::parse($request->end_date);
+        }else{
+            // $start_date = $inital_start_date;
+            $last_debit_credit = DebitCredit::where('user_id',Auth::user()->id)->whereNotNull('sale_date')->orderBy('sale_date','DESC')->first();
+            $start_date =  $last_debit_credit?Carbon::parse($last_debit_credit->sale_date)->firstOfMonth():Carbon::today()->firstOfMonth();  
+            $end_date = $last_debit_credit?Carbon::parse($last_debit_credit->sale_date):Carbon::today();
+        } 
+        $labelsArray = [];
+        $sales = [];
+        if($request->product_id)
+        {
+            $product = Product::find($request->product_id);
+        }else{
+            $product = Product::find(1);
+        }
+        $supply_sale = SaleDetail::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->whereBetween('sale_date',[$start_date,$end_date])
+                ->sum('supply_sale');
+        $label = "Supply Sales in QTY : ".$supply_sale;
+        array_push($labelsArray, $label);
+        $retail_sales = Sale::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->where('type','retail_sale')
+                ->whereBetween('sale_date',[$start_date,$end_date])
+                ->sum('qty');
+        if($retail_sales > 0)
+        {
+            $price = round($product->getClosingBalance($end_date) * Auth::user()->getPurchasePrice($end_date,$product));
+            $totalAmount = $product->totalDrAmount($start_date,$end_date);
+            if($totalAmount > 0)
+            {
+                $revenue = $price + abs($totalAmount);
+            }else{
+                $revenue = $price - abs($totalAmount);
+            }
+            $averageCost = $revenue/$retail_sales;
+            $supplyRevenue = round($averageCost*$supply_sale,0);
+            array_push($sales, $supplyRevenue);
+        }else{
+            array_push($sales, 0);
+        }
+        $whole_sale = Sale::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->where('type','whole_sale')
+                ->whereBetween('sale_date',[$start_date,$end_date])
+                ->sum('qty');
+        $label = "Whole Sales in Qty :".$whole_sale;
+        array_push($labelsArray, $label);
+        $whole_sale_amount = Sale::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->where('type','whole_sale')
+                ->whereBetween('sale_date',[$start_date,$end_date])
+                ->sum('total_amount');
+        array_push($sales, $whole_sale_amount);
+        if($product->name == "HSD")
+        {
+            $label = "Expense Less HSD";
+            array_push($labelsArray, $label);
+            $account_id = DebitCreditAccount::where('name','Expense Less')->first()->id;
+        }else{
+            $label = "Expense Less PMG";
+            array_push($labelsArray, $label);
+            $account_id = DebitCreditAccount::where('name','Expense Less PMG')->first()->id;
+        }
+        $credit = DebitCredit::where('user_id',Auth::user()->id)
+            ->where('account_id',$account_id)
+            ->whereBetween('sale_date', [$start_date,$end_date])->sum('credit');
+        $debit = DebitCredit::where('user_id',Auth::user()->id)
+            ->where('account_id',$account_id)
+            ->whereBetween('sale_date', [$start_date,$end_date])
+            ->sum('debit');
+        $totalExpense = $credit - $debit;
+        array_push($sales, $totalExpense);
+        $data['labels']      = "'".implode("', '", $labelsArray)."'";
+        $data['sales']      = "'".implode("', '", $sales)."'";
+        return view('user.reports.supply.index',compact('data','start_date','end_date','product'));   
     }
     public function postMonthPorfit($products,$start_date,$end_date)
     {

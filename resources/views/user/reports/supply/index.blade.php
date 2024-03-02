@@ -1,7 +1,7 @@
 @extends('user.layout.index')
 
 @section('title')
-   Product Analysis Reports
+   Supply Reports
 @endsection
 @section('css')
 <script src="{{asset('admin/global_assets/js/demo_pages/picker_date.js')}}"></script>

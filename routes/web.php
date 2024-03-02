@@ -127,6 +127,7 @@ Route::group(['prefix' => 'user', 'as'=>'user.','namespace' => 'User'], function
     /******************Reports ROUTES****************/
     Route::get('reports', 'ReportsController@index')->name('reports.index');  
     Route::get('reports/product-analysis', 'ReportsController@productAnalysis')->name('reports.product-analysis');  
+    Route::get('reports/supply', 'ReportsController@supply')->name('reports.supply');  
     /******************Debit Credit Accounts ROUTES****************/
     Route::resource('debit_credit_account', 'DebitCreditAccountController');  
   });
