@@ -36,12 +36,16 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label>Account Categories</label>
-                            <select class="form-control select-search" name="account_category_id" required>
+                            <select class="form-control select-search" name="account_category_id" id="account_category_id" required>
                                 <option value="">Choose Type</option>
                                 @foreach(App\Models\AccountCategory::all() as $category)
                                 <option @if($account->account_category_id == $category->id) selected @endif value="{{$category->id}}">{{$category->name}}</option>
                                 @endforeach
                             </select>
+                        </div>
+                        <div class="form-group col-md-6" id="salary_field" @if($account->account_category_id != 4) style="display: none;" @endif>
+                            <label>Employee Salary</label>
+                            <input type="number" name="salary" value="{{@$account->salary}}" class="form-control">
                         </div>
                     </div>
                     <div class="text-right">
@@ -59,4 +63,14 @@
 
 @endsection
 @section('scripts')
+<script>
+    $("#account_category_id").on('change',function(){
+        if($(this).val() == 4)
+        {
+            $("#salary_field").show();
+        }else{
+            $("#salary_field").hide();
+        }
+    });
+</script>
 @endsection

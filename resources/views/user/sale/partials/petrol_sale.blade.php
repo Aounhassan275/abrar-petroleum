@@ -121,17 +121,40 @@
     </div>
     <div class="row">
         <div class="form-group col-md-3">
-            <label>Supply Sale</label>
-            <input type="number" class="form-control" min="0" id="petrol_supply_sale" name="supply_sale" required>
+            <label>Total Sale</label>
+            <input type="number" value="0" readonly class="form-control" min="0" id="petrol_total_sale" name="total_sale">
+        </div>
+    </div>
+    <div class="row">
+        <input type="hidden" name="sale_type[]" value="Day">
+        <div class="form-group col-md-3">
+            <label>Day Supply Sale</label>
+            <input type="number" class="form-control" min="0" id="petrol_supply_sale" value="0" name="supply_sale[]" value="0" required>
             <p id="petrol-supply-sale-response" style="color:red;"></p>
         </div>
         <div class="form-group col-md-3">
-            <label>Retail Sale</label>
-            <input type="number"  class="form-control" readonly min="0" id="petrol_retail_sale" name="retail_sale">
+            <label>Day Retail Sale</label>
+            <input type="number"  class="form-control"  min="0" id="petrol_retail_sale" value="0" name="retail_sale[]" value="0">
         </div>
         <div class="form-group col-md-3">
-            <label>Total Sale</label>
-            <input type="number" value="0" readonly class="form-control" min="0" id="petrol_total_sale" name="total_sale">
+            <label>Day Total Sale</label>
+            <input type="number" value="0" readonly class="form-control" min="0" id="day_petrol_total_sale" name="day_and_night_sale[]">
+        </div>
+    </div>
+    <div class="row">
+        <input type="hidden" name="sale_type[]" value="Night">
+        <div class="form-group col-md-3">
+            <label>Night Supply Sale</label>
+            <input type="number" class="form-control" min="0" id="night_petrol_supply_sale" value="0" name="supply_sale[]" required>
+            <p id="night-petrol-supply-sale-response" style="color:red;"></p>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Night Retail Sale</label>
+            <input type="number"  class="form-control" min="0" id="night_petrol_retail_sale" value="0" name="retail_sale[]">
+        </div>
+        <div class="form-group col-md-3">
+            <label>Night Total Sale</label>
+            <input type="number" value="0" readonly class="form-control" min="0" id="night_petrol_total_sale" name="day_and_night_sale[]">
         </div>
     </div>
     <div class="row">

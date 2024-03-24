@@ -201,6 +201,8 @@
 							<ul class="nav nav-group-sub" data-submenu-title="Layouts" style="{{Request::is('user/reports*') ?'display:block':''}}">
 								<li class="nav-item"><a href="{{route('user.reports.product-analysis')}}" class="nav-link {{Request::is('user/reports/product-analysis')?'active':''}}">Product Analysis</a></li>
 								<li class="nav-item"><a href="{{route('user.reports.supply')}}" class="nav-link {{Request::is('user/reports/supply')?'active':''}}">Supply</a></li>
+								<li class="nav-item"><a href="{{route('user.reports.day-night-sale')}}" class="nav-link {{Request::is('user/reports/day-night-sale')?'active':''}}">Day Night Sale</a></li>
+								<li class="nav-item"><a href="{{route('user.reports.excess-analysis')}}" class="nav-link {{Request::is('user/reports/excess-analysis')?'active':''}}">Excess Analysis</a></li>
 								<li class="nav-item"><a href="{{route('user.reports.index')}}" class="nav-link {{Request::is('user/reports')?'active':''}}">Other Reports</a></li>
 							</ul>
 						</li>

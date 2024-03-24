@@ -139,14 +139,32 @@ class PurchaseController extends Controller
                 }
 
             }
-            if($request->product_id == 2)
-            {
-                return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->date);
-            }else{
-                return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->date);
-            }
             toastr()->success('Purchase is Created Successfully');
-            return redirect()->back();
+            if($request->is_misc_purchase)
+            {
+                $product = Product::find($request->product_id);
+                if($product->user_id && $product->purchasing_price != $purchase->price)
+                {
+                    $product->update([
+                        'purchasing_price' => $purchase->price
+                    ]);
+                }
+                if($product->user_id && $request->selling_price && $request->selling_price != $product->selling_price)
+                {
+                    $product->update([
+                        'selling_price' => $request->selling_price
+                    ]);
+                }
+                return redirect()->to(route('user.sale.index').'?active_tab=misc&date='.$request->date);
+            }else{
+                if($request->product_id == 2)
+                {
+                    return redirect()->to(route('user.sale.index').'?active_tab=petrol&date='.$request->date);
+                }else if($request->product_id == 1){
+                    return redirect()->to(route('user.sale.index').'?active_tab=diesel&date='.$request->date);
+                }
+            }
+            return redirect()->to(route('user.purchase.index'));
 
         }catch(Exception $e)
         {
@@ -214,7 +232,8 @@ class PurchaseController extends Controller
         $date = Carbon::parse($request->date);
         $price =  Auth::user()->getPurchasePrice($date,$product);
         return response()->json([
-            'price' => $price
+            'price' => $price,
+            'selling_price' => $product->selling_price,
         ]);
     }
 }

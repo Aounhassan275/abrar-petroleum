@@ -110,6 +110,7 @@
     </div>
 </div>
 @include('user.sale.partials.add-purchase-modal')
+@include('user.sale.partials.add-misc-purchase-modal')
 @include('user.sale.partials.delete-confirmation-modal')
 @endsection
 @section('scripts')

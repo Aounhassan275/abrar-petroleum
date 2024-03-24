@@ -178,26 +178,31 @@ class SaleController extends Controller
                         'date' => $request->sale_date,
                     ]);
                 }   
-                if($request->supply_sale >= 0)
+                foreach($request->day_and_night_sale as $index => $day_and_night_sale)
                 {
-                    if($request->supply_sale_id)
+                    if($day_and_night_sale > 0)
                     {
-                        $saleDetail = SaleDetail::find($request->supply_sale_id);
-                        $saleDetail->update([
-                            'supply_sale' => $request->supply_sale,
-                            'retail_sale' => $request->retail_sale,
-                            'total_sale' => $request->total_sale,
-                            'product_id' => $request->product_id,
-                        ]);
-                    }else{
-                        SaleDetail::create([
-                            'user_id' => Auth::user()->id,
-                            'sale_date' => $request->sale_date,
-                            'supply_sale' => $request->supply_sale,
-                            'retail_sale' => $request->retail_sale,
-                            'total_sale' => $request->total_sale,
-                            'product_id' => $request->product_id,
-                        ]);
+                        if($request->sale_detail_id && $request->sale_detail_id[$index])
+                        {
+                            $saleDetail = SaleDetail::find($request->sale_detail_id[$index]);
+                            $saleDetail->update([
+                                'supply_sale' => $request->supply_sale[$index],
+                                'retail_sale' => $request->retail_sale[$index],
+                                'type' => $request->sale_type[$index],
+                                'total_sale' => $day_and_night_sale,
+                                'product_id' => $request->product_id,
+                            ]);
+                        }else{
+                            SaleDetail::create([
+                                'user_id' => Auth::user()->id,
+                                'sale_date' => Carbon::parse($request->sale_date),
+                                'supply_sale' => $request->supply_sale[$index],
+                                'retail_sale' => $request->retail_sale[$index],
+                                'type' => $request->sale_type[$index],
+                                'total_sale' => $day_and_night_sale,
+                                'product_id' => $request->product_id,
+                            ]);
+                        }
                     }
                 }
                 $this->manageSale($request->sale_date);
@@ -447,27 +452,32 @@ class SaleController extends Controller
                             'date' => $request->sale_date,
                         ]);
                     }
-                }
-                if($request->supply_sale >= 0 && $request->supply_sale != null)
+                }  
+                foreach($request->day_and_night_sale as $index => $day_and_night_sale)
                 {
-                    if($request->sale_detail_id)
+                    if($day_and_night_sale > 0)
                     {
-                        $saleDetail = SaleDetail::find($request->sale_detail_id);
-                        $saleDetail->update([
-                            'supply_sale' => $request->supply_sale,
-                            'retail_sale' => $request->retail_sale,
-                            'total_sale' => $request->total_sale,
-                            'product_id' => $request->product_id,
-                        ]);
-                    }else{
-                        SaleDetail::create([
-                            'user_id' => Auth::user()->id,
-                            'sale_date' => Carbon::parse($request->sale_date)->format('Y-m-d'),
-                            'supply_sale' => $request->supply_sale,
-                            'retail_sale' => $request->retail_sale,
-                            'total_sale' => $request->total_sale,
-                            'product_id' => $request->product_id,
-                        ]);
+                        if($request->sale_detail_id && $request->sale_detail_id[$index])
+                        {
+                            $saleDetail = SaleDetail::find($request->sale_detail_id[$index]);
+                            $saleDetail->update([
+                                'supply_sale' => $request->supply_sale[$index],
+                                'retail_sale' => $request->retail_sale[$index],
+                                'type' => $request->sale_type[$index],
+                                'total_sale' => $day_and_night_sale,
+                                'product_id' => $request->product_id,
+                            ]);
+                        }else{
+                            SaleDetail::create([
+                                'user_id' => Auth::user()->id,
+                                'sale_date' => Carbon::parse($request->sale_date),
+                                'supply_sale' => $request->supply_sale[$index],
+                                'retail_sale' => $request->retail_sale[$index],
+                                'type' => $request->sale_type[$index],
+                                'total_sale' => $day_and_night_sale,
+                                'product_id' => $request->product_id,
+                            ]);
+                        }
                     }
                 }
                 $this->manageSale($request->sale_date);
@@ -628,7 +638,7 @@ class SaleController extends Controller
 
             }else{
                 $sales = Sale::where('user_id',Auth::user()->id)->whereDate('sale_date',$request->change_rate_date)
-                ->where('product_id',$product->id)->where('type','!=',['misc_sale','whole_sale'])->get();
+                ->where('product_id',$product->id)->where('type',['retail_sale','test'])->get();
             }
             foreach($sales as $sale)
             {

@@ -395,4 +395,143 @@ class ReportsController extends Controller
         // // dd($pdf);
         // return $pdf->download('sample.pdf');
     }
+    public function dayNightSale(Request $request)
+    {
+        $inital_sale_detail = SaleDetail::where('user_id',Auth::user()->id)->whereNotNull('sale_date')->orderBy('sale_date','ASC')->first();
+        $inital_start_date = $inital_sale_detail?Carbon::parse($inital_sale_detail->sale_date):Carbon::today();     
+        if($request->end_date)
+        {
+            $start_date =  Carbon::parse($request->end_date)->firstOfMonth();  
+            $end_date = Carbon::parse($request->end_date);
+        }else{
+            // $start_date = $inital_start_date;
+            $last_sale_detail = SaleDetail::where('user_id',Auth::user()->id)->whereNotNull('sale_date')->orderBy('sale_date','DESC')->first();
+            $start_date =  $last_sale_detail?Carbon::parse($last_sale_detail->sale_date)->firstOfMonth():Carbon::today()->firstOfMonth();  
+            $end_date = $last_sale_detail?Carbon::parse($last_sale_detail->sale_date):Carbon::today();
+        } 
+        $labelsArray = [];
+        $sales = [];
+        if($request->product_id)
+        {
+            $product = Product::find($request->product_id);
+        }else{
+            $product = Product::find(1);
+        }
+            
+        $label = "Day Supply Sales";
+        array_push($labelsArray, $label);
+        $daySupplySales = SaleDetail::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->where('type','Day')
+                ->whereBetween('sale_date',[$start_date,$end_date])
+                ->sum('supply_sale');
+        array_push($sales, $daySupplySales);
+        $label = "Day Retail Sales";
+        array_push($labelsArray, $label);
+        $dayRetailSales = SaleDetail::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->where('type','Day')
+                ->whereBetween('sale_date',[$start_date,$end_date])
+                ->sum('retail_sale');
+        array_push($sales, $dayRetailSales);
+        $label = "Night Supply Sales";
+        array_push($labelsArray, $label);
+        $nightSupplySale = SaleDetail::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->where('type','Night')
+                ->whereBetween('sale_date',[$start_date,$end_date])
+                ->sum('supply_sale');
+        array_push($sales, $nightSupplySale);
+        $label = "Night Retail Sales";
+        array_push($labelsArray, $label);
+        $nightRetailSales = SaleDetail::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->where('type','Night')
+                ->whereBetween('sale_date',[$start_date,$end_date])
+                ->sum('retail_sale');
+        array_push($sales, $nightRetailSales);
+        $data['labels']      = "'".implode("', '", $labelsArray)."'";
+        $data['sales']      = "'".implode("', '", $sales)."'";
+        return view('user.reports.day-night-sale.index',compact('data','start_date','end_date','product'));   
+    }
+    public function excessAnalysis(Request $request)
+    {
+        $inital_purchase = Purchase::where('user_id',Auth::user()->id)->whereNotNull('date')->orderBy('date','ASC')->first();
+        $inital_start_date = $inital_purchase?Carbon::parse($inital_purchase->date):Carbon::today();     
+        if($request->end_date)
+        {
+            $start_date =  Carbon::parse($request->end_date)->firstOfMonth();  
+            $end_date = Carbon::parse($request->end_date);
+        }else{
+            // $start_date = $inital_start_date;
+            $last_purchase = Purchase::where('user_id',Auth::user()->id)->whereNotNull('date')->orderBy('date','DESC')->first();
+            $start_date =  $last_purchase?Carbon::parse($last_purchase->date)->firstOfMonth():Carbon::today()->firstOfMonth();  
+            $end_date = $last_purchase?Carbon::parse($last_purchase->date):Carbon::today();
+        } 
+        $labelsArray = [];
+        $sales = [];
+        if($request->product_id)
+        {
+            $product = Product::find($request->product_id);
+        }else{
+            $product = Product::find(1);
+        }
+            
+        $label = "Total Purchases";
+        array_push($labelsArray, $label);
+        $totalPurchases = Purchase::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->whereBetween('date',[$start_date,$end_date])
+                ->sum('qty');
+        array_push($sales, $totalPurchases);
+        $label = "Expected Excess";
+        array_push($labelsArray, $label);
+        $expectedAccess = $totalPurchases/ 5000 * 50;
+        array_push($sales, $expectedAccess);
+        $label = "Get Excess";
+        array_push($labelsArray, $label);
+        $haveAccess = Purchase::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->whereBetween('date',[$start_date,$end_date])
+                ->sum('access');
+        array_push($sales, $haveAccess);
+        $data['labels']      = "'".implode("', '", $labelsArray)."'";
+        $data['sales']      = "'".implode("', '", $sales)."'";
+        return view('user.reports.excess-analysis.index',compact('data','start_date','end_date','product'));   
+    }
+    public function dipAnalysis(Request $request)
+    {
+        $inital_purchase = Purchase::where('user_id',Auth::user()->id)->whereNotNull('date')->orderBy('date','ASC')->first();
+        $inital_start_date = $inital_purchase?Carbon::parse($inital_purchase->date):Carbon::today();     
+        if($request->end_date)
+        {
+            $start_date =  Carbon::parse($request->end_date)->firstOfMonth();  
+            $end_date = Carbon::parse($request->end_date);
+        }else{
+            // $start_date = $inital_start_date;
+            $last_purchase = Purchase::where('user_id',Auth::user()->id)->whereNotNull('date')->orderBy('date','DESC')->first();
+            $start_date =  $last_purchase?Carbon::parse($last_purchase->date)->firstOfMonth():Carbon::today()->firstOfMonth();  
+            $end_date = $last_purchase?Carbon::parse($last_purchase->date):Carbon::today();
+        } 
+        $labelsArray = [];
+        $sales = [];
+        if($request->product_id)
+        {
+            $product = Product::find($request->product_id);
+        }else{
+            $product = Product::find(1);
+        }
+        $totalDips = Purchase::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->where('dip','!=',0)
+                ->whereBetween('date',[$start_date,$end_date])->get();
+        return view('user.reports.dip-analysis.index',compact('totalDips','start_date','end_date','product'));   
+    }
 }

@@ -128,6 +128,9 @@ Route::group(['prefix' => 'user', 'as'=>'user.','namespace' => 'User'], function
     Route::get('reports', 'ReportsController@index')->name('reports.index');  
     Route::get('reports/product-analysis', 'ReportsController@productAnalysis')->name('reports.product-analysis');  
     Route::get('reports/supply', 'ReportsController@supply')->name('reports.supply');  
+    Route::get('reports/day-night-sale', 'ReportsController@dayNightSale')->name('reports.day-night-sale');  
+    Route::get('reports/excess-analysis', 'ReportsController@excessAnalysis')->name('reports.excess-analysis');  
+    Route::get('reports/dip-analysis', 'ReportsController@dipAnalysis')->name('reports.dip-analysis');  
     /******************Debit Credit Accounts ROUTES****************/
     Route::resource('debit_credit_account', 'DebitCreditAccountController');  
   });

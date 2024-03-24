@@ -13,6 +13,7 @@ class SaleDetail extends Model
         'product_id',
         'supplier_id',
         'user_id',
-        'sale_date'
+        'sale_date',
+        'type'
     ];
 }

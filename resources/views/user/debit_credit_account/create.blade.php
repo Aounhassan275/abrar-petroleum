@@ -43,6 +43,10 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="form-group col-md-6" id="salary_field" style="display: none;">
+                            <label>Employee Salary</label>
+                            <input type="number" name="salary" value="{{@$account->salary}}" class="form-control">
+                        </div>
                     </div>
                     <div class="text-right">
                         <button type="submit" class="btn btn-primary">Create <i class="icon-paperplane ml-2"></i></button>
@@ -56,5 +60,15 @@
 
 @endsection
 @section('scripts')
+<script>
+    $("#account_category_id").on('change',function(){
+        if($(this).val() == 4)
+        {
+            $("#salary_field").show();
+        }else{
+            $("#salary_field").hide();
+        }
+    });
+</script>
 
 @endsection

@@ -434,10 +434,11 @@ class User extends Authenticatable
                         ->first();  
         return $dip;
     }
-    public function getSaleDetail($date,$product)
+    public function getSaleDetail($date,$product,$type)
     {   
         $saleDetail = SaleDetail::where('user_id',$this->id)
                         ->where('product_id',$product->id)
+                        ->where('type',$type)
                         ->whereDate('sale_date',$date)
                         ->first();  
         return $saleDetail;

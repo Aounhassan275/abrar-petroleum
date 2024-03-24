@@ -121,19 +121,43 @@
         </div>
     </div>
     <div class="row">
-        <input type="hidden" name="sale_detail_id" value="{{Auth::user()->getSaleDetail($date,$diesel)?Auth::user()->getSaleDetail($date,$diesel)->id:''}}">
-        <div class="form-group col-md-3">
-            <label>Supply Sale</label>
-            <input type="number" class="form-control" min="0" required  id="desiel_supply_sale"  name="supply_sale" value="{{Auth::user()->getSaleDetail($date,$diesel)?Auth::user()->getSaleDetail($date,$diesel)->supply_sale:''}}" >
-            <p id="supply-sale-response" style="color:red;"></p>
-        </div>
-        <div class="form-group col-md-3">
-            <label>Retail Sale</label>
-            <input type="number" class="form-control" min="0" id="desiel_retail_sale" name="retail_sale" value="{{Auth::user()->getSaleDetail($date,$diesel)?Auth::user()->getSaleDetail($date,$diesel)->retail_sale:''}}" readonly>
-        </div> 
         <div class="form-group col-md-3">
             <label>Total Sale</label>
-            <input type="number" class="form-control" min="0"  name="total_sale" id="desiel_total_sale"  value="{{Auth::user()->getSaleDetail($date,$diesel)?Auth::user()->getSaleDetail($date,$diesel)->total_sale:Auth::user()->getMachineSaleQuantity($date,$diesel)}}" readonly>
+            <input type="number" value="0" readonly class="form-control" min="0" id="diesel_total_sale" name="total_sale">
+        </div>
+    </div>
+    <div class="row">
+        <input type="hidden" name="sale_detail_id[]" value="{{Auth::user()->getSaleDetail($date,$diesel,'Day')?Auth::user()->getSaleDetail($date,$diesel,'Day')->id:''}}">
+        <input type="hidden" name="sale_type[]" value="Day">
+        <div class="form-group col-md-3">
+            <label>Day Supply Sale</label>
+            <input type="number" class="form-control" min="0" id="diesel_supply_sale" value="{{Auth::user()->getSaleDetail($date,$diesel,'Day')?Auth::user()->getSaleDetail($date,$diesel,'Day')->supply_sale:'0'}}" name="supply_sale[]" value="0" required>
+            <p id="diesel-supply-sale-response" style="color:red;"></p>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Day Retail Sale</label>
+            <input type="number"  class="form-control"  min="0" id="diesel_retail_sale" value="{{Auth::user()->getSaleDetail($date,$diesel,'Day')?Auth::user()->getSaleDetail($date,$diesel,'Day')->retail_sale:'0'}}" name="retail_sale[]" value="0">
+        </div>
+        <div class="form-group col-md-3">
+            <label>Day Total Sale</label>
+            <input type="number" value="{{Auth::user()->getSaleDetail($date,$diesel,'Day')?Auth::user()->getSaleDetail($date,$diesel,'Day')->total_sale:'0'}}" readonly class="form-control" min="0" id="day_diesel_total_sale" name="day_and_night_sale[]">
+        </div>
+    </div>
+    <div class="row">
+        <input type="hidden" name="sale_detail_id[]" value="{{Auth::user()->getSaleDetail($date,$diesel,'Night')?Auth::user()->getSaleDetail($date,$diesel,'Night')->id:''}}">
+        <input type="hidden" name="sale_type[]" value="Night">
+        <div class="form-group col-md-3">
+            <label>Night Supply Sale</label>
+            <input type="number" class="form-control" min="0" id="night_diesel_supply_sale" value="{{Auth::user()->getSaleDetail($date,$diesel,'Night')?Auth::user()->getSaleDetail($date,$diesel,'Night')->supply_sale:'0'}}" name="supply_sale[]" required>
+            <p id="night-diesel-supply-sale-response" style="color:red;"></p>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Night Retail Sale</label>
+            <input type="number"  class="form-control" min="0" id="night_diesel_retail_sale" value="{{Auth::user()->getSaleDetail($date,$diesel,'Night')?Auth::user()->getSaleDetail($date,$diesel,'Night')->retail_sale:'0'}}" name="retail_sale[]">
+        </div>
+        <div class="form-group col-md-3">
+            <label>Night Total Sale</label>
+            <input type="number" value="{{Auth::user()->getSaleDetail($date,$diesel,'Night')?Auth::user()->getSaleDetail($date,$diesel,'Night')->total_sale:'0'}}" readonly class="form-control" min="0" id="night_diesel_total_sale" name="day_and_night_sale[]">
         </div>
     </div>
     

@@ -123,19 +123,43 @@
         </div>
     </div>
     <div class="row">
-        <input type="hidden" name="sale_detail_id" value="{{Auth::user()->getSaleDetail($date,$petrol)?Auth::user()->getSaleDetail($date,$petrol)->id:''}}">
         <div class="form-group col-md-3">
-            <label>Supply Sale</label>
-            <input type="number" class="form-control" min="0" required  id="petrol_supply_sale"  name="supply_sale" value="{{Auth::user()->getSaleDetail($date,$petrol)?Auth::user()->getSaleDetail($date,$petrol)->supply_sale:''}}" >
+            <label>Total Sale</label>
+            <input type="number" value="0" readonly class="form-control" min="0" id="petrol_total_sale" name="total_sale">
+        </div>
+    </div>
+    <div class="row">
+        <input type="hidden" name="sale_detail_id[]" value="{{Auth::user()->getSaleDetail($date,$petrol,'Day')?Auth::user()->getSaleDetail($date,$petrol,'Day')->id:''}}">
+        <input type="hidden" name="sale_type[]" value="Day">
+        <div class="form-group col-md-3">
+            <label>Day Supply Sale</label>
+            <input type="number" class="form-control" min="0" id="petrol_supply_sale" value="{{Auth::user()->getSaleDetail($date,$petrol,'Day')?Auth::user()->getSaleDetail($date,$petrol,'Day')->supply_sale:'0'}}" name="supply_sale[]" value="0" required>
             <p id="petrol-supply-sale-response" style="color:red;"></p>
         </div>
         <div class="form-group col-md-3">
-            <label>Retail Sale</label>
-            <input type="number" class="form-control" min="0" id="petrol_retail_sale" name="retail_sale" value="{{Auth::user()->getSaleDetail($date,$petrol)?Auth::user()->getSaleDetail($date,$petrol)->retail_sale:''}}" readonly>
-        </div> 
+            <label>Day Retail Sale</label>
+            <input type="number"  class="form-control"  min="0" id="petrol_retail_sale" value="{{Auth::user()->getSaleDetail($date,$petrol,'Day')?Auth::user()->getSaleDetail($date,$petrol,'Day')->retail_sale:'0'}}" name="retail_sale[]" value="0">
+        </div>
         <div class="form-group col-md-3">
-            <label>Total Sale</label>
-            <input type="number" class="form-control" min="0"  name="total_sale" id="petrol_total_sale"  value="{{Auth::user()->getSaleDetail($date,$petrol)?Auth::user()->getSaleDetail($date,$petrol)->total_sale:Auth::user()->getMachineSaleQuantity($date,$petrol)}}" readonly>
+            <label>Day Total Sale</label>
+            <input type="number" value="{{Auth::user()->getSaleDetail($date,$petrol,'Day')?Auth::user()->getSaleDetail($date,$petrol,'Day')->total_sale:'0'}}" readonly class="form-control" min="0" id="day_petrol_total_sale" name="day_and_night_sale[]">
+        </div>
+    </div>
+    <div class="row">
+        <input type="hidden" name="sale_detail_id[]" value="{{Auth::user()->getSaleDetail($date,$petrol,'Night')?Auth::user()->getSaleDetail($date,$petrol,'Night')->id:''}}">
+        <input type="hidden" name="sale_type[]" value="Night">
+        <div class="form-group col-md-3">
+            <label>Night Supply Sale</label>
+            <input type="number" class="form-control" min="0" id="night_petrol_supply_sale" value="{{Auth::user()->getSaleDetail($date,$petrol,'Night')?Auth::user()->getSaleDetail($date,$petrol,'Night')->supply_sale:'0'}}" name="supply_sale[]" required>
+            <p id="night-petrol-supply-sale-response" style="color:red;"></p>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Night Retail Sale</label>
+            <input type="number"  class="form-control" min="0" id="night_petrol_retail_sale" value="{{Auth::user()->getSaleDetail($date,$petrol,'Night')?Auth::user()->getSaleDetail($date,$petrol,'Night')->retail_sale:'0'}}" name="retail_sale[]">
+        </div>
+        <div class="form-group col-md-3">
+            <label>Night Total Sale</label>
+            <input type="number" value="{{Auth::user()->getSaleDetail($date,$petrol,'Night')?Auth::user()->getSaleDetail($date,$petrol,'Night')->total_sale:'0'}}" readonly class="form-control" min="0" id="night_petrol_total_sale" name="day_and_night_sale[]">
         </div>
     </div>
     <div class="row">

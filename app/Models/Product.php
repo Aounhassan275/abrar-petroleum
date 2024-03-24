@@ -210,7 +210,7 @@ class Product extends Model
     {
         $sale = Sale::where('user_id',Auth::user()->id)
                         ->where('product_id',$this->id)
-                        ->where('type','!=',['whole_sale','test'])
+                        ->where('type','retail_sale')
                         ->whereDate('sale_date',$date)
                         ->first(); 
         return $sale?$sale->price:$this->selling_amount;
