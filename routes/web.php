@@ -182,6 +182,9 @@ Route::get('/migrate/install', function() {
 });
 Route::get('/migrate', function() {
   Artisan::call('migrate');
+  Artisan::call('config:cache');
+  Artisan::call('view:clear');
+  Artisan::call('cache:clear');
   return 'Migration done';
 });
 Route::get('/cache_clear', function() {

@@ -29,7 +29,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label>Product Qty</label>
-                            <input name="qty" id="qty" type="text" value="{{$purchase->qty}}" class="form-control" placeholder="Enter Product Quantity" required readonly>
+                            <input name="qty" id="qty" type="text" value="{{$purchase->qty}}" class="form-control" placeholder="Enter Product Quantity" required>
                         </div>
                         <div class="form-group col-md-6">
                             <label>Product Access</label>
