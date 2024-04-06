@@ -30,7 +30,7 @@
                     </div>
                     <div class="col-md-12">
                         
-                        <table class="table datatable-button-html5-basic">
+                        <table class="table">
                             <thead>
                                 <tr>
                                     <th>Name</th>
@@ -44,7 +44,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (Auth::user()->debitCreditAccounts as  $account)
+                                @foreach ($debitCreditAccounts as  $account)
                                 <tr>
                                     <td>{{$account->name}}</td>
                                     <td>{{$account->accountCategory->name}}</td>

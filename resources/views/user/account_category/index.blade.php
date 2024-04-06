@@ -83,7 +83,7 @@
                             </form>
                             <div class="row">
                                 <div class="col-md-12 mb-2">
-                                    <a href="{{route('user.debit_credit_account.index')}}" class="btn btn-info btn-sm float-right">Manage Debit Credit Account</a>
+                                    <a href="{{route('user.debit_credit_account.index',['account_category_id'=>$account_category->id])}}" class="btn btn-info btn-sm float-right">Manage Debit Credit Account</a>
                                 </div>
                             </div>
                             @if($sub_account && $active_tab == $account_category->id)
