@@ -12,6 +12,7 @@ use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\Sale;
 use App\Models\SaleDetail;
+use App\Models\Supplier;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -533,5 +534,16 @@ class ReportsController extends Controller
                 ->where('dip','!=',0)
                 ->whereBetween('date',[$start_date,$end_date])->get();
         return view('user.reports.dip-analysis.index',compact('totalDips','start_date','end_date','product'));   
+    }
+    public function supplierAnalysis(Request $request)
+    {
+        $inital_debit_credit = DebitCredit::where('user_id',Auth::user()->id)->whereNotNull('sale_date')->orderBy('sale_date','ASC')->first();
+        $inital_start_date = $inital_debit_credit?Carbon::parse($inital_debit_credit->sale_date):Carbon::today();     
+        $last_debit_credit = DebitCredit::where('user_id',Auth::user()->id)->whereNotNull('sale_date')->orderBy('sale_date','DESC')->first();
+        $end_date = $last_debit_credit?Carbon::parse($last_debit_credit->sale_date):Carbon::today();
+        $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->orderBy('display_order','ASC')->get();
+        $account  = DebitCreditAccount::where('supplier_id',Supplier::first()->id)->first();
+        $balance = $account->debitCredits($inital_start_date,$end_date);
+        return view('user.reports.supplier-analysis.index',compact('products','balance'));   
     }
 }
