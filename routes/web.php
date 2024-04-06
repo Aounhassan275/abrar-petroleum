@@ -116,6 +116,7 @@ Route::group(['prefix' => 'user', 'as'=>'user.','namespace' => 'User'], function
     Route::post('debit_credit/update_form', 'DebitCreditController@updateForm')->name('debit_credit.update_form');  
     Route::post('debit_credit/delete', 'DebitCreditController@delete')->name('debit_credit.delete');  
     Route::post('debit_credit/get_customer_vehicle', 'DebitCreditController@get_customer_vehicle')->name('debit_credit.get_customer_vehicle');  
+    Route::post('debit_credit/transfer_salary', 'DebitCreditController@transferSalary')->name('debit_credit.transfer_salary');  
     Route::get('debit_credit/deleted', 'DebitCreditController@deletedValues')->name('debit_credit.deleted');  
     Route::delete('debit_credit/force_delete/{id}', 'DebitCreditController@forceDelete')->name('debit_credit.force_delete');  
     Route::resource('debit_credit', 'DebitCreditController');  

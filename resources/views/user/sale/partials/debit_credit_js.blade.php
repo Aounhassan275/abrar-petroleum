@@ -263,5 +263,41 @@
             });
             $('#update-debit-credit-sale').attr('disabled',true).text('Please wait...');
         });
+        $('#transfer-salary-btn').on('click', function (event) {
+            event.preventDefault();
+            $('#transfer-salary-response').html("");
+            $('#transfer-salary-btn').attr('disabled',true).text('Please wait...');
+            data = $('#transferSalaryForm').serialize();
+            $.ajax({
+                url: "{{route('user.debit_credit.transfer_salary')}}",
+                method: 'post',
+                data: data,
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                success: function(response){
+                    if(response.success == true)
+                    {
+                        window.location.href = response.url;
+                    }else{
+                        $('#transfer-salary-response').html(respons.message);
+                        $('#transfer-salary-btn').attr('disabled',false).text('Transfer');
+                    }
+                },
+                error: function(xhr) {
+                    var errorMessages = 'An error occurred while processing your request.';
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        var errors = xhr.responseJSON.errors;
+                        $.each(errors, function(field, messages) {
+                            key_array = field.split(".");
+                            $('#error-'+key_array[0]+'-'+key_array[1]).show();
+                        });   
+                        errorMessages = Object.values(errors).join('<br>');
+                    }
+                    $('#transfer-salary-response').html(errorMessages);
+                    $('#transfer-salary-btn').attr('disabled',false).text('Trasnfer');
+                }
+            });
+        });
     });
 </script>

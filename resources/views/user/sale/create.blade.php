@@ -36,7 +36,8 @@
                 <div class="tab-content">
                     <div class="row">
                         <div class="col-md-12">
-                            <a href="{{route('user.debit_credit.deleted')}}" class="btn btn-danger btn-sm float-right">Deleted Debit Credit</a>
+                            <a href="#" data-toggle="modal" data-target="#transfer-salary-modal" class="btn btn-success btn-sm float-right">Transfer Salary To Employee</a>
+                            <a href="{{route('user.debit_credit.deleted')}}" class="btn btn-danger btn-sm float-right mr-2">Deleted Debit Credit</a>
                             <a href="{{route('user.sale.index').'?active_tab='.$active_tab.'&date='.Carbon\Carbon::parse($date)->addDay(1)->format('Y-m-d')}}" class="btn btn-primary btn-sm float-right mr-2">Next Date</a>
                             <a href="{{$previousUrl}}" class="btn btn-secondary btn-sm float-right mr-2">Previous Date</a>
                         </div>
@@ -112,6 +113,7 @@
 @include('user.sale.partials.add-purchase-modal')
 @include('user.sale.partials.add-misc-purchase-modal')
 @include('user.sale.partials.delete-confirmation-modal')
+@include('user.sale.partials.transfer-salary-modal')
 @endsection
 @section('scripts')
 @include('user.sale.partials.js')

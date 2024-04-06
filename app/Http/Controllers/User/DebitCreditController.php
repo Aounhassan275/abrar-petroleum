@@ -437,4 +437,41 @@ class DebitCreditController extends Controller
         toastr()->success('Debit Credit Deleted successfully');
         return redirect()->back();
     }
+    public function transferSalary(Request $request)
+    {
+        try{
+            $this->validate($request, [
+				'date' => 'required',
+			]);
+            $date = Carbon::parse($request->date);
+            $accounts = DebitCreditAccount::where('user_id',Auth::user()->id)->where('account_category_id',4)->where('salary','>',0)->get();
+            foreach($accounts as $account){
+                $isAlreadyPaid = DebitCredit::where('user_id',Auth::user()->id)
+                                ->where('account_id',$account->id)
+                                ->whereMonth('sale_date',$date->format('m'))->first();
+                if(!$isAlreadyPaid)
+                {
+                    DebitCredit::create([
+                        'user_id' => Auth::user()->id,
+                        'credit' => $account->salary,
+                        'account_id' => $account->id,
+                        'sale_date' => $date,
+                    ]);
+                }
+                
+            }
+            toastr()->success('Salary Transferred Successfully');
+            $url = route('user.sale.index').'?active_tab=debit_credit&date='.$date->format('Y-m-d');
+            return [
+                'success' => true,
+                'url' => $url,
+            ];
+        }catch(Exception $e)
+        {
+            return [
+                'success' => false,
+                'message' => $e->getMessage(),
+            ];
+        }
+    }
 }
