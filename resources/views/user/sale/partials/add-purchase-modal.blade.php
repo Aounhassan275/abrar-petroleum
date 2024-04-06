@@ -28,16 +28,16 @@
                             <input name="total_amount" id="purchase_total_amount" type="text" value="{{old('total_amount')?old('total_amount'):0}}" class="form-control" placeholder="Enter Product Total Amount" readonly>
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Product Dip</label>
-                            <input name="dip" id="dip"  type="number" value="{{old('dip')?old('dip'):0}}" class="form-control" placeholder="Enter Product Dip">
-                        </div>
-                        <div class="form-group col-md-6">
                             <label>Product Access</label>
                             <input name="access" id="access"  type="number" value="{{old('access')?old('access'):0}}" class="form-control" placeholder="Enter Product Access">
                         </div>
                         <div class="form-group col-md-6">
                             <label>Access Total Amount</label>
                             <input name="access_total_amount" id="access_total_amount" type="text" value="{{old('access_total_amount')?old('access_total_amount'):0}}" class="form-control" placeholder="Enter Product Total Amount" readonly>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Product Dip</label>
+                            <input name="dip" id="dip"  type="number" value="{{old('dip')?old('dip'):0}}" class="form-control" placeholder="Enter Product Dip">
                         </div>
                         <input type="hidden" name="date" value="{{@$date}}">
                         <div class="form-group col-md-6">

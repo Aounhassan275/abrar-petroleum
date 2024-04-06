@@ -113,13 +113,13 @@
         </div>
         @endif
     </div>
-    <div class="row">
+    {{-- <div class="row">
         <input type="hidden" name="dip_id" value="{{Auth::user()->getDip($date,$diesel)?Auth::user()->getDip($date,$diesel)->id:''}}">
         <div class="form-group col-md-2">
             <label>Dip</label>
             <input type="number" class="form-control" name="dip" value="{{Auth::user()->getDip($date,$diesel)?Auth::user()->getDip($date,$diesel)->access:''}}">
         </div>
-    </div>
+    </div> --}}
     <div class="row">
         <div class="form-group col-md-3">
             <label>Total Sale</label>

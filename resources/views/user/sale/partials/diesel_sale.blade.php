@@ -92,12 +92,12 @@
             <input type="number" class="form-control" name="wholesale_total_amount" id="diesel_wholesale_total_amount">
         </div>
     </div>
-    <div class="row">
+    {{-- <div class="row">
         <div class="form-group col-md-2">
             <label>Dip</label>
             <input type="number" class="form-control" name="dip">
         </div>
-    </div>
+    </div> --}}
     <div class="row">
         <div class="form-group col-md-3">
             <label>Total Sale</label>
