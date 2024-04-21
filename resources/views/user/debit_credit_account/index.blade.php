@@ -38,6 +38,9 @@
                                     <th>Phone</th>
                                     <th>Address</th>
                                     <th>Designation</th>
+                                    @if(@request()->account_category_id && request()->account_category_id == 4)
+                                    <th>Salary</th>
+                                    @endif
                                     <th>Display Order</th>
                                     <th>Action</th>
                                     <th>Action</th>
@@ -51,6 +54,9 @@
                                     <td>{{$account->phone}}</td>
                                     <td>{{$account->address}}</td>
                                     <td>{{@$account->designation}}</td>
+                                    @if(@request()->account_category_id && request()->account_category_id == 4)
+                                        <td>{{@$account->salary}}</td>
+                                    @endif
                                     <td>{{@$account->display_order}}</td>
                                     <td>
                                         <a href="{{route('user.debit_credit_account.edit',$account->id)}}" class="btn btn-primary btn-sm">Edit</a>

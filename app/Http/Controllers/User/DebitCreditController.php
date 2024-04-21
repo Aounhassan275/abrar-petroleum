@@ -445,9 +445,11 @@ class DebitCreditController extends Controller
 			]);
             $date = Carbon::parse($request->date);
             $accounts = DebitCreditAccount::where('user_id',Auth::user()->id)->where('account_category_id',4)->where('salary','>',0)->get();
+            $expenseAccount = DebitCreditAccount::where('name','Expense miscellaneous')->first();
             foreach($accounts as $account){
                 $isAlreadyPaid = DebitCredit::where('user_id',Auth::user()->id)
                                 ->where('account_id',$account->id)
+                                ->where('is_salary_transfer',1)
                                 ->whereMonth('sale_date',$date->format('m'))->first();
                 if(!$isAlreadyPaid)
                 {
@@ -456,7 +458,17 @@ class DebitCreditController extends Controller
                         'credit' => $account->salary,
                         'account_id' => $account->id,
                         'sale_date' => $date,
+                        'is_salary_transfer' => 1,
                     ]);
+                    if($expenseAccount)
+                    {
+                        DebitCredit::create([
+                            'user_id' => Auth::user()->id,
+                            'debit' => $account->salary,
+                            'account_id' => $expenseAccount->id,
+                            'sale_date' => $date,
+                        ]);
+                    }
                 }
                 
             }
