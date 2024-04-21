@@ -49,7 +49,13 @@ class GlobalProductRateController extends Controller
 			);
             GlobalProductRate::create($request->all());
             $product = Product::find($request->product_id);
-            $html = view('admin.product.partials.site_rate_content', compact('product'))->render();
+            $globalProductRates = GlobalProductRate::query()->select('global_product_rates.*')
+                    ->join('users','users.id','global_product_rates.user_id')
+                    ->where('global_product_rates.product_id',$product->id)
+                    ->orderBy('users.display_order')
+                    ->get();
+            $html = view('admin.product.partials.site_rate_content', compact('product','globalProductRates'))->render();
+           
             // toastr()->success('Product is Created Successfully');
             return response([
                 'success' => true,

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Helpers\LossGainHelper;
 use App\Http\Controllers\Controller;
+use App\Models\GlobalProductRate;
 use App\Models\Product;
 use Exception;
 use Illuminate\Http\Request;
@@ -125,7 +126,12 @@ class ProductController extends Controller
     public function getSiteRates(Request $request)
     {
         $product = Product::find($request->product_id);
-        $html = view('admin.product.partials.site_rate_content', compact('product'))->render();
+        $globalProductRates = GlobalProductRate::query()->select('global_product_rates.*')
+                ->join('users','users.id','global_product_rates.user_id')
+                ->where('global_product_rates.product_id',$product->id)
+                ->orderBy('users.display_order')
+                ->get();
+        $html = view('admin.product.partials.site_rate_content', compact('product','globalProductRates'))->render();
         return response([
             'html' => $html,
         ], 200);

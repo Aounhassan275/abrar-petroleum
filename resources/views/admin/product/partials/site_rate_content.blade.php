@@ -37,7 +37,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (App\Models\GlobalProductRate::where('product_id',$product->id)->get() as $key => $global_product)
+                @foreach ($globalProductRates as $key => $global_product)
                 <tr>
                     <td>{{$key+1}}</td>
                     <td>{{$global_product->user->username}}</td>

@@ -57,6 +57,10 @@
                             <input name="diesel_total_capacity"  type="number" class="form-control" placeholder="Enter Diesel Total Capacity" required>
                         </div>
                         <div class="form-group col-md-6">
+                            <label>Display Order</label>
+                            <input name="display_order"  type="number" class="form-control" placeholder="Enter Display Order" required>
+                        </div>
+                        <div class="form-group col-md-6">
                             <label>Image</label>
                             <input name="image" type="file" class="form-control" placeholder="Enter Diesel Low Stock">
                         </div>
@@ -99,12 +103,13 @@
                 <th>Diesel Low Stock</th>
                 <th>Petrol Total Capacity</th>
                 <th>Diesel Total Capacity</th>
+                <th>Display Order</th>
                 <th>Action</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (App\Models\User::all() as $key => $user)
+            @foreach (App\Models\User::orderBy('display_order')->get() as $key => $user)
             <tr>
                 <td>{{$key+1}}</td>
                 <td>
@@ -119,13 +124,14 @@
                 <td>{{$user->diesel_low_stock}}</td>
                 <td>{{$user->petrol_total_capacity}}</td>
                 <td>{{$user->diesel_total_capacity}}</td>
+                <td>{{$user->display_order}}</td>
                 
                 <td>
                     <button data-toggle="modal" data-target="#edit_modal" username="{{$user->username}}"
                         petrol_red_zone="{{$user->petrol_red_zone}}" diesel_red_zone="{{$user->diesel_red_zone}}" 
                         petrol_low_stock="{{$user->petrol_low_stock}}" diesel_low_stock="{{$user->diesel_low_stock}}" 
                         petrol_total_capacity="{{$user->petrol_total_capacity}}" diesel_total_capacity="{{$user->diesel_total_capacity}}" 
-                        id="{{$user->id}}" description="{{$user->description}}" class="edit-btn btn btn-primary">Edit</button>
+                        id="{{$user->id}}" description="{{$user->description}}" display_order="{{$user->display_order}}" class="edit-btn btn btn-primary">Edit</button>
                 </td>
                 <td>
                     <form action="{{route('admin.user.destroy',$user->id)}}" method="POST">
@@ -184,6 +190,10 @@
                             <label>Diesel Total Capacity</label>
                             <input name="diesel_total_capacity" id="diesel_total_capacity" type="number" class="form-control" placeholder="Enter Diesel Total Capacity" required>
                         </div>
+                        <div class="form-group col-md-6">
+                            <label>Display Order</label>
+                            <input name="display_order" id="display_order" type="number" class="form-control" placeholder="Enter Display Order" required>
+                        </div>
                         <div class="form-group col-md-12">
                             <label>Image</label>
                             <input name="image" type="file" class="form-control" placeholder="Enter Diesel Low Stock">
@@ -226,6 +236,7 @@
             let diesel_total_capacity = $(this).attr('diesel_total_capacity');
             let petrol_total_capacity = $(this).attr('petrol_total_capacity');
             let description = $(this).attr('description');
+            let display_order = $(this).attr('display_order');
             $('#petrol_low_stock').val(petrol_low_stock);
             $('#diesel_red_zone').val(diesel_red_zone);
             $('#petrol_red_zone').val(petrol_red_zone);
@@ -233,6 +244,7 @@
             $('#diesel_total_capacity').val(diesel_total_capacity);
             $('#petrol_total_capacity').val(petrol_total_capacity);
             $('#description').html(description);
+            $('#display_order').val(display_order);
             $('#username').val(username);
             $('#id').val(id);
             $('#updateForm').attr('action','{{route('admin.user.update','')}}' +'/'+id);
