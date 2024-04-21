@@ -122,4 +122,12 @@ class ProductController extends Controller
         toastr()->success('Product Deleted Successfully');
         return redirect()->back();
     }
+    public function getSiteRates(Request $request)
+    {
+        $product = Product::find($request->product_id);
+        $html = view('admin.product.partials.site_rate_content', compact('product'))->render();
+        return response([
+            'html' => $html,
+        ], 200);
+    }
 }

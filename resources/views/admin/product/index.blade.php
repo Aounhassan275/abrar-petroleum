@@ -75,7 +75,7 @@
                 <td>{{$product->name}}</td>
                 <td>{{$product->purchasing_price}}</td>
                 <td>{{$product->selling_price}}</td>
-                <td><a href="{{route('admin.product.show',$product->id)}}" target="_blank">Site Rate</a></td>
+                <td><button type="button"  class="btn btn-info btn-sm site-rate-btn" product_id="{{$product->id}}"> Site Rate</button></td>
                 <td>{{$product->display_order}}</td>
                 <td>
                     <button data-toggle="modal" data-target="#edit_modal" name="{{$product->name}}" display_order="{{$product->display_order}}"
@@ -134,6 +134,7 @@
         </form>
     </div>
 </div>
+@include('admin.product.partials.site_rate_popup')
 @endsection
 
 @section('scripts')
@@ -151,6 +152,52 @@
             $('#name').val(name);
             $('#id').val(id);
             $('#updateForm').attr('action','{{route('admin.product.update','')}}' +'/'+id);
+        });
+        $('.site-rate-btn').click(function(){
+            let product_id = $(this).attr('product_id');
+            $.ajax({
+                url: "{{route('admin.product.get_site_rate')}}",
+                method: 'post',
+                data: {product_id : product_id},
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                success: function(response){
+                    $("#site-rate-content").html(response.html);
+                    $("#site-rate-modal").modal('show');
+                }
+            });
+        });
+        $(document).on('click','#save-product-rate',function(){
+            data = $('#storeProductRateForm').serialize();
+            $('.save-product-rate').attr('disabled',true);
+            $('.save-product-rate').html('Please Wait');
+            $("#store-response").html("")
+            $.ajax({
+                url: "{{route('admin.global_product_rate.store')}}",
+                method: 'post',
+                data: data,
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                success: function(response){
+                    if(response.success)
+                    {
+                        $("#store-response").removeClass('error_reponse');
+                        $("#store-response").addClass('success_reponse');
+                        $("#store-response").html(response.message);
+                        setTimeout(() => {
+                            $("#site-rate-content").html(response.html);
+                        }, 1500);
+                    }else{
+                        $("#store-response").removeClass('success_reponse');
+                        $("#store-response").addClass('error_reponse');
+                        $("#store-response").html(response.message);
+                    }
+                    $('.save-product-rate').attr('disabled',false);
+                    $('.save-product-rate').html('Create');
+                }
+            });
         });
     });
 </script>

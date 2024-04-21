@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\GlobalProductRate;
+use App\Models\Product;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -47,12 +48,24 @@ class GlobalProductRateController extends Controller
 			]
 			);
             GlobalProductRate::create($request->all());
+            $product = Product::find($request->product_id);
+            $html = view('admin.product.partials.site_rate_content', compact('product'))->render();
+            // toastr()->success('Product is Created Successfully');
+            return response([
+                'success' => true,
+                'html' => $html,
+                'message' => 'Global Product Rate is Created Successfully',
+            ], 200);
             toastr()->success('Global Product Rate is Created Successfully');
             return redirect()->back();
         }catch(Exception $e)
         {
-            toastr()->error($e->getMessage());
-            return back()->withInput($request->all());
+            // toastr()->error($e->getMessage());
+            // return back()->withInput($request->all());
+            return response([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 200);
         }
     }
 

@@ -34,6 +34,7 @@ Route::group(['prefix' => 'admin', 'as'=>'admin.','namespace' => 'Admin',], func
       /******************Supplier ROUTES****************/
       Route::resource('supplier', 'SupplierController');    
     /******************Product ROUTES****************/
+      Route::post('product/get_site_rates', 'ProductController@getSiteRates')->name('product.get_site_rate');   
       Route::resource('product', 'ProductController');   
     /******************Expense Type ROUTES****************/
       Route::resource('expense_type', 'ExpenseTypeController');    

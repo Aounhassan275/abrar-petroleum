@@ -56,6 +56,14 @@
 	<!-- /theme JS files -->
 
 	@yield('styles')
+	<style>
+		.success_reponse{
+			color:green;
+		}
+		.error_reponse{
+			color:red;
+		}
+	</style>
 </head>
 
 <body>
