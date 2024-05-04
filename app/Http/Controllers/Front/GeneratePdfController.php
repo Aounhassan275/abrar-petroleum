@@ -45,8 +45,8 @@ class GeneratePdfController extends Controller
         $dateRange = CarbonPeriod::create($start_date, $end_date);
         $user = User::find($request->user_id);
         $dates = array_map(fn ($date) => $date->format('Y-m-d'), iterator_to_array($dateRange));
-       
-        return view('user.pdf.product-ledger',compact('product','dates','start_date','end_date','user'));   
+        $url = url('product/pdf?product_id='.$product->id.'&start_date='.$start_date->format('Y-m-d').'&end_date='.$end_date->format('Y-m-d').'&user_id='.$user->id);
+        return view('user.pdf.product-ledger',compact('url','product','dates','start_date','end_date','user'));   
    
     }
 }

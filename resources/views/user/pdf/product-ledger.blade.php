@@ -264,7 +264,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12" style="margin-top:5px;">
-                        <input type="text" class="form-control" id="link_area"  value="{{ urlencode(Request::fullUrl()) }}"  readonly>
+                        <input type="text" class="form-control" id="link_area"  value="{{$url}}"  readonly>
                         <br>
                         <button type="button" class="copy-button btn btn-dark  btn-sm" data-clipboard-action="copy" data-clipboard-target="#link_area">Share</button>
                      </div>
