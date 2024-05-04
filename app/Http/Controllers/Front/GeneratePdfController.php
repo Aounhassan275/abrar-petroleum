@@ -28,7 +28,8 @@ class GeneratePdfController extends Controller
             $end_date = Carbon::today();
         }
         $user = User::find($request->user_id);
-        return view('user.pdf.account-category',compact('start_date','user','end_date','account_category','sub_account','sub_account_id'));
+        $url = url('account_category/pdf?sub_account='.$sub_account->id.'&type='.$request->type.'&account_category_id='.$account_category->id.'&start_date='.$start_date->format('Y-m-d').'&end_date='.$end_date->format('Y-m-d').'&user_id='.$user->id);
+        return view('user.pdf.account-category',compact('url','start_date','user','end_date','account_category','sub_account','sub_account_id'));
    
     }
     public function generatePDFForProduct(Request $request)
