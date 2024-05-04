@@ -4,8 +4,19 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>{{Auth::user()->username}} - Products - {{$product->name}} Ledger</title>
-	<!-- Global stylesheets -->
+    <title>{{$user->username}} - Products - {{$product->name}} Ledger</title>
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="{{$user->username}}  | Products | {{$product->name}} Ledger" />
+    <meta property="og:description" content="Its ledger report for ali traders" />
+    <meta property="og:url" content="{{Request::url()}}" />
+    <meta property="og:site_name" content="ALI TRADERS.COM" />
+    <meta property="og:image" content="{{asset($user->image)}}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{$user->username}}  | Products | {{$product->name}} Ledger" />
+    {{-- <meta name="twitter:description" content="{!! $user->description !!}" /> --}}
+    <meta name="twitter:image" content="{{asset($user->image)}}" />
+    <!-- Global stylesheets -->
 	<link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
 	<link href="{{asset('admin/global_assets/css/icons/icomoon/styles.min.css')}}" rel="stylesheet" type="text/css">
 	<link href="{{asset('admin/assets/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css">
@@ -71,11 +82,14 @@
                             <div class="col-md-4">
                                 <img src="{{asset('attock-logo.png')}}" alt="">
                             </div>
-                            <div class="col-md-8 ">
-                                <h1><strong>Site Name :</strong> {{Auth::user()->username}}</h1>
+                            <div class="col-md-6 ">
+                                <h1><strong>Site Name :</strong> {{$user->username}}</h1>
                                 <h1>{{$product->name}} Ledger From {{$start_date->format('M d,Y')}} To {{$end_date->format('M d,Y')}}</h1>
-                                <p><b>Opening Stock : {{Auth::user()->getOpeningBalance($start_date,$product)}}</b></p>
-                                <p><b>Opening Stock Amount : {{round(Auth::user()->getPurchasePrice($start_date,$product) * Auth::user()->getOpeningBalance($start_date,$product))}}</b></p>
+                                <p><b>Opening Stock : {{$user->getOpeningBalance($start_date,$product)}}</b></p>
+                                <p><b>Opening Stock Amount : {{round($user->getPurchasePrice($start_date,$product) * $user->getOpeningBalance($start_date,$product))}}</b></p>
+                            </div>
+                            <div class="col-md-2">
+                                <a href="https://wa.me/?text=={{Request::url()}}&via=ALITRADERS.COM" class="btn btn-success btn-sm">Share PDF</a>
                             </div>
                         </div>
                     </div>
@@ -99,42 +113,42 @@
                             @php 
                             $totalPurchase = 0;
                             $totalSale = 0;
-                            $totalQunatity = Auth::user()->getOpeningBalance($start_date,$product);
-                            $quantityBalance = Auth::user()->getOpeningBalance($start_date,$product);
+                            $totalQunatity = $user->getOpeningBalance($start_date,$product);
+                            $quantityBalance = $user->getOpeningBalance($start_date,$product);
                             $totalDebit = 0;
                             $totalCredit = 0;
                             $totalRevenue = 0;
                             $totallossGainAmount = 0;
-                            $amountBalance = -(Auth::user()->getPurchasePrice($start_date,$product) * Auth::user()->getOpeningBalance($start_date,$product));
+                            $amountBalance = -($user->getPurchasePrice($start_date,$product) * $user->getOpeningBalance($start_date,$product));
                             @endphp
                             @foreach($dates as $key => $date)
                             
-                            @if(Auth::user()->getTodayPurchase($date,$product) > 0 || Auth::user()->getTodaySale($date,$product) > 0)
+                            @if($user->getTodayPurchase($date,$product) > 0 || $user->getTodaySale($date,$product) > 0)
                             @php 
-                                $totalPurchase = $totalPurchase + Auth::user()->getTodayPurchase($date,$product);
-                                $totalQunatity = $totalQunatity + Auth::user()->getTodayPurchase($date,$product);
-                                $quantityBalance = $quantityBalance + Auth::user()->getTodayPurchase($date,$product);
-                                $quantityBalance = $quantityBalance - Auth::user()->getTodaySale($date,$product);
-                                $totalCredit = $totalCredit + Auth::user()->getTodaySaleTotalAmount($date,$product);
-                                $amountBalance = $amountBalance + Auth::user()->getTodaySaleTotalAmount($date,$product);
-                                $amountBalance = round($amountBalance - Auth::user()->getTodayPurchaseTotalAmount($date,$product));
-                                $totalDebit = $totalDebit + Auth::user()->getTodayPurchaseTotalAmount($date,$product);
-                                $totalSale = $totalSale + Auth::user()->getTodaySale($date,$product);
-                                $lossGainAmount = Auth::user()->productLossGainTranscation($date,$product->id);
-                                $rateDifference = Auth::user()->getTodaySalePrice($date,$product) - Auth::user()->getPurchasePrice($date,$product);
-                                $reveune = Auth::user()->getTodaySale($date,$product) * $rateDifference;
+                                $totalPurchase = $totalPurchase + $user->getTodayPurchase($date,$product);
+                                $totalQunatity = $totalQunatity + $user->getTodayPurchase($date,$product);
+                                $quantityBalance = $quantityBalance + $user->getTodayPurchase($date,$product);
+                                $quantityBalance = $quantityBalance - $user->getTodaySale($date,$product);
+                                $totalCredit = $totalCredit + $user->getTodaySaleTotalAmount($date,$product);
+                                $amountBalance = $amountBalance + $user->getTodaySaleTotalAmount($date,$product);
+                                $amountBalance = round($amountBalance - $user->getTodayPurchaseTotalAmount($date,$product));
+                                $totalDebit = $totalDebit + $user->getTodayPurchaseTotalAmount($date,$product);
+                                $totalSale = $totalSale + $user->getTodaySale($date,$product);
+                                $lossGainAmount = $user->productLossGainTranscation($date,$product->id);
+                                $rateDifference = $user->getTodaySalePrice($date,$product) - $user->getPurchasePrice($date,$product);
+                                $reveune = $user->getTodaySale($date,$product) * $rateDifference;
                                 $totalRevenue = $totalRevenue + $reveune;
                                 $totallossGainAmount = $totallossGainAmount + $lossGainAmount;
                             @endphp
                             <tr>
                                 <td>{{$key+1}}</td>
                                 <td>{{$date}}</td>
-                                <td>{{Auth::user()->getTodayPurchase($date,$product)}} <span class="badge badge-sm badge-success">{{Auth::user()->getTodayPurchasePrice($date,$product)}}</span></td>
+                                <td>{{$user->getTodayPurchase($date,$product)}} <span class="badge badge-sm badge-success">{{$user->getTodayPurchasePrice($date,$product)}}</span></td>
                                 <td>{{@$totalQunatity}}</td>
-                                <td>{{Auth::user()->getTodaySale($date,$product)}}  <span class="badge badge-sm badge-success">{{Auth::user()->getTodaySalePrice($date,$product)}}</span></td>
+                                <td>{{$user->getTodaySale($date,$product)}}  <span class="badge badge-sm badge-success">{{$user->getTodaySalePrice($date,$product)}}</span></td>
                                 <td>{{$quantityBalance}}</td>
-                                <td>{{Auth::user()->getTodayPurchaseTotalAmount($date,$product)}}</td>
-                                <td>{{Auth::user()->getTodaySaleTotalAmount($date,$product)}}</td>
+                                <td>{{$user->getTodayPurchaseTotalAmount($date,$product)}}</td>
+                                <td>{{$user->getTodaySaleTotalAmount($date,$product)}}</td>
                                 <td>
                                     @if($amountBalance > 0) 
                                     ({{abs($amountBalance)}}) Cr 
@@ -153,7 +167,7 @@
                                     @endif
                                     @endif
                                 </td>
-                                {{-- <td>{{$reveune}}  <span class="badge badge-sm badge-success">{{Auth::user()->getPurchasePrice($date,$product)}}</span></td> --}}
+                                {{-- <td>{{$reveune}}  <span class="badge badge-sm badge-success">{{$user->getPurchasePrice($date,$product)}}</span></td> --}}
                             </tr>
                             @php 
                                 $totalQunatity = $quantityBalance;

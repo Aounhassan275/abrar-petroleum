@@ -37,13 +37,14 @@
                 sum += parseFloat($(this).val()); 
             }
         });
+        total_quantity = sum;
         if($.isNumeric($('#petrol_wholesale_quantity').val())){
             petrol_wholesale_quantity = parseFloat($('#petrol_wholesale_quantity').val());
-            total_quantity = petrol_wholesale_quantity + sum;
+            total_quantity = petrol_wholesale_quantity + total_quantity;
         }
         if($.isNumeric($('#petrol_testing_quantity').val())){
             petrol_testing_quantity = parseFloat($('#petrol_testing_quantity').val());
-            var total_quantity =  total_quantity - petrol_testing_quantity;
+            total_quantity =  total_quantity - petrol_testing_quantity;
         }
         if(total_quantity == 0)
         {
@@ -141,13 +142,14 @@
                 sum += parseFloat($(this).val()); 
             }
         });
+        total_quantity = sum;
         if($.isNumeric($('#diesel_wholesale_quantity').val())){
             diesel_wholesale_quantity = parseFloat($('#diesel_wholesale_quantity').val());
-            total_quantity = diesel_wholesale_quantity + sum;
+            total_quantity = diesel_wholesale_quantity + total_quantity;
         }
         if($.isNumeric($('#diesel_testing_quantity').val())){
             diesel_testing_quantity = parseFloat($('#diesel_testing_quantity').val());
-            var total_quantity =  total_quantity - diesel_testing_quantity;
+            total_quantity =  total_quantity - diesel_testing_quantity;
         }
         if(total_quantity == 0)
         {

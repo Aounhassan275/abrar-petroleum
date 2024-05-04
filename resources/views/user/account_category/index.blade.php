@@ -47,7 +47,7 @@
                                             End Date
                                         </label>   
 
-                                            <input type="text" name="end_date" class="daterange-single form-control pull-right dates" style="height: 35px; "
+                                            <input type="text" name="select_month_end_date" class="daterange-single form-control pull-right dates" style="height: 35px; "
                                                 value="{{ date('m/d/Y', strtotime(@$end_date))}}">
                                     </div>
                                     <div class="form-group col-2 current_month_field" @if(request()->type == 'Selected Month') hidden @endif>

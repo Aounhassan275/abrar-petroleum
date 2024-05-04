@@ -12,7 +12,9 @@
                 <select class="form-control select-search" name="user_id" required>
                     <option value="">Choose User</option>
                     @foreach(App\Models\User::where('type','Site')->get() as $user)
+                    @if(!in_array($user->id,$userIds))
                     <option value="{{$user->id}}">{{$user->username}}</option>
+                    @endif
                     @endforeach
                 </select>
             </div>
@@ -42,9 +44,9 @@
                     <td>{{$key+1}}</td>
                     <td>{{$global_product->user->username}}</td>
                     <td>{{$global_product->selling_price}}</td>
-                    {{-- <td>
-                        <button data-toggle="modal" data-target="#edit_modal" selling_price="{{$global_product->selling_price}}" id="{{$global_product->id}}" class="edit-btn btn btn-primary">Edit</button>
-                    </td> --}}
+                    <td>
+                        <button type="button" selling_price="" id="{{$global_product->id}}" onclick="changeRate('{{ @$global_product->id }}','{{ @$global_product->selling_price }}')" class="edit-global-rate-btn btn btn-primary">Edit</button>
+                    </td>
                     <td>
                         <form action="{{route('admin.global_product_rate.destroy',$global_product->id)}}" method="POST">
                             @method('DELETE')

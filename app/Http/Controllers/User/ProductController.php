@@ -91,7 +91,7 @@ class ProductController extends Controller
         }
         $dateRange = CarbonPeriod::create($start_date, $end_date);
         $dates = array_map(fn ($date) => $date->format('Y-m-d'), iterator_to_array($dateRange));
-        $url = url('user/product/pdf?product_id='.$product->id.'&start_date='.$start_date->format('Y-m-d').'&end_date='.$end_date->format('Y-m-d'));
+        $url = url('product/pdf?product_id='.$product->id.'&start_date='.$start_date->format('Y-m-d').'&end_date='.$end_date->format('Y-m-d').'&user_id='.Auth::user()->id);
         return view('user.product.show',compact('product','dates','start_date','end_date','url'));
     }
 

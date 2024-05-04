@@ -131,7 +131,8 @@ class ProductController extends Controller
                 ->where('global_product_rates.product_id',$product->id)
                 ->orderBy('users.display_order')
                 ->get();
-        $html = view('admin.product.partials.site_rate_content', compact('product','globalProductRates'))->render();
+        $userIds = $globalProductRates->pluck('user_id')->toArray();
+        $html = view('admin.product.partials.site_rate_content', compact('product','globalProductRates','userIds'))->render();
         return response([
             'html' => $html,
         ], 200);
