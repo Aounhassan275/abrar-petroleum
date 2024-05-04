@@ -89,7 +89,7 @@
                                 <p><b>Opening Stock Amount : {{round($user->getPurchasePrice($start_date,$product) * $user->getOpeningBalance($start_date,$product))}}</b></p>
                             </div>
                             <div class="col-md-2">
-                                <a href="https://wa.me/?text=={{Request::url()}}&via=ALITRADERS.COM" class="btn btn-success btn-sm">Share PDF</a>
+                                <a href="https://wa.me/?text=={{ urlencode(Request::fullUrl()) }}&via=ALITRADERS.COM" class="btn btn-success btn-sm">Share PDF</a>
                             </div>
                         </div>
                     </div>
