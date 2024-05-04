@@ -262,13 +262,36 @@
                     </div>
 
                 </div>
-            </div>
+                <div class="row">
+                    <div class="col-md-12" style="margin-top:5px;">
+                        <input type="text" class="form-control" id="link_area"  value="{{ urlencode(Request::fullUrl()) }}"  readonly>
+                        <br>
+                        <button type="button" class="copy-button btn btn-dark  btn-sm" data-clipboard-action="copy" data-clipboard-target="#link_area">Share</button>
+                     </div>
+                </div>
+
+                </div>
         </div>
     </div>
     
 	<script src="{{asset('admin/assets/js/toastr.js')}}"></script>
 	@toastr_render
     
+    <script type="text/javascript" src="{{asset('clipboard.js')}}"></script>
+    <script type="text/javascript">
+        var clipboard = new Clipboard('.copy-button');
+            clipboard.on('success', function(e) {
+                copyText.select();
+                var $div2 = $("#coppied");
+                console.log($div2);
+                console.log($div2.is(":visible"));
+                if ($div2.is(":visible")) { return; }
+                $div2.show();
+                setTimeout(function() {
+                    $div2.fadeOut();
+                }, 800);
+            });
+    </script>
     <script>
         window.print();
     </script>
