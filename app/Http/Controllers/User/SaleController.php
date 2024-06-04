@@ -60,11 +60,12 @@ class SaleController extends Controller
         $lastDayCash = DebitCredit::where('account_id',$cash_account_id)->whereDate('sale_date',$day_before)->where('user_id',Auth::user()->id)->first();
         $missing_debit_credits = DebitCredit::whereNull('account_id')->where('user_id',Auth::user()->id)->get();
         $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
+        $salaryAccounts = DebitCreditAccount::where('user_id',Auth::user()->id)->where('account_category_id',4)->where('salary','>',0)->get();
         return view('user.sale.create',compact(
             'petrol','diesel','date','active_tab',
             'accounts','products','cash_account_id',
             'lastDayCash','missing_debit_credits',
-            'previousUrl','nextUrl'
+            'previousUrl','nextUrl','salaryAccounts'
         ));
     }
 

@@ -14,8 +14,10 @@ use App\Models\Sale;
 use App\Models\SaleDetail;
 use App\Models\Supplier;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ReportsController extends Controller
 {
@@ -63,7 +65,15 @@ class ReportsController extends Controller
                     ->where('user_id',Auth::user()->id)->get();
         if($request->post_month_profit)
         {
-            $this->postMonthPorfit($products,$start_date,$end_date);
+            try{
+                DB::beginTransaction();
+                $this->postMonthPorfit($products,$start_date,$end_date,$request);
+                DB::commit();
+            }catch(Exception $e) {
+                DB::rollback();
+                toastr()->error($e->getMessage());
+                return redirect()->back();
+            }
         }
         $active_tab = $request->active_tab?$request->active_tab:'trail_balance';
         $product_account_category_id = AccountCategory::where('name','Products')->first()->id;
@@ -274,7 +284,7 @@ class ReportsController extends Controller
         $data['sales']      = "'".implode("', '", $sales)."'";
         return view('user.reports.supply.index',compact('data','start_date','end_date','product'));   
     }
-    public function postMonthPorfit($products,$start_date,$end_date)
+    public function postMonthPorfit($products,$start_date,$end_date,$request)
     {
         $totalRevenue = 0;
         $new_date = $end_date;
@@ -319,9 +329,96 @@ class ReportsController extends Controller
         if($debit_credit)
         {
             if($totalExpense > 0)
-            {
+            {         
+                $pendingAmount = $totalExpense; 
+                $miscellaneousAccountId = DebitCreditAccount::where('name','Expense miscellaneous')->first()->id;
+                if($request->zakat_amount > 0)
+                {
+                    $zakatAccountId = DebitCreditAccount::where('name','Zakat')->first()->id;
+                    $pendingAmount = $totalExpense - $request->zakat_amount;
+                    $zakatDebitCredit = DebitCredit::where('user_id',Auth::user()->id)->where('account_id',$zakatAccountId)
+                        ->whereDate('sale_date',$newDateForMonthProfit)->first();
+                    if($zakatDebitCredit)
+                    {
+                        $zakatDebitCredit->update([
+                            'credit' => $request->zakat_amount,
+                            'debit' => 0,
+                            'description' => "Zakat of ".$end_date->format('F')." Month with ".$request->zakat."% on month profit ".$totalExpense,
+                        ]);
+                        $zakatExpenseDebit = DebitCredit::where('user_id',Auth::user()->id)->where('account_id',$miscellaneousAccountId)
+                            ->whereDate('sale_date',$newDateForMonthProfit)
+                            ->where('is_zakat',1)->first();
+                        $zakatExpenseDebit->update([
+                            'debit' => $request->zakat_amount,
+                            'credit' => 0,
+                            'description' => "Maintenance of ".$end_date->format('F')." Month with ".$request->maintenance."% on month profit ".$totalExpense,
+                        ]);
+                    }else{           
+                        DebitCredit::create([
+                            'account_id' => $zakatAccountId,
+                            'sale_date' => $newDateForMonthProfit,
+                            'user_id' => Auth::user()->id,
+                            'credit' => $request->zakat_amount,
+                            'is_zakat' => 1,
+                            'description' => "Zakat of ".$end_date->format('F')." Month with ".$request->zakat."% on month profit ".$totalExpense,
+                        ]);          
+                        DebitCredit::create([
+                            'account_id' => $miscellaneousAccountId,
+                            'sale_date' => $newDateForMonthProfit,
+                            'user_id' => Auth::user()->id,
+                            'debit' => $request->zakat_amount,
+                            'is_zakat' => 1,
+                            'description' => "Zakat of ".$end_date->format('F')." Month with ".$request->zakat."% on month profit ".$totalExpense,
+                        ]);     
+                    }
+                }
+                if($request->maintenance_amount > 0)
+                {
+                    $maintenanceAccountId = DebitCreditAccount::where('name','Maintenance')->first()->id;
+                    if($request->zakat_amount > 0)
+                    {
+                        $pendingAmount = $pendingAmount - $request->maintenance_amount;
+                    }else{
+                        $pendingAmount = $totalExpense - $request->maintenance_amount;
+                    }
+                    $maintenanceDebitCredit = DebitCredit::where('user_id',Auth::user()->id)->where('account_id',$maintenanceAccountId)
+                        ->whereDate('sale_date',$newDateForMonthProfit)->first();
+                    if($maintenanceDebitCredit)
+                    {
+                        $maintenanceDebitCredit->update([
+                            'credit' => $request->maintenance_amount,
+                            'debit' => 0,
+                            'description' => "Maintenance of ".$end_date->format('F')." Month with ".$request->maintenance."% on month profit ".$totalExpense,
+                        ]);
+                        $maintenanceExpenseDebit = DebitCredit::where('user_id',Auth::user()->id)->where('account_id',$miscellaneousAccountId)
+                            ->whereDate('sale_date',$newDateForMonthProfit)
+                            ->where('is_maintenance',1)->first();
+                        $maintenanceExpenseDebit->update([
+                            'debit' => $request->maintenance_amount,
+                            'credit' => 0,
+                            'description' => "Maintenance of ".$end_date->format('F')." Month with ".$request->maintenance."% on month profit ".$totalExpense,
+                        ]);
+                    }else{           
+                        DebitCredit::create([
+                            'account_id' => $maintenanceAccountId,
+                            'sale_date' => $newDateForMonthProfit,
+                            'user_id' => Auth::user()->id,
+                            'credit' => $request->maintenance_amount,
+                            'is_maintenance' => 1,
+                            'description' => "Maintenance of ".$end_date->format('F')." Month with ".$request->maintenance."% on month profit ".$totalExpense,
+                        ]);            
+                        DebitCredit::create([
+                            'account_id' => $miscellaneousAccountId,
+                            'sale_date' => $newDateForMonthProfit,
+                            'user_id' => Auth::user()->id,
+                            'debit' => $request->maintenance_amount,
+                            'is_maintenance' => 1,
+                            'description' => "Maintenance of ".$end_date->format('F')." Month with ".$request->maintenance."% on month profit ".$totalExpense,
+                        ]);     
+                    }
+                }
                 $debit_credit->update([
-                    'credit' => abs($totalExpense),
+                    'credit' => abs($pendingAmount),
                     'debit' => 0,
                     'description' => "Profit of ".$end_date->format('F')." Month",
                 ]);
@@ -335,14 +432,63 @@ class ReportsController extends Controller
         }else{
             if($totalExpense > 0)
             {
+                $pendingAmount = $totalExpense; 
+                $miscellaneousAccountId = DebitCreditAccount::where('name','Expense miscellaneous')->first()->id;
+                if($request->zakat_amount > 0)
+                {
+                    $zakatAccountId = DebitCreditAccount::where('name','Zakat')->first()->id;
+                    $pendingAmount = $totalExpense - $request->zakat_amount;         
+                    DebitCredit::create([
+                        'account_id' => $zakatAccountId,
+                        'sale_date' => $newDateForMonthProfit,
+                        'user_id' => Auth::user()->id,
+                        'credit' => $request->zakat_amount,
+                        'is_zakat' => 1,
+                        'description' => "Zakat of ".$end_date->format('F')." Month with ".$request->zakat."% on month profit ".$totalExpense,
+                    ]);          
+                    DebitCredit::create([
+                        'account_id' => $miscellaneousAccountId,
+                        'sale_date' => $newDateForMonthProfit,
+                        'user_id' => Auth::user()->id,
+                        'debit' => $request->zakat_amount,
+                        'is_zakat' => 1,
+                        'description' => "Zakat of ".$end_date->format('F')." Month with ".$request->zakat."% on month profit ".$totalExpense,
+                    ]);     
+                }
+                if($request->maintenance_amount > 0)
+                {
+                    $maintenanceAccountId = DebitCreditAccount::where('name','Maintenance')->first()->id;
+                    if($request->zakat_amount > 0)
+                    {
+                        $pendingAmount = $pendingAmount - $request->maintenance_amount;
+                    }else{
+                        $pendingAmount = $totalExpense - $request->maintenance_amount;
+                    }       
+                    DebitCredit::create([
+                        'account_id' => $maintenanceAccountId,
+                        'sale_date' => $newDateForMonthProfit,
+                        'user_id' => Auth::user()->id,
+                        'credit' => $request->maintenance_amount,
+                        'is_maintenance' => 1,
+                        'description' => "Maintenance of ".$end_date->format('F')." Month with ".$request->maintenance."% on month profit ".$totalExpense,
+                    ]);            
+                    DebitCredit::create([
+                        'account_id' => $miscellaneousAccountId,
+                        'sale_date' => $newDateForMonthProfit,
+                        'user_id' => Auth::user()->id,
+                        'debit' => $request->maintenance_amount,
+                        'is_maintenance' => 1,
+                        'description' => "Maintenance of ".$end_date->format('F')." Month with ".$request->maintenance."% on month profit ".$totalExpense,
+                    ]);     
+                }
                 DebitCredit::create([
                     'account_id' => $month_profit_account_id,
                     'sale_date' => $newDateForMonthProfit,
                     'user_id' => Auth::user()->id,
-                    'credit' => abs($totalExpense),
+                    'credit' => abs($pendingAmount),
                     'is_hide' => true,
                     'description' => "Profit of ".$end_date->format('F')." Month",
-                ]);
+                ]);                
             }else{
                 DebitCredit::create([
                     'account_id' => $month_profit_account_id,

@@ -23,7 +23,7 @@
                 getTotalPetrolSale();
             }else{
                 alert('Current Reading is Less than Previous Reading');
-                $('#petrol_current_reading_' + index).val();
+                $('#petrol_current_reading_' + index).val('');
             }
         }
     }
@@ -128,7 +128,7 @@
                 getTotalDieselSale();
             }else{
                 alert('Current Reading is Less than Previous Reading');
-                $('#diesel_current_reading_' + index).val();
+                $('#diesel_current_reading_' + index).val('');
             }
         }
     }

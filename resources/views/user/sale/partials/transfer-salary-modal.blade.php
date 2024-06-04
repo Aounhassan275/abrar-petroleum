@@ -16,6 +16,32 @@
                         </div>
                     </div>
                     <p id="transfer-salary-response" style="color:red;"></p>
+                    <table class="table datatable-button-html5-basic">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Employee Name</th>
+                                <th>Employee Salary</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($salaryAccounts as $salaryKey => $salaryAccount)
+                            <tr>
+                                <td>{{$salaryKey +1 }}</td>
+                                <td>{{$salaryAccount->name}}</td>
+                                <td>{{$salaryAccount->salary}}</td>
+                                <td>
+                                    @if($salaryAccount->isSalaryTransfer($date))
+                                        <span class="badge badge-success badge-sm">{{@$salaryAccount->isSalaryTransfer($date)}}</span>
+                                    @else 
+                                        <span class="badge badge-danger badge-sm">Pending</span>
+                                    @endif
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Cancel</button>
