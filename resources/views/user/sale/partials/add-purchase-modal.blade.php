@@ -10,6 +10,7 @@
                 <div class="modal-body">
                     <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
                     <input type="hidden" name="product_id" id="purchase_product_id">
+                    <input type="hidden" name="is_supplier" value="1">
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label>Products</label>

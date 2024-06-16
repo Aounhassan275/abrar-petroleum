@@ -68,7 +68,7 @@
         <div class="form-group col-md-6">
             <label>Qty</label>
             <input type="hidden" name="testing_sale_id" value="{{Auth::user()->getTestSale($date,$petrol)?Auth::user()->getTestSale($date,$petrol)->id:null}}">
-            <input type="number" class="form-control" value="{{Auth::user()->getTestSale($date,$petrol)?Auth::user()->getTestSale($date,$petrol)->qty:''}}" name="testing_quantity" id="petrol_testing_quantity">
+            <input type="number" style="width:50%;" class="form-control" value="{{Auth::user()->getTestSale($date,$petrol)?Auth::user()->getTestSale($date,$petrol)->qty:''}}" name="testing_quantity" id="petrol_testing_quantity">
         </div>
         @if(Auth::user()->getTestSale($date,$petrol))
         <div class="form-group col-md-6">
@@ -97,15 +97,15 @@
     <div class="row" id="petrol_whole_sale_fields" @if(Auth::user()->getWholeSale($date,$petrol)) @else style="display:none;" @endif>
         <div class="form-group col-md-3">
             <label>Qty</label>
-            <input type="number" class="form-control" name="wholesale_quantity" id="petrol_wholesale_quantity" value="{{Auth::user()->getWholeSale($date,$petrol)?Auth::user()->getWholeSale($date,$petrol)->qty:null}}">
+            <input type="number" style="width:50%;" class="form-control" name="wholesale_quantity" id="petrol_wholesale_quantity" value="{{Auth::user()->getWholeSale($date,$petrol)?Auth::user()->getWholeSale($date,$petrol)->qty:null}}">
         </div>
         <div class="form-group col-md-3">
             <label>Price</label>
-            <input type="number" class="form-control" name="wholesale_price" id="petrol_wholesale_price" value="{{Auth::user()->getWholeSale($date,$petrol)?Auth::user()->getWholeSale($date,$petrol)->price:App\Models\Product::petrolSellingPrice()}}">
+            <input type="number" style="width:50%;" class="form-control" name="wholesale_price" id="petrol_wholesale_price" value="{{Auth::user()->getWholeSale($date,$petrol)?Auth::user()->getWholeSale($date,$petrol)->price:App\Models\Product::petrolSellingPrice()}}">
         </div>
         <div class="form-group col-md-3">
             <label>Total Amount</label>
-            <input type="number" class="form-control" name="wholesale_total_amount" id="petrol_wholesale_total_amount" value="{{Auth::user()->getWholeSale($date,$petrol)?Auth::user()->getWholeSale($date,$petrol)->total_amount:null}}">
+            <input type="number" style="width:50%;" class="form-control" name="wholesale_total_amount" id="petrol_wholesale_total_amount" value="{{Auth::user()->getWholeSale($date,$petrol)?Auth::user()->getWholeSale($date,$petrol)->total_amount:null}}">
         </div>
         @if(Auth::user()->getWholeSale($date,$petrol))
         <div class="form-group col-md-3">
@@ -125,7 +125,7 @@
     <div class="row">
         <div class="form-group col-md-3">
             <label>Total Sale</label>
-            <input type="number" value="0" readonly class="form-control" min="0" id="petrol_total_sale" name="total_sale">
+            <input type="number" value="0" style="width:50%;" readonly class="form-control" min="0" id="petrol_total_sale" name="total_sale">
         </div>
     </div>
     <div class="row">
@@ -133,16 +133,16 @@
         <input type="hidden" name="sale_type[]" value="Day">
         <div class="form-group col-md-3">
             <label>Day Supply Sale</label>
-            <input type="number" class="form-control" min="0" id="petrol_supply_sale" value="{{Auth::user()->getSaleDetail($date,$petrol,'Day')?Auth::user()->getSaleDetail($date,$petrol,'Day')->supply_sale:'0'}}" name="supply_sale[]" value="0" required>
+            <input type="number" class="form-control" style="width:50%;" min="0" id="petrol_supply_sale" value="{{Auth::user()->getSaleDetail($date,$petrol,'Day')?Auth::user()->getSaleDetail($date,$petrol,'Day')->supply_sale:'0'}}" name="supply_sale[]" value="0" required>
             <p id="petrol-supply-sale-response" style="color:red;"></p>
         </div>
         <div class="form-group col-md-3">
             <label>Day Retail Sale</label>
-            <input type="number"  class="form-control"  min="0" id="petrol_retail_sale" value="{{Auth::user()->getSaleDetail($date,$petrol,'Day')?Auth::user()->getSaleDetail($date,$petrol,'Day')->retail_sale:'0'}}" name="retail_sale[]" value="0">
+            <input type="number"  class="form-control" style="width:50%;" min="0" id="petrol_retail_sale" value="{{Auth::user()->getSaleDetail($date,$petrol,'Day')?Auth::user()->getSaleDetail($date,$petrol,'Day')->retail_sale:'0'}}" name="retail_sale[]" value="0">
         </div>
         <div class="form-group col-md-3">
             <label>Day Total Sale</label>
-            <input type="number" value="{{Auth::user()->getSaleDetail($date,$petrol,'Day')?Auth::user()->getSaleDetail($date,$petrol,'Day')->total_sale:'0'}}" readonly class="form-control" min="0" id="day_petrol_total_sale" name="day_and_night_sale[]">
+            <input type="number" style="width:50%;" value="{{Auth::user()->getSaleDetail($date,$petrol,'Day')?Auth::user()->getSaleDetail($date,$petrol,'Day')->total_sale:'0'}}" readonly class="form-control" min="0" id="day_petrol_total_sale" name="day_and_night_sale[]">
         </div>
     </div>
     <div class="row">
@@ -150,16 +150,16 @@
         <input type="hidden" name="sale_type[]" value="Night">
         <div class="form-group col-md-3">
             <label>Night Supply Sale</label>
-            <input type="number" class="form-control" min="0" id="night_petrol_supply_sale" value="{{Auth::user()->getSaleDetail($date,$petrol,'Night')?Auth::user()->getSaleDetail($date,$petrol,'Night')->supply_sale:'0'}}" name="supply_sale[]" required>
+            <input type="number" class="form-control" style="width:50%;" min="0" id="night_petrol_supply_sale" value="{{Auth::user()->getSaleDetail($date,$petrol,'Night')?Auth::user()->getSaleDetail($date,$petrol,'Night')->supply_sale:'0'}}" name="supply_sale[]" required>
             <p id="night-petrol-supply-sale-response" style="color:red;"></p>
         </div>
         <div class="form-group col-md-3">
             <label>Night Retail Sale</label>
-            <input type="number"  class="form-control" min="0" id="night_petrol_retail_sale" value="{{Auth::user()->getSaleDetail($date,$petrol,'Night')?Auth::user()->getSaleDetail($date,$petrol,'Night')->retail_sale:'0'}}" name="retail_sale[]">
+            <input type="number"  class="form-control" style="width:50%;" min="0" id="night_petrol_retail_sale" value="{{Auth::user()->getSaleDetail($date,$petrol,'Night')?Auth::user()->getSaleDetail($date,$petrol,'Night')->retail_sale:'0'}}" name="retail_sale[]">
         </div>
         <div class="form-group col-md-3">
             <label>Night Total Sale</label>
-            <input type="number" value="{{Auth::user()->getSaleDetail($date,$petrol,'Night')?Auth::user()->getSaleDetail($date,$petrol,'Night')->total_sale:'0'}}" readonly class="form-control" min="0" id="night_petrol_total_sale" name="day_and_night_sale[]">
+            <input type="number" style="width:50%;" value="{{Auth::user()->getSaleDetail($date,$petrol,'Night')?Auth::user()->getSaleDetail($date,$petrol,'Night')->total_sale:'0'}}" readonly class="form-control" min="0" id="night_petrol_total_sale" name="day_and_night_sale[]">
         </div>
     </div>
     <div class="row">
@@ -179,7 +179,7 @@
                 <tr>
                     <td>
                         Purchase 
-                        <button type="button" data-toggle="modal" data-target="#add-purchase-modal" product_name="PMG" product_id="2"
+                        <button type="button" data-toggle="modal" data-target="#add-purchase-modal" date="{{$date}}"  product_name="PMG" product_id="2"
                            class="add-purchase-btn btn btn-primary btn-sm">Add New Purchase</button>
 
                     </td>

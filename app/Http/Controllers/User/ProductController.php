@@ -6,6 +6,7 @@ use App\Helpers\LossGainHelper;
 use App\Http\Controllers\Controller;
 use App\Models\AccountCategory;
 use App\Models\DebitCreditAccount;
+use App\Models\LossGainTranscation;
 use App\Models\Product;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -149,6 +150,30 @@ class ProductController extends Controller
     public function getPrice(Request $request)
     {
         $product = Product::find($request->id);
+        if($product && $request->date)
+        {
+            $lossGains = LossGainTranscation::where('user_id',Auth::user()->id)
+                        ->where('product_id',$product->id)
+                        ->orderBy('date','desc')->get()->toArray();
+            foreach($lossGains as $key => $lossGain)
+            {
+                $index = $key+1;
+                $lastLossGain = array_key_exists($index, $lossGains) ? $lossGains[$index] : [];
+                if($lastLossGain)
+                {
+                    $date = Carbon::parse($request->date);
+                    $lossGainDate = Carbon::parse($lossGain['date']);
+                    $lastDate = Carbon::parse($lastLossGain['date']);
+                    if($date->lte($lossGainDate) && $date->gt($lastDate))
+                    {
+                        return response()->json([
+                            'purchasing_price' => $lastLossGain['new_price'],
+                            'selling_price' => $product?$product->selling_amount:0
+                        ]);
+                    }
+                }
+            }
+        }
         $purchasing_price = $product?$product->purchasing_price:0;
         $selling_price = $product?$product->selling_amount:0;
         return response()->json([

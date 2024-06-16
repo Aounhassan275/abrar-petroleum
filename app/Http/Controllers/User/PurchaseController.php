@@ -66,7 +66,16 @@ class PurchaseController extends Controller
                 toastr()->error("Adding Qty and access at the same time is not allowed");
                 return back()->withInput($request->all());
             }
-            if(!$request->vendor_id)
+            if(!$request->dip)
+            {
+                $product = Product::find($request->product_id);
+                if($product && $product->name == 'HSD' || $product->name == 'PMG')
+                {
+                    toastr()->error("Add Dip");
+                    return back()->withInput($request->all());
+                }
+            }
+            if(!$request->vendor_id && $request->is_supplier)
             {
                 $request->merge([
                     'supplier_id' => Supplier::first()->id
@@ -132,6 +141,16 @@ class PurchaseController extends Controller
                         'user_id' => Auth::user()->id,
                         'credit' => @$purchase->total_amount,
                         'account_id' => $supplier_account_id,
+                        'sale_date' => $purchase->date,
+                        'purchase_id' => $purchase->id,
+                        'description' => $purchase->qty.' litres '.$purchase->product->name,
+                    ]);
+                }else{
+                    $expenseAccount = DebitCreditAccount::where('name','Expense miscellaneous')->first();
+                    DebitCredit::create([
+                        'user_id' => Auth::user()->id,
+                        'credit' => @$purchase->total_amount,
+                        'account_id' => $expenseAccount->id,
                         'sale_date' => $purchase->date,
                         'purchase_id' => $purchase->id,
                         'description' => $purchase->qty.' litres '.$purchase->product->name,

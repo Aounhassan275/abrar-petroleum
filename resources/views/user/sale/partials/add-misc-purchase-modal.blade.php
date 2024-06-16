@@ -40,6 +40,12 @@
                             <label>Product Dip</label>
                             <input name="dip" id="misc_dip" type="number" value="{{old('dip')?old('dip'):0}}"  class="form-control" placeholder="Enter Product Dip"  >
                         </div>
+                        <div class="form-group col-md-6">
+                            <label>Is For Supplier ? </label>
+                            <br>
+                            <input type="radio" name="is_supplier" value="1" checked> Yes
+                            <input type="radio" name="is_supplier" value="0" > No
+                        </div>
                         <input type="hidden" name="date" value="{{@$date}}">
                         <div class="form-group col-md-6">
                             <label>Vendor</label>

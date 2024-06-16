@@ -634,6 +634,7 @@
         $('.add-purchase-btn').click(function(){
             let product_id = $(this).attr('product_id');
             let product_name = $(this).attr('product_name');
+            let date = $(this).attr('date');
             $('#purchase_product_id').val(product_id);
             $('#product_name').val(product_name);
             $.ajax({
@@ -641,6 +642,7 @@
                 method: 'post',
                 data: {
                     id: product_id,
+                    date: date,
                 },
                 headers: {
                     'X-CSRF-TOKEN': "{{ csrf_token() }}"
