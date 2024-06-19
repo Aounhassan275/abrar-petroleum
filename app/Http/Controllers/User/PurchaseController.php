@@ -71,8 +71,13 @@ class PurchaseController extends Controller
                 $product = Product::find($request->product_id);
                 if($product && $product->name == 'HSD' || $product->name == 'PMG')
                 {
-                    toastr()->error("Add Dip");
-                    return back()->withInput($request->all());
+                    if($request->dip == 0)
+                    {
+                        //
+                    } else {
+                        toastr()->error("Add Dip");
+                        return back()->withInput($request->all());
+                    }
                 }
             }
             if(!$request->vendor_id && $request->is_supplier)
