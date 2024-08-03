@@ -9,6 +9,7 @@ use App\Models\Product;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AccountCategoryController extends Controller
 {
@@ -19,9 +20,10 @@ class AccountCategoryController extends Controller
      */
     public function index(Request $request)
     {
+        // dd($request->all());
         if($request->type == 'Selected Month' && $request->start_date)
         {
-            $end_date = Carbon::parse($request->end_date);
+            $end_date = Carbon::parse($request->select_month_end_date);
             $start_date = Carbon::parse($request->start_date);
         }
         else if($request->end_date)
@@ -37,7 +39,7 @@ class AccountCategoryController extends Controller
         $petrol = Product::where('name','PMG')->first();
         $active_tab = $request->active_tab?$request->active_tab:1;
         $sub_account = $request->sub_account?$request->sub_account:'';
-        $url = url('user/account_category/pdf?sub_account='.$sub_account.'&type='.$request->type.'&account_category_id='.$active_tab.'&start_date='.$start_date->format('Y-m-d').'&end_date='.$end_date->format('Y-m-d'));
+        $url = url('account_category/pdf?sub_account='.$sub_account.'&type='.$request->type.'&account_category_id='.$active_tab.'&start_date='.$start_date->format('Y-m-d').'&end_date='.$end_date->format('Y-m-d').'&user_id='.Auth::user()->id);
         return view('user.account_category.index',compact('active_tab','start_date','end_date','sub_account','dates','petrol','url'));
     }
 

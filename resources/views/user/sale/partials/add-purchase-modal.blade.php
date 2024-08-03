@@ -10,6 +10,7 @@
                 <div class="modal-body">
                     <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
                     <input type="hidden" name="product_id" id="purchase_product_id">
+                    <input type="hidden" name="is_supplier" value="1">
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label>Products</label>
@@ -34,6 +35,10 @@
                         <div class="form-group col-md-6">
                             <label>Access Total Amount</label>
                             <input name="access_total_amount" id="access_total_amount" type="text" value="{{old('access_total_amount')?old('access_total_amount'):0}}" class="form-control" placeholder="Enter Product Total Amount" readonly>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Product Dip</label>
+                            <input name="dip" id="dip"  type="number" value="{{old('dip')?old('dip'):0}}" class="form-control" placeholder="Enter Product Dip">
                         </div>
                         <input type="hidden" name="date" value="{{@$date}}">
                         <div class="form-group col-md-6">

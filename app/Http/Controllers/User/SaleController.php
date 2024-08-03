@@ -8,6 +8,7 @@ use App\Models\DebitCreditAccount;
 use App\Models\Dip;
 use App\Models\Product;
 use App\Models\Sale;
+use App\Models\SaleDetail;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -59,11 +60,12 @@ class SaleController extends Controller
         $lastDayCash = DebitCredit::where('account_id',$cash_account_id)->whereDate('sale_date',$day_before)->where('user_id',Auth::user()->id)->first();
         $missing_debit_credits = DebitCredit::whereNull('account_id')->where('user_id',Auth::user()->id)->get();
         $products = Product::whereNull('supplier_id')->where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
+        $salaryAccounts = DebitCreditAccount::where('user_id',Auth::user()->id)->where('account_category_id',4)->where('salary','>',0)->get();
         return view('user.sale.create',compact(
             'petrol','diesel','date','active_tab',
             'accounts','products','cash_account_id',
             'lastDayCash','missing_debit_credits',
-            'previousUrl','nextUrl'
+            'previousUrl','nextUrl','salaryAccounts'
         ));
     }
 
@@ -177,6 +179,33 @@ class SaleController extends Controller
                         'date' => $request->sale_date,
                     ]);
                 }   
+                foreach($request->day_and_night_sale as $index => $day_and_night_sale)
+                {
+                    if($day_and_night_sale > 0)
+                    {
+                        if($request->sale_detail_id && $request->sale_detail_id[$index])
+                        {
+                            $saleDetail = SaleDetail::find($request->sale_detail_id[$index]);
+                            $saleDetail->update([
+                                'supply_sale' => $request->supply_sale[$index],
+                                'retail_sale' => $request->retail_sale[$index],
+                                'type' => $request->sale_type[$index],
+                                'total_sale' => $day_and_night_sale,
+                                'product_id' => $request->product_id,
+                            ]);
+                        }else{
+                            SaleDetail::create([
+                                'user_id' => Auth::user()->id,
+                                'sale_date' => Carbon::parse($request->sale_date),
+                                'supply_sale' => $request->supply_sale[$index],
+                                'retail_sale' => $request->retail_sale[$index],
+                                'type' => $request->sale_type[$index],
+                                'total_sale' => $day_and_night_sale,
+                                'product_id' => $request->product_id,
+                            ]);
+                        }
+                    }
+                }
                 $this->manageSale($request->sale_date);
                 toastr()->success('Sale is Created Successfully');
                 if($product->name == 'PMG')
@@ -424,6 +453,33 @@ class SaleController extends Controller
                             'date' => $request->sale_date,
                         ]);
                     }
+                }  
+                foreach($request->day_and_night_sale as $index => $day_and_night_sale)
+                {
+                    if($day_and_night_sale > 0)
+                    {
+                        if($request->sale_detail_id && $request->sale_detail_id[$index])
+                        {
+                            $saleDetail = SaleDetail::find($request->sale_detail_id[$index]);
+                            $saleDetail->update([
+                                'supply_sale' => $request->supply_sale[$index],
+                                'retail_sale' => $request->retail_sale[$index],
+                                'type' => $request->sale_type[$index],
+                                'total_sale' => $day_and_night_sale,
+                                'product_id' => $request->product_id,
+                            ]);
+                        }else{
+                            SaleDetail::create([
+                                'user_id' => Auth::user()->id,
+                                'sale_date' => Carbon::parse($request->sale_date),
+                                'supply_sale' => $request->supply_sale[$index],
+                                'retail_sale' => $request->retail_sale[$index],
+                                'type' => $request->sale_type[$index],
+                                'total_sale' => $day_and_night_sale,
+                                'product_id' => $request->product_id,
+                            ]);
+                        }
+                    }
                 }
                 $this->manageSale($request->sale_date);
                 toastr()->success('Sale is Created Successfully');
@@ -583,7 +639,7 @@ class SaleController extends Controller
 
             }else{
                 $sales = Sale::where('user_id',Auth::user()->id)->whereDate('sale_date',$request->change_rate_date)
-                ->where('product_id',$product->id)->where('type','!=',['misc_sale','whole_sale'])->get();
+                ->where('product_id',$product->id)->where('type',['retail_sale','test'])->get();
             }
             foreach($sales as $sale)
             {

@@ -57,3 +57,33 @@
     </div>
 
 </div>
+<div class="row">
+
+    <div class="col-sm-6 col-xl-6">
+        <div class="card card-body bg-brown-400 has-bg-image">
+            <div class="media">
+                <div class="media-body align-self-center ">
+                    <h3 class="mb-0">{{Auth::user()->petrol_total_capacity}}</h3>
+                    <span class="text-uppercase font-size-xs">Petrol Total Capacity</span>
+                </div>
+                <div class="ml-3 text-right">
+                    <i class="icon-cash3 icon-3x opacity-75"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-6">
+        <div class="card card-body bg-teal-400 has-bg-image">
+            <div class="media">
+                <div class="mr-3 align-self-center">
+                    <i class="icon-cash4 icon-3x opacity-75"></i>
+                </div>
+                <div class="media-body text-right">
+                    <h3 class="mb-0">{{Auth::user()->diesel_total_capacity}}</h3>
+                    <span class="text-uppercase font-size-xs">Diesel Total Capacity</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

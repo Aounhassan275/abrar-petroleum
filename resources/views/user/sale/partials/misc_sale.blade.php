@@ -9,6 +9,11 @@
             value="{{ date('m/d/Y', strtotime(@$date))}}">
         </label>   
     </div>
+    <div class="text-right">
+        
+        <button type="button" data-toggle="modal" data-target="#add-misc-purchase-modal" 
+        class="add-purchase-btn btn btn-primary btn-sm">Add New Purchase</button>
+    </div>
     <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
     <input name="is_misc_sale" value="1" type="hidden" >
     @foreach(Auth::user()->products as $product_index => $product)  

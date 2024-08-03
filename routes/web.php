@@ -34,6 +34,7 @@ Route::group(['prefix' => 'admin', 'as'=>'admin.','namespace' => 'Admin',], func
       /******************Supplier ROUTES****************/
       Route::resource('supplier', 'SupplierController');    
     /******************Product ROUTES****************/
+      Route::post('product/get_site_rates', 'ProductController@getSiteRates')->name('product.get_site_rate');   
       Route::resource('product', 'ProductController');   
     /******************Expense Type ROUTES****************/
       Route::resource('expense_type', 'ExpenseTypeController');    
@@ -87,7 +88,7 @@ Route::group(['prefix' => 'user', 'as'=>'user.','namespace' => 'User'], function
     Route::resource('purchase_payment', 'PurchasePaymentController');  
     /******************Product ROUTES****************/
     Route::post('product/get_price','ProductController@getPrice')->name('product.get_price');
-    Route::get('product/pdf','ProductController@generatePDF')->name('product.pdf');
+    // Route::get('product/pdf','ProductController@generatePDF')->name('product.pdf');
     Route::resource('product', 'ProductController');  
     /******************OWN BANK ACCOUNTS ROUTES****************/
     Route::resource('bank_account', 'BankAccountController');  
@@ -116,16 +117,23 @@ Route::group(['prefix' => 'user', 'as'=>'user.','namespace' => 'User'], function
     Route::post('debit_credit/update_form', 'DebitCreditController@updateForm')->name('debit_credit.update_form');  
     Route::post('debit_credit/delete', 'DebitCreditController@delete')->name('debit_credit.delete');  
     Route::post('debit_credit/get_customer_vehicle', 'DebitCreditController@get_customer_vehicle')->name('debit_credit.get_customer_vehicle');  
+    Route::post('debit_credit/transfer_salary', 'DebitCreditController@transferSalary')->name('debit_credit.transfer_salary');  
     Route::get('debit_credit/deleted', 'DebitCreditController@deletedValues')->name('debit_credit.deleted');  
     Route::delete('debit_credit/force_delete/{id}', 'DebitCreditController@forceDelete')->name('debit_credit.force_delete');  
     Route::resource('debit_credit', 'DebitCreditController');  
     /******************Account Category ROUTES****************/
-    Route::get('account_category/pdf','AccountCategoryController@generatePDF')->name('account_category.pdf');
+    // Route::get('account_category/pdf','AccountCategoryController@generatePDF')->name('account_category.pdf');
     Route::resource('account_category', 'AccountCategoryController');  
     /******************Employee ROUTES****************/
     Route::resource('employee', 'EmployeeController');  
     /******************Reports ROUTES****************/
     Route::get('reports', 'ReportsController@index')->name('reports.index');  
+    Route::get('reports/product-analysis', 'ReportsController@productAnalysis')->name('reports.product-analysis');  
+    Route::get('reports/supply', 'ReportsController@supply')->name('reports.supply');  
+    Route::get('reports/day-night-sale', 'ReportsController@dayNightSale')->name('reports.day-night-sale');  
+    Route::get('reports/excess-analysis', 'ReportsController@excessAnalysis')->name('reports.excess-analysis');  
+    Route::get('reports/dip-analysis', 'ReportsController@dipAnalysis')->name('reports.dip-analysis');  
+    Route::get('reports/supplier-analysis', 'ReportsController@supplierAnalysis')->name('reports.supplier-analysis');  
     /******************Debit Credit Accounts ROUTES****************/
     Route::resource('debit_credit_account', 'DebitCreditAccountController');  
   });
@@ -184,8 +192,12 @@ Route::group(['prefix' => 'supplier', 'as'=>'supplier.','namespace' => 'Supplier
     Route::resource('debit_credit_account', 'DebitCreditAccountController');  
   });
 });
+Route::group(['namespace' => 'Front'], function () {
 
-
+  Route::get('product/pdf','GeneratePdfController@generatePDFForProduct')->name('product.pdf');
+  /******************Account Category ROUTES****************/
+  Route::get('account_category/pdf','GeneratePdfController@generatePDF')->name('account_category.pdf');
+});
 /******************FRONTEND ROUTES****************/
 Route::view('/', 'front.home.index')->name('home.index');
 /******************FUNCTIONALITY ROUTES****************/
@@ -198,6 +210,9 @@ Route::get('/migrate/install', function() {
 });
 Route::get('/migrate', function() {
   Artisan::call('migrate');
+  Artisan::call('config:cache');
+  Artisan::call('view:clear');
+  Artisan::call('cache:clear');
   return 'Migration done';
 });
 Route::get('/cache_clear', function() {

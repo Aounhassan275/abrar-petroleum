@@ -7,6 +7,7 @@ use App\Models\AccountCategory;
 use App\Models\DebitCreditAccount;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DebitCreditAccountController extends Controller
 {
@@ -15,9 +16,15 @@ class DebitCreditAccountController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('user.debit_credit_account.index');
+        if($request->account_category_id)
+        {
+            $debitCreditAccounts = Auth::user()->debitCreditAccounts->where('account_category_id',$request->account_category_id);
+        }else{
+            $debitCreditAccounts = Auth::user()->debitCreditAccounts;
+        }
+        return view('user.debit_credit_account.index',compact('debitCreditAccounts'));
     }
 
     /**
@@ -40,14 +47,15 @@ class DebitCreditAccountController extends Controller
     {
         try{
             $account = DebitCreditAccount::create($request->all());
-            $category = AccountCategory::find($request->account_category_id); 
             toastr()->success('Account is Created Successfully');
-            return redirect()->to(route('user.account_category.index').'?active_tab='.$category->id);
+            return redirect()->to(route('user.debit_credit_account.index').'?account_category_id='.$account->account_category_id);
+   
         }catch(Exception $e)
         {
             toastr()->error($e->getMessage());
-            $category = AccountCategory::find($request->account_category_id); 
-            return redirect()->to(route('user.account_category.index').'?active_tab='.$category->id);
+            return redirect()->back();
+            // $category = AccountCategory::find($account->account_category_id); 
+            // return redirect()->to(route('user.account_category.index').'?active_tab='.$category->id);
         }
     }
 
@@ -87,8 +95,9 @@ class DebitCreditAccountController extends Controller
         $account = DebitCreditAccount::find($id);
         $account->update($request->all());
         toastr()->success('Account Informations Updated successfully');
-        $category = AccountCategory::find($account->account_category_id); 
-        return redirect()->to(route('user.account_category.index').'?active_tab='.$category->id);
+        return redirect()->to(route('user.debit_credit_account.index').'?account_category_id='.$account->account_category_id);
+        // $category = AccountCategory::find($account->account_category_id); 
+        // return redirect()->to(route('user.account_category.index').'?active_tab='.$category->id);
     }
 
     /**
@@ -102,7 +111,8 @@ class DebitCreditAccountController extends Controller
         $account = DebitCreditAccount::find($id);
         $account->delete();
         toastr()->success('Debit Credit Account Deleted successfully');
-        $category = AccountCategory::find($account->account_category_id); 
-        return redirect()->to(route('user.account_category.index').'?active_tab='.$category->id);
+        return redirect()->back();
+        // $category = AccountCategory::find($account->account_category_id); 
+        // return redirect()->to(route('user.account_category.index').'?active_tab='.$category->id);
     }
 }

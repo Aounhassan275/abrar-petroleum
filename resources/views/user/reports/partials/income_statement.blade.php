@@ -27,6 +27,33 @@
             <button type="submit" class="btn btn-primary" id="income-statment-button">Search</button>
         </div>
     </div>
+    <div class="row">
+        
+        <div class="form-group col-2 post-profit-field" style="display:none;">
+            <label>
+                Zakat Percentage
+                <input type="text" name="zakat" id="zakat" value="0" class="form-control"> 
+            </label>   
+        </div>
+        <div class="form-group col-2 post-profit-field" style="display:none;">
+            <label>
+                Zakat Amount
+                <input type="text" name="zakat_amount" id="zakat_amount" value="0"  class="form-control"> 
+            </label>   
+        </div>
+        <div class="form-group col-2 post-profit-field" style="display:none;">
+            <label>
+                Maintenance Percentage
+                <input type="text" name="maintenance" id="maintenance" value="0"  class="form-control"> 
+            </label>   
+        </div>
+        <div class="form-group col-2 post-profit-field" style="display:none;">
+            <label>
+                Maintenance Amount
+                <input type="text" name="maintenance_amount" id="maintenance_amount"  value="0" class="form-control"> 
+            </label>   
+        </div>
+    </div>
 </form>
 <table class="table datatable-button-html5-basic">
     <thead>
@@ -127,4 +154,5 @@
             </div>
         </div>
     </div>
+    <input type="hidden" id="monthProfitAmount" value="{{$profitValue}}">
 </div>

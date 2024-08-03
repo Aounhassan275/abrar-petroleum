@@ -29,7 +29,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label>Product Qty</label>
-                            <input name="qty" id="qty" type="text" value="{{$purchase->qty}}" class="form-control" placeholder="Enter Product Quantity" required readonly>
+                            <input name="qty" id="qty" type="text" value="{{$purchase->qty}}" class="form-control" placeholder="Enter Product Quantity" required>
                         </div>
                         <div class="form-group col-md-6">
                             <label>Product Access</label>
@@ -42,6 +42,10 @@
                         <div class="form-group col-md-6">
                             <label> Date</label>
                             <input name="date" type="date"  class="form-control" value="{{$purchase->date?Carbon\Carbon::parse($purchase->date)->format('Y-m-d'):''}}"  required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Product Dip</label>
+                            <input name="dip" id="dip"  type="number" value="{{$purchase->dip}}" class="form-control" placeholder="Enter Product Dip">
                         </div>
                         @if($purchase->vendor)
                         <div class="form-group col-md-6">

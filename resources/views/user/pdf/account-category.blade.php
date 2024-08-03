@@ -4,8 +4,19 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>{{Auth::user()->username}} - {{$account_category->name}} - {{$sub_account->name}} Ledger</title>
-	<!-- Global stylesheets -->
+	<title>{{$user->username}} - {{$account_category->name}} - {{$sub_account->name}} Ledger</title>
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="{{$user->username}}  | {{$account_category->name}} | {{$sub_account->name}} Ledger" />
+    <meta property="og:description" content="Its ledger report for ali traders" />
+    <meta property="og:url" content="{{Request::url()}}" />
+    <meta property="og:site_name" content="ALI TRADERS.COM" />
+    <meta property="og:image" content="{{asset($user->image)}}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{$user->username}}  | {{$account_category->name}} | {{$sub_account->name}} Ledger" />
+    {{-- <meta name="twitter:description" content="{!! $user->description !!}" /> --}}
+    <meta name="twitter:image" content="{{asset($user->image)}}" />
+    <!-- Global stylesheets -->
 	<link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
 	<link href="{{asset('admin/global_assets/css/icons/icomoon/styles.min.css')}}" rel="stylesheet" type="text/css">
 	<link href="{{asset('admin/assets/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css">
@@ -70,16 +81,20 @@
                             <div class="col-md-4">
                                 <img src="{{asset('attock-logo.png')}}" alt="">
                             </div>
-                            <div class="col-md-8 ">
-                                <h3><strong>Account Category :</strong> {{$account_category->name}}</h1>
+                            <div class="col-md-6 ">
+                                <h3><strong>Site Name :</strong> {{$user->username}}</h3>
+                                <h3><strong>Account Category :</strong> {{$account_category->name}}</h3>
                                 <h3><strong>Account Name :</strong> {{$sub_account->name}}</h3>
                                 <p>Ledger From {{$start_date->format('M d,Y')}} To {{$end_date->format('M d,Y')}}</p>
                                 @if($account_category->id != 6)
-                                <p>Start Balance : {{$account_category->getOldDebitCredits($start_date,$end_date,$sub_account->id,request()->type)}}
+                                <p>Start Balance : {{$account_category->getOldDebitCreditsForPdf($start_date,$end_date,$sub_account->id,request()->type,$user->id)}}
                                 </p>
                                 @endif
-                                {{-- <p><b>Opening Stock : {{Auth::user()->getOpeningBalance($start_date,$product)}}</b></p> --}}
-                                {{-- <p><b>Opening Stock Amount : {{round(Auth::user()->getPurchasePrice($start_date,$product) * Auth::user()->getOpeningBalance($start_date,$product))}}</b></p> --}}
+                                {{-- <p><b>Opening Stock : {{$user->getOpeningBalance($start_date,$product)}}</b></p> --}}
+                                {{-- <p><b>Opening Stock Amount : {{round($user->getPurchasePrice($start_date,$product) * $user->getOpeningBalance($start_date,$product))}}</b></p> --}}
+                            </div>
+                            <div class="col-md-2">
+                                <a href="https://wa.me/?text=={{ urlencode(Request::fullUrl()) }}&via=ALITRADERS.COM" class="btn btn-success btn-sm">Share PDF</a>
                             </div>
                         </div>
                     </div>
@@ -101,11 +116,11 @@
                             
                             @php 
                             if($account_category->id != 6)
-                                $balance = $account_category->getOldDebitCredits($start_date,$end_date,$sub_account->id,request()->type);
+                                $balance = $account_category->getOldDebitCreditsForPdf($start_date,$end_date,$sub_account->id,request()->type,$user->id);
                             else  
                                 $balance = 0;
                             @endphp
-                            @foreach($account_category->debitCredits($start_date,$end_date,$sub_account_id,request()->type) as $key => $debitCredit)
+                            @foreach($account_category->debitCreditsForPdf($start_date,$end_date,$sub_account_id,request()->type,$user->id) as $key => $debitCredit)
                             @if($sub_account_id == 24)
                             @include('user.account_category.partials.cash_in_hand')
                             @else
@@ -133,6 +148,18 @@
                             @endforeach
                         </tbody>
                     </table>
+                    <div class="row">
+                        <div class="col-md-12" style="margin-top:10px;margin-bottom:10px;">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" id="link_area"  value="={{$url}}"  readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button" class="copy-button btn btn-dark  btn-sm" data-clipboard-action="copy" data-clipboard-target="#link_area">Share</button>
+                                </div>
+                            </div>
+                         </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -141,6 +168,21 @@
 	<script src="{{asset('admin/assets/js/toastr.js')}}"></script>
 	@toastr_render
     
+    <script type="text/javascript" src="{{asset('clipboard.js')}}"></script>
+    <script type="text/javascript">
+        var clipboard = new Clipboard('.copy-button');
+            clipboard.on('success', function(e) {
+                copyText.select();
+                var $div2 = $("#coppied");
+                console.log($div2);
+                console.log($div2.is(":visible"));
+                if ($div2.is(":visible")) { return; }
+                $div2.show();
+                setTimeout(function() {
+                    $div2.fadeOut();
+                }, 800);
+            });
+    </script>
     <script>
         window.print();
     </script>

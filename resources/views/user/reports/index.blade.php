@@ -149,8 +149,55 @@
             if(this.checked)
             {
                 $('#income-statment-button').text('Post Month Profit');
+                $('.post-profit-field').show();
             }else{
                 $('#income-statment-button').text('Search');
+                $('.post-profit-field').hide();
+            }
+        });
+        $('#zakat').change(function(){
+            var monthProfit = parseFloat($("#monthProfitAmount").val());
+            var zakat = parseFloat($("#zakat").val());
+            var maintenance = parseFloat($("#maintenance").val());
+            var totalPercentage = parseFloat(zakat+maintenance);
+            if(totalPercentage > 100)
+            {
+                alert('You are trying to pay more than month profit.');
+                $('#zakat_amount').val(0);
+                $('#zakat').val(0);
+            }else{
+                if(monthProfit > 0 &&  zakat > 0)
+                {
+                    var amount = monthProfit/100 * zakat;
+                    $("#zakat_amount").val(amount);
+                }else{
+                    alert('Month Profit or Zakat Percentage is less than zero.');
+                    $('#zakat_amount').val(0);
+                    $('#zakat').val(0);
+                }
+            }
+        });
+        $('#maintenance').change(function(){
+            var monthProfit = parseFloat($("#monthProfitAmount").val());
+            var maintenance = parseFloat($("#maintenance").val());
+            var zakat = parseFloat($("#zakat").val());
+            var totalPercentage = parseFloat(zakat+maintenance);
+            if(totalPercentage > 100)
+            {
+                alert('You are trying to pay more than month profit.');
+                $('#maintenance_amount').val(0);
+                $('#maintenance').val(0);
+            }else{
+                if(monthProfit > 0 &&  maintenance > 0)
+                {
+                    var amount = monthProfit/100 * maintenance;
+                    $("#maintenance_amount").val(amount);
+                }else{
+                    alert('Month Profit or Maintenance Percentage is less than zero.');
+                    $('#maintenance_amount').val(0);
+                    $('#maintenance').val(0);
+                }
+
             }
         });
     });

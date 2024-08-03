@@ -11,9 +11,13 @@ use App\Models\MonthProfit;
 use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\Sale;
+use App\Models\SaleDetail;
+use App\Models\Supplier;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ReportsController extends Controller
 {
@@ -61,7 +65,15 @@ class ReportsController extends Controller
                     ->where('user_id',Auth::user()->id)->get();
         if($request->post_month_profit)
         {
-            $this->postMonthPorfit($products,$start_date,$end_date);
+            try{
+                DB::beginTransaction();
+                $this->postMonthPorfit($products,$start_date,$end_date,$request);
+                DB::commit();
+            }catch(Exception $e) {
+                DB::rollback();
+                toastr()->error($e->getMessage());
+                return redirect()->back();
+            }
         }
         $active_tab = $request->active_tab?$request->active_tab:'trail_balance';
         $product_account_category_id = AccountCategory::where('name','Products')->first()->id;
@@ -115,7 +127,164 @@ class ReportsController extends Controller
         // }
         return view('user.reports.index',compact('data','active_tab','start_date','end_date','products','accounts','expenseAccounts','lastDayCash','workingCaptial','product_account_category_id','test_sales','inital_start_date','whole_sales','category_id','monthlyProfits','purchasesRates','loss_gain_transactions'));   
     }
-    public function postMonthPorfit($products,$start_date,$end_date)
+    public function productAnalysis(Request $request)
+    {
+        $inital_debit_credit = DebitCredit::where('user_id',Auth::user()->id)->whereNotNull('sale_date')->orderBy('sale_date','ASC')->first();
+        $inital_start_date = $inital_debit_credit?Carbon::parse($inital_debit_credit->sale_date):Carbon::today();     
+        if($request->end_date)
+        {
+            $start_date =  Carbon::parse($request->end_date)->firstOfMonth();  
+            $end_date = Carbon::parse($request->end_date);
+        }else{
+            // $start_date = $inital_start_date;
+            $last_debit_credit = DebitCredit::where('user_id',Auth::user()->id)->whereNotNull('sale_date')->orderBy('sale_date','DESC')->first();
+            $start_date =  $last_debit_credit?Carbon::parse($last_debit_credit->sale_date)->firstOfMonth():Carbon::today()->firstOfMonth();  
+            $end_date = $last_debit_credit?Carbon::parse($last_debit_credit->sale_date):Carbon::today();
+        } 
+        $labelsArray = [];
+        $sales = [];
+        if($request->product_id)
+        {
+            $product = Product::find($request->product_id);
+        }else{
+            $product = Product::find(1);
+        }
+            
+        $label = "Total Sales";
+        array_push($labelsArray, $label);
+        $total_sale = Sale::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->where('type','!=','test')
+                ->whereBetween('sale_date',[$start_date,$end_date])
+                ->sum('qty');
+        $test_sale = Sale::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->where('type','test')
+                ->whereBetween('sale_date',[$start_date,$end_date])
+                ->sum('qty');
+        $total_qty  = $total_sale - $test_sale;
+        array_push($sales, $total_qty);
+        $label = "Retail Sales";
+        array_push($labelsArray, $label);
+        $retail_sale = SaleDetail::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->whereBetween('sale_date',[$start_date,$end_date])
+                ->sum('retail_sale');
+        array_push($sales, $retail_sale);
+        $label = "Supply Sales";
+        array_push($labelsArray, $label);
+        $supply_sale = SaleDetail::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->whereBetween('sale_date',[$start_date,$end_date])
+                ->sum('supply_sale');
+        array_push($sales, $supply_sale);
+        $label = "Whole Sales";
+        array_push($labelsArray, $label);
+        $whole_sale = Sale::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->where('type','whole_sale')
+                ->whereBetween('sale_date',[$start_date,$end_date])
+                ->sum('qty');
+        array_push($sales, $whole_sale);
+        $data['labels']      = "'".implode("', '", $labelsArray)."'";
+        $data['sales']      = "'".implode("', '", $sales)."'";
+        return view('user.reports.product-analysis.index',compact('data','start_date','end_date','product'));   
+    }
+    public function supply(Request $request)
+    {
+        $inital_debit_credit = DebitCredit::where('user_id',Auth::user()->id)->whereNotNull('sale_date')->orderBy('sale_date','ASC')->first();
+        $inital_start_date = $inital_debit_credit?Carbon::parse($inital_debit_credit->sale_date):Carbon::today();     
+        if($request->end_date)
+        {
+            $start_date =  Carbon::parse($request->end_date)->firstOfMonth();  
+            $end_date = Carbon::parse($request->end_date);
+        }else{
+            // $start_date = $inital_start_date;
+            $last_debit_credit = DebitCredit::where('user_id',Auth::user()->id)->whereNotNull('sale_date')->orderBy('sale_date','DESC')->first();
+            $start_date =  $last_debit_credit?Carbon::parse($last_debit_credit->sale_date)->firstOfMonth():Carbon::today()->firstOfMonth();  
+            $end_date = $last_debit_credit?Carbon::parse($last_debit_credit->sale_date):Carbon::today();
+        } 
+        $labelsArray = [];
+        $sales = [];
+        if($request->product_id)
+        {
+            $product = Product::find($request->product_id);
+        }else{
+            $product = Product::find(1);
+        }
+        $supply_sale = SaleDetail::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->whereBetween('sale_date',[$start_date,$end_date])
+                ->sum('supply_sale');
+        $label = "Supply Sales in QTY : ".$supply_sale;
+        array_push($labelsArray, $label);
+        $retail_sales = Sale::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->where('type','retail_sale')
+                ->whereBetween('sale_date',[$start_date,$end_date])
+                ->sum('qty');
+        if($retail_sales > 0)
+        {
+            $price = round($product->getClosingBalance($end_date) * Auth::user()->getPurchasePrice($end_date,$product));
+            $totalAmount = $product->totalDrAmount($start_date,$end_date);
+            if($totalAmount > 0)
+            {
+                $revenue = $price + abs($totalAmount);
+            }else{
+                $revenue = $price - abs($totalAmount);
+            }
+            $averageCost = $revenue/$retail_sales;
+            $supplyRevenue = round($averageCost*$supply_sale,0);
+            array_push($sales, $supplyRevenue);
+        }else{
+            array_push($sales, 0);
+        }
+        $whole_sale = Sale::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->where('type','whole_sale')
+                ->whereBetween('sale_date',[$start_date,$end_date])
+                ->sum('qty');
+        $label = "Whole Sales in Qty :".$whole_sale;
+        array_push($labelsArray, $label);
+        $whole_sale_amount = Sale::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->where('type','whole_sale')
+                ->whereBetween('sale_date',[$start_date,$end_date])
+                ->sum('total_amount');
+        array_push($sales, $whole_sale_amount);
+        if($product->name == "HSD")
+        {
+            $label = "Expense Less HSD";
+            array_push($labelsArray, $label);
+            $account_id = DebitCreditAccount::where('name','Expense Less')->first()->id;
+        }else{
+            $label = "Expense Less PMG";
+            array_push($labelsArray, $label);
+            $account_id = DebitCreditAccount::where('name','Expense Less PMG')->first()->id;
+        }
+        $credit = DebitCredit::where('user_id',Auth::user()->id)
+            ->where('account_id',$account_id)
+            ->whereBetween('sale_date', [$start_date,$end_date])->sum('credit');
+        $debit = DebitCredit::where('user_id',Auth::user()->id)
+            ->where('account_id',$account_id)
+            ->whereBetween('sale_date', [$start_date,$end_date])
+            ->sum('debit');
+        $totalExpense = $credit - $debit;
+        array_push($sales, $totalExpense);
+        $data['labels']      = "'".implode("', '", $labelsArray)."'";
+        $data['sales']      = "'".implode("', '", $sales)."'";
+        return view('user.reports.supply.index',compact('data','start_date','end_date','product'));   
+    }
+    public function postMonthPorfit($products,$start_date,$end_date,$request)
     {
         $totalRevenue = 0;
         $new_date = $end_date;
@@ -160,9 +329,96 @@ class ReportsController extends Controller
         if($debit_credit)
         {
             if($totalExpense > 0)
-            {
+            {         
+                $pendingAmount = $totalExpense; 
+                $miscellaneousAccountId = DebitCreditAccount::where('name','Expense miscellaneous')->first()->id;
+                if($request->zakat_amount > 0)
+                {
+                    $zakatAccountId = DebitCreditAccount::where('name','Zakat')->first()->id;
+                    $pendingAmount = $totalExpense - $request->zakat_amount;
+                    $zakatDebitCredit = DebitCredit::where('user_id',Auth::user()->id)->where('account_id',$zakatAccountId)
+                        ->whereDate('sale_date',$newDateForMonthProfit)->first();
+                    if($zakatDebitCredit)
+                    {
+                        $zakatDebitCredit->update([
+                            'credit' => $request->zakat_amount,
+                            'debit' => 0,
+                            'description' => "Zakat of ".$end_date->format('F')." Month with ".$request->zakat."% on month profit ".$totalExpense,
+                        ]);
+                        $zakatExpenseDebit = DebitCredit::where('user_id',Auth::user()->id)->where('account_id',$miscellaneousAccountId)
+                            ->whereDate('sale_date',$newDateForMonthProfit)
+                            ->where('is_zakat',1)->first();
+                        $zakatExpenseDebit->update([
+                            'debit' => $request->zakat_amount,
+                            'credit' => 0,
+                            'description' => "Maintenance of ".$end_date->format('F')." Month with ".$request->maintenance."% on month profit ".$totalExpense,
+                        ]);
+                    }else{           
+                        DebitCredit::create([
+                            'account_id' => $zakatAccountId,
+                            'sale_date' => $newDateForMonthProfit,
+                            'user_id' => Auth::user()->id,
+                            'credit' => $request->zakat_amount,
+                            'is_zakat' => 1,
+                            'description' => "Zakat of ".$end_date->format('F')." Month with ".$request->zakat."% on month profit ".$totalExpense,
+                        ]);          
+                        DebitCredit::create([
+                            'account_id' => $miscellaneousAccountId,
+                            'sale_date' => $newDateForMonthProfit,
+                            'user_id' => Auth::user()->id,
+                            'debit' => $request->zakat_amount,
+                            'is_zakat' => 1,
+                            'description' => "Zakat of ".$end_date->format('F')." Month with ".$request->zakat."% on month profit ".$totalExpense,
+                        ]);     
+                    }
+                }
+                if($request->maintenance_amount > 0)
+                {
+                    $maintenanceAccountId = DebitCreditAccount::where('name','Maintenance')->first()->id;
+                    if($request->zakat_amount > 0)
+                    {
+                        $pendingAmount = $pendingAmount - $request->maintenance_amount;
+                    }else{
+                        $pendingAmount = $totalExpense - $request->maintenance_amount;
+                    }
+                    $maintenanceDebitCredit = DebitCredit::where('user_id',Auth::user()->id)->where('account_id',$maintenanceAccountId)
+                        ->whereDate('sale_date',$newDateForMonthProfit)->first();
+                    if($maintenanceDebitCredit)
+                    {
+                        $maintenanceDebitCredit->update([
+                            'credit' => $request->maintenance_amount,
+                            'debit' => 0,
+                            'description' => "Maintenance of ".$end_date->format('F')." Month with ".$request->maintenance."% on month profit ".$totalExpense,
+                        ]);
+                        $maintenanceExpenseDebit = DebitCredit::where('user_id',Auth::user()->id)->where('account_id',$miscellaneousAccountId)
+                            ->whereDate('sale_date',$newDateForMonthProfit)
+                            ->where('is_maintenance',1)->first();
+                        $maintenanceExpenseDebit->update([
+                            'debit' => $request->maintenance_amount,
+                            'credit' => 0,
+                            'description' => "Maintenance of ".$end_date->format('F')." Month with ".$request->maintenance."% on month profit ".$totalExpense,
+                        ]);
+                    }else{           
+                        DebitCredit::create([
+                            'account_id' => $maintenanceAccountId,
+                            'sale_date' => $newDateForMonthProfit,
+                            'user_id' => Auth::user()->id,
+                            'credit' => $request->maintenance_amount,
+                            'is_maintenance' => 1,
+                            'description' => "Maintenance of ".$end_date->format('F')." Month with ".$request->maintenance."% on month profit ".$totalExpense,
+                        ]);            
+                        DebitCredit::create([
+                            'account_id' => $miscellaneousAccountId,
+                            'sale_date' => $newDateForMonthProfit,
+                            'user_id' => Auth::user()->id,
+                            'debit' => $request->maintenance_amount,
+                            'is_maintenance' => 1,
+                            'description' => "Maintenance of ".$end_date->format('F')." Month with ".$request->maintenance."% on month profit ".$totalExpense,
+                        ]);     
+                    }
+                }
                 $debit_credit->update([
-                    'credit' => abs($totalExpense),
+                    'credit' => abs($pendingAmount),
                     'debit' => 0,
                     'description' => "Profit of ".$end_date->format('F')." Month",
                 ]);
@@ -176,14 +432,63 @@ class ReportsController extends Controller
         }else{
             if($totalExpense > 0)
             {
+                $pendingAmount = $totalExpense; 
+                $miscellaneousAccountId = DebitCreditAccount::where('name','Expense miscellaneous')->first()->id;
+                if($request->zakat_amount > 0)
+                {
+                    $zakatAccountId = DebitCreditAccount::where('name','Zakat')->first()->id;
+                    $pendingAmount = $totalExpense - $request->zakat_amount;         
+                    DebitCredit::create([
+                        'account_id' => $zakatAccountId,
+                        'sale_date' => $newDateForMonthProfit,
+                        'user_id' => Auth::user()->id,
+                        'credit' => $request->zakat_amount,
+                        'is_zakat' => 1,
+                        'description' => "Zakat of ".$end_date->format('F')." Month with ".$request->zakat."% on month profit ".$totalExpense,
+                    ]);          
+                    DebitCredit::create([
+                        'account_id' => $miscellaneousAccountId,
+                        'sale_date' => $newDateForMonthProfit,
+                        'user_id' => Auth::user()->id,
+                        'debit' => $request->zakat_amount,
+                        'is_zakat' => 1,
+                        'description' => "Zakat of ".$end_date->format('F')." Month with ".$request->zakat."% on month profit ".$totalExpense,
+                    ]);     
+                }
+                if($request->maintenance_amount > 0)
+                {
+                    $maintenanceAccountId = DebitCreditAccount::where('name','Maintenance')->first()->id;
+                    if($request->zakat_amount > 0)
+                    {
+                        $pendingAmount = $pendingAmount - $request->maintenance_amount;
+                    }else{
+                        $pendingAmount = $totalExpense - $request->maintenance_amount;
+                    }       
+                    DebitCredit::create([
+                        'account_id' => $maintenanceAccountId,
+                        'sale_date' => $newDateForMonthProfit,
+                        'user_id' => Auth::user()->id,
+                        'credit' => $request->maintenance_amount,
+                        'is_maintenance' => 1,
+                        'description' => "Maintenance of ".$end_date->format('F')." Month with ".$request->maintenance."% on month profit ".$totalExpense,
+                    ]);            
+                    DebitCredit::create([
+                        'account_id' => $miscellaneousAccountId,
+                        'sale_date' => $newDateForMonthProfit,
+                        'user_id' => Auth::user()->id,
+                        'debit' => $request->maintenance_amount,
+                        'is_maintenance' => 1,
+                        'description' => "Maintenance of ".$end_date->format('F')." Month with ".$request->maintenance."% on month profit ".$totalExpense,
+                    ]);     
+                }
                 DebitCredit::create([
                     'account_id' => $month_profit_account_id,
                     'sale_date' => $newDateForMonthProfit,
                     'user_id' => Auth::user()->id,
-                    'credit' => abs($totalExpense),
+                    'credit' => abs($pendingAmount),
                     'is_hide' => true,
                     'description' => "Profit of ".$end_date->format('F')." Month",
-                ]);
+                ]);                
             }else{
                 DebitCredit::create([
                     'account_id' => $month_profit_account_id,
@@ -236,5 +541,155 @@ class ReportsController extends Controller
         // ]);
         // // dd($pdf);
         // return $pdf->download('sample.pdf');
+    }
+    public function dayNightSale(Request $request)
+    {
+        $inital_sale_detail = SaleDetail::where('user_id',Auth::user()->id)->whereNotNull('sale_date')->orderBy('sale_date','ASC')->first();
+        $inital_start_date = $inital_sale_detail?Carbon::parse($inital_sale_detail->sale_date):Carbon::today();     
+        if($request->end_date)
+        {
+            $start_date =  Carbon::parse($request->end_date)->firstOfMonth();  
+            $end_date = Carbon::parse($request->end_date);
+        }else{
+            // $start_date = $inital_start_date;
+            $last_sale_detail = SaleDetail::where('user_id',Auth::user()->id)->whereNotNull('sale_date')->orderBy('sale_date','DESC')->first();
+            $start_date =  $last_sale_detail?Carbon::parse($last_sale_detail->sale_date)->firstOfMonth():Carbon::today()->firstOfMonth();  
+            $end_date = $last_sale_detail?Carbon::parse($last_sale_detail->sale_date):Carbon::today();
+        } 
+        $labelsArray = [];
+        $sales = [];
+        if($request->product_id)
+        {
+            $product = Product::find($request->product_id);
+        }else{
+            $product = Product::find(1);
+        }
+            
+        $label = "Day Supply Sales";
+        array_push($labelsArray, $label);
+        $daySupplySales = SaleDetail::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->where('type','Day')
+                ->whereBetween('sale_date',[$start_date,$end_date])
+                ->sum('supply_sale');
+        array_push($sales, $daySupplySales);
+        $label = "Day Retail Sales";
+        array_push($labelsArray, $label);
+        $dayRetailSales = SaleDetail::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->where('type','Day')
+                ->whereBetween('sale_date',[$start_date,$end_date])
+                ->sum('retail_sale');
+        array_push($sales, $dayRetailSales);
+        $label = "Night Supply Sales";
+        array_push($labelsArray, $label);
+        $nightSupplySale = SaleDetail::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->where('type','Night')
+                ->whereBetween('sale_date',[$start_date,$end_date])
+                ->sum('supply_sale');
+        array_push($sales, $nightSupplySale);
+        $label = "Night Retail Sales";
+        array_push($labelsArray, $label);
+        $nightRetailSales = SaleDetail::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->where('type','Night')
+                ->whereBetween('sale_date',[$start_date,$end_date])
+                ->sum('retail_sale');
+        array_push($sales, $nightRetailSales);
+        $data['labels']      = "'".implode("', '", $labelsArray)."'";
+        $data['sales']      = "'".implode("', '", $sales)."'";
+        return view('user.reports.day-night-sale.index',compact('data','start_date','end_date','product'));   
+    }
+    public function excessAnalysis(Request $request)
+    {
+        $inital_purchase = Purchase::where('user_id',Auth::user()->id)->whereNotNull('date')->orderBy('date','ASC')->first();
+        $inital_start_date = $inital_purchase?Carbon::parse($inital_purchase->date):Carbon::today();     
+        if($request->end_date)
+        {
+            $start_date =  Carbon::parse($request->end_date)->firstOfMonth();  
+            $end_date = Carbon::parse($request->end_date);
+        }else{
+            // $start_date = $inital_start_date;
+            $last_purchase = Purchase::where('user_id',Auth::user()->id)->whereNotNull('date')->orderBy('date','DESC')->first();
+            $start_date =  $last_purchase?Carbon::parse($last_purchase->date)->firstOfMonth():Carbon::today()->firstOfMonth();  
+            $end_date = $last_purchase?Carbon::parse($last_purchase->date):Carbon::today();
+        } 
+        $labelsArray = [];
+        $sales = [];
+        if($request->product_id)
+        {
+            $product = Product::find($request->product_id);
+        }else{
+            $product = Product::find(1);
+        }
+            
+        $label = "Total Purchases";
+        array_push($labelsArray, $label);
+        $totalPurchases = Purchase::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->whereBetween('date',[$start_date,$end_date])
+                ->sum('qty');
+        array_push($sales, $totalPurchases);
+        $label = "Expected Excess";
+        array_push($labelsArray, $label);
+        $expectedAccess = $totalPurchases/ 5000 * 50;
+        array_push($sales, $expectedAccess);
+        $label = "Get Excess";
+        array_push($labelsArray, $label);
+        $haveAccess = Purchase::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->whereBetween('date',[$start_date,$end_date])
+                ->sum('access');
+        array_push($sales, $haveAccess);
+        $data['labels']      = "'".implode("', '", $labelsArray)."'";
+        $data['sales']      = "'".implode("', '", $sales)."'";
+        return view('user.reports.excess-analysis.index',compact('data','start_date','end_date','product'));   
+    }
+    public function dipAnalysis(Request $request)
+    {
+        $inital_purchase = Purchase::where('user_id',Auth::user()->id)->whereNotNull('date')->orderBy('date','ASC')->first();
+        $inital_start_date = $inital_purchase?Carbon::parse($inital_purchase->date):Carbon::today();     
+        if($request->end_date)
+        {
+            $start_date =  Carbon::parse($request->end_date)->firstOfMonth();  
+            $end_date = Carbon::parse($request->end_date);
+        }else{
+            // $start_date = $inital_start_date;
+            $last_purchase = Purchase::where('user_id',Auth::user()->id)->whereNotNull('date')->orderBy('date','DESC')->first();
+            $start_date =  $last_purchase?Carbon::parse($last_purchase->date)->firstOfMonth():Carbon::today()->firstOfMonth();  
+            $end_date = $last_purchase?Carbon::parse($last_purchase->date):Carbon::today();
+        } 
+        $labelsArray = [];
+        $sales = [];
+        if($request->product_id)
+        {
+            $product = Product::find($request->product_id);
+        }else{
+            $product = Product::find(1);
+        }
+        $totalDips = Purchase::query()
+                ->where('user_id',Auth::user()->id)
+                ->where('product_id',$product->id)
+                ->where('dip','!=',0)
+                ->whereBetween('date',[$start_date,$end_date])->get();
+        return view('user.reports.dip-analysis.index',compact('totalDips','start_date','end_date','product'));   
+    }
+    public function supplierAnalysis(Request $request)
+    {
+        $inital_debit_credit = DebitCredit::where('user_id',Auth::user()->id)->whereNotNull('sale_date')->orderBy('sale_date','ASC')->first();
+        $inital_start_date = $inital_debit_credit?Carbon::parse($inital_debit_credit->sale_date):Carbon::today();     
+        $last_debit_credit = DebitCredit::where('user_id',Auth::user()->id)->whereNotNull('sale_date')->orderBy('sale_date','DESC')->first();
+        $end_date = $last_debit_credit?Carbon::parse($last_debit_credit->sale_date):Carbon::today();
+        $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->orderBy('display_order','ASC')->get();
+        $account  = DebitCreditAccount::where('supplier_id',Supplier::first()->id)->first();
+        $balance = $account->debitCredits($inital_start_date,$end_date);
+        return view('user.reports.supplier-analysis.index',compact('products','balance'));   
     }
 }

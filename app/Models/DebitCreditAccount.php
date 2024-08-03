@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Customer;
 use App\Models\Expense;
 use App\Models\Vendor;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,6 +14,7 @@ class DebitCreditAccount extends Model
     protected $fillable = [
         'customer_id','vendor_id','supplier_id','user_id','expense_id','name','account_category_id',
         'employee_id','phone','address','designation','product_id','is_hide','display_order','site_id'
+        ,'salary'
     ];
     public function customer()
     {
@@ -101,5 +103,17 @@ class DebitCreditAccount extends Model
         // $month_profit = MonthProfit::where('product_id',$product->id)->whereDate('end_date',$end_date)
         //                     ->where('user_id',Auth::user()->id)->sum('amount');
         return round($amount + $sale - $purchase);
+    }
+    public function isSalaryTransfer($date)
+    {   
+        $isAlreadyPaid = DebitCredit::where('user_id',Auth::user()->id)
+            ->where('account_id',$this->id)
+            ->where('is_salary_transfer',1)
+            ->whereMonth('sale_date',Carbon::parse($date)->format('m'))->first();
+        if($isAlreadyPaid)
+        {
+            return "Salary Transfer on ".$isAlreadyPaid->sale_date->format('d M, Y')." with amount ".$isAlreadyPaid->credit;
+        }
+        return null;
     }
 }

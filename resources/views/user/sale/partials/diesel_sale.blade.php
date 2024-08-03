@@ -42,7 +42,7 @@
             @if($key == 0)
             <label>Qty</label>
             @endif
-            <input name="qty[]" id="diesel_qty_{{$key}}" type="text" value="{{old('qty')}}" class="form-control desiel_qty" placeholder="Enter Product Quantity"  readonly>
+            <input name="qty[]" id="diesel_qty_{{$key}}" type="text" value="{{old('qty')}}" class="form-control diesel_sale_quantity" placeholder="Enter Product Quantity"  readonly>
         </div>
     </div>
     @endforeach
@@ -62,7 +62,7 @@
     <div class="row" id="testing_fields" style="display:none;">
         <div class="form-group col-md-6">
             <label>Qty</label>
-            <input type="number" class="form-control" name="testing_quantity" id="testing_quantity">
+            <input type="number" class="form-control" style="width:50%;" name="testing_quantity" id="diesel_testing_quantity">
         </div>
     </div>
     <div class="row">
@@ -81,21 +81,59 @@
     <div class="row" id="diesel_whole_sale_fields" style="display:none;">
         <div class="form-group col-md-4">
             <label>Qty</label>
-            <input type="number" class="form-control" name="wholesale_quantity" id="diesel_wholesale_quantity">
+            <input type="number" class="form-control" style="width:50%;" name="wholesale_quantity" id="diesel_wholesale_quantity">
         </div>
         <div class="form-group col-md-4">
             <label>Price</label>
-            <input type="number" class="form-control" name="wholesale_price" id="diesel_wholesale_price" value="{{App\Models\Product::dieselSellingPrice()}}">
+            <input type="number" class="form-control" style="width:50%;" name="wholesale_price" id="diesel_wholesale_price" value="{{App\Models\Product::dieselSellingPrice()}}">
         </div>
         <div class="form-group col-md-4">
             <label>Total Amount</label>
-            <input type="number" class="form-control" name="wholesale_total_amount" id="diesel_wholesale_total_amount">
+            <input type="number" class="form-control" style="width:50%;" name="wholesale_total_amount" id="diesel_wholesale_total_amount">
         </div>
     </div>
-    <div class="row">
+    {{-- <div class="row">
         <div class="form-group col-md-2">
             <label>Dip</label>
             <input type="number" class="form-control" name="dip">
+        </div>
+    </div> --}}
+    <div class="row">
+        <div class="form-group col-md-3">
+            <label>Total Sale</label>
+            <input type="number" style="width:50%;" value="0" readonly class="form-control" min="0" id="diesel_total_sale" name="total_sale">
+        </div>
+    </div>
+    <div class="row">
+        <input type="hidden" name="sale_type[]" value="Day">
+        <div class="form-group col-md-3">
+            <label>Day Supply Sale</label>
+            <input type="number" style="width:50%;" class="form-control" min="0" id="diesel_supply_sale" value="0" name="supply_sale[]" value="0" required>
+            <p id="supply-sale-response" style="color:red;"></p>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Day Retail Sale</label>
+            <input type="number" style="width:50%;" class="form-control"  min="0" id="diesel_retail_sale" value="0" name="retail_sale[]" value="0">
+        </div>
+        <div class="form-group col-md-3">
+            <label>Day Total Sale</label>
+            <input type="number" style="width:50%;" value="0" readonly class="form-control" min="0" id="day_diesel_total_sale" name="day_and_night_sale[]">
+        </div>
+    </div>
+    <div class="row">
+        <input type="hidden" name="sale_type[]" value="Night">
+        <div class="form-group col-md-3">
+            <label>Night Supply Sale</label>
+            <input type="number" style="width:50%;" class="form-control" min="0" id="night_diesel_supply_sale" value="0" name="supply_sale[]" required>
+            <p id="night-diesel-supply-sale-response" style="color:red;"></p>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Night Retail Sale</label>
+            <input type="number" style="width:50%;" class="form-control" min="0" id="night_diesel_retail_sale" value="0" name="retail_sale[]">
+        </div>
+        <div class="form-group col-md-3">
+            <label>Night Total Sale</label>
+            <input type="number" style="width:50%;" value="0" readonly class="form-control" min="0" id="night_diesel_total_sale" name="day_and_night_sale[]">
         </div>
     </div>
     <div class="row">
@@ -115,7 +153,7 @@
                 <tr>
                     <td>
                         Purchase 
-                        <button type="button" data-toggle="modal" data-target="#add-purchase-modal" product_name="HSD" product_id="1"
+                        <button type="button" data-toggle="modal" data-target="#add-purchase-modal" date="{{$date}}" product_name="HSD" product_id="1"
                             class="add-purchase-btn btn btn-primary btn-sm">Add New Purchase</button>
 
                     </td>

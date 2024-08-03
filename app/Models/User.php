@@ -21,7 +21,8 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'username', 'password','type','capital_amount','petrol_red_zone','diesel_red_zone',
-        'petrol_low_stock','diesel_low_stock','user_id','description','image'
+        'petrol_low_stock','diesel_low_stock','user_id','description','image',
+        'petrol_total_capacity','diesel_total_capacity','display_order'
     ];
 
     /**
@@ -264,7 +265,7 @@ class User extends Authenticatable
         $todayPurchase = Purchase::where('user_id',$this->id)->where('product_id',$product->id)->whereDate('date',$date)->first();
         if(!$todayPurchase && $product->id == 1 || $product->id == 2)
         {
-            $price = LossGainTranscation::where('user_id',Auth::user()->id)->where('product_id', $product->id)->whereDate('date','<=', $date)->orderBy('date','DESC')->first();
+            $price = LossGainTranscation::where('user_id',$this->id)->where('product_id', $product->id)->whereDate('date','<=', $date)->orderBy('date','DESC')->first();
             if($price)
                 return $price->new_price; 
         }
@@ -281,12 +282,12 @@ class User extends Authenticatable
         $category_id = AccountCategory::where('name','Expenses & Income')->first()->id;
         $credit = DebitCredit::select('debit_credits.*','debit_credit_accounts.account_category_id as account_category_id')
             ->join('debit_credit_accounts', 'debit_credits.account_id', 'debit_credit_accounts.id')
-            ->where('debit_credits.user_id',Auth::user()->id)
+            ->where('debit_credits.user_id',$this->id)
             ->where('debit_credit_accounts.account_category_id',$category_id)
             ->whereBetween('debit_credits.sale_date', [$start_date,$end_date])->sum('credit');
         $debit = DebitCredit::select('debit_credits.*','debit_credit_accounts.account_category_id as account_category_id')
             ->join('debit_credit_accounts', 'debit_credits.account_id', 'debit_credit_accounts.id')
-            ->where('debit_credits.user_id',Auth::user()->id)
+            ->where('debit_credits.user_id',$this->id)
             ->where('debit_credit_accounts.account_category_id',$category_id)
             ->whereBetween('debit_credits.sale_date', [$start_date,$end_date])
             ->sum('debit');
@@ -297,27 +298,27 @@ class User extends Authenticatable
         $category_id = AccountCategory::where('name','Expenses & Income')->first()->id;
         $credit = DebitCredit::select('debit_credits.*','debit_credit_accounts.account_category_id as account_category_id')
             ->join('debit_credit_accounts', 'debit_credits.account_id', 'debit_credit_accounts.id')
-            ->where('debit_credits.user_id',Auth::user()->id)
+            ->where('debit_credits.user_id',$this->id)
             ->where('debit_credit_accounts.account_category_id',$category_id)
             ->whereBetween('debit_credits.sale_date', [$start_date,$end_date])->sum('credit');
         $debit = DebitCredit::select('debit_credits.*','debit_credit_accounts.account_category_id as account_category_id')
             ->join('debit_credit_accounts', 'debit_credits.account_id', 'debit_credit_accounts.id')
-            ->where('debit_credits.user_id',Auth::user()->id)
+            ->where('debit_credits.user_id',$this->id)
             ->where('debit_credit_accounts.account_category_id',$category_id)
             ->whereBetween('debit_credits.sale_date', [$start_date,$end_date])
             ->sum('debit');
-        $loss_gain_amount = LossGainTranscation::where('user_id',Auth::user()->id)->whereBetween('date', [$start_date,$end_date])->sum('amount');
+        $loss_gain_amount = LossGainTranscation::where('user_id',$this->id)->whereBetween('date', [$start_date,$end_date])->sum('amount');
         $total_amount = $credit - $debit;
         return abs($total_amount)  - $loss_gain_amount;
     }
     public function productLossGainTranscation($date,$product_id)
     {
-        $loss_gain_amount = LossGainTranscation::where('user_id',Auth::user()->id)->where('product_id', $product_id)->whereDate('date', $date)->sum('amount');
+        $loss_gain_amount = LossGainTranscation::where('user_id',$this->id)->where('product_id', $product_id)->whereDate('date', $date)->sum('amount');
         return $loss_gain_amount;
     }
     public function getCurrentPrice($date,$product_id)
     {
-        $price = LossGainTranscation::where('user_id',Auth::user()->id)->where('product_id', $product_id)->whereDate('date','<=', $date)->first()->new_price;
+        $price = LossGainTranscation::where('user_id',$this->id)->where('product_id', $product_id)->whereDate('date','<=', $date)->first()->new_price;
         return $price;
     }
     public function getDieselOpeningBalance($date)
@@ -433,6 +434,25 @@ class User extends Authenticatable
                         ->whereDate('date',$date)
                         ->first();  
         return $dip;
+    }
+    public function getSaleDetail($date,$product,$type)
+    {   
+        $saleDetail = SaleDetail::where('user_id',$this->id)
+                        ->where('product_id',$product->id)
+                        ->where('type',$type)
+                        ->whereDate('sale_date',$date)
+                        ->first();  
+        return $saleDetail;
+    }
+    public function getMachineSaleQuantity($date,$product)
+    {   
+        $qty = Sale::whereNotNull('machine_id')
+                    ->whereDate('sale_date',$date)
+                    ->where('product_id',$product->id)
+                    ->where('user_id',$this->id)
+                    ->sum('qty');
+
+        return $qty;
     }
     public function todaySaleAmount($date)
     {

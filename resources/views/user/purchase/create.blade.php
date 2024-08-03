@@ -41,16 +41,21 @@
                             <label> Date</label>
                             <input name="date" type="date" id="date"  class="form-control"  required>
                         </div>
+                        <div class="form-group col-md-6">
+                            <label>Product Dip</label>
+                            <input name="dip" id="dip"  type="number" value="{{old('dip')?old('dip'):0}}" class="form-control" placeholder="Enter Product Dip">
+                        </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-6">
                             <div class="checkbox">
                                 <label>
                                     <input
-                                            name="local_vendor"
+                                            name="is_supplier"
                                             type="checkbox"
-                                            id="local_vendor"
-                                    > Local Vendor 
+                                            checked
+                                            id="is_supplier"
+                                    > Supplier 
                                 </label>
                             </div>
                         </div>
@@ -132,13 +137,13 @@
             $('#amount').val('');
             $('#vendor_account_id').attr('required',false);
         });
-        $('#local_vendor').change(function(){
+        $('#is_supplier').change(function(){
             if (this.checked) {
-                $('#supplier_field').hide();
-                $('.local_vendor_fields').show();
-            }else{
                 $('.local_vendor_fields').hide();
                 $('#supplier_field').show();
+            }else{
+                $('#supplier_field').hide();
+                $('.local_vendor_fields').show();
             }
         });
         $('#date').change(function(){

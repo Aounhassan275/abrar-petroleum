@@ -47,7 +47,7 @@
                                             End Date
                                         </label>   
 
-                                            <input type="text" name="end_date" class="daterange-single form-control pull-right dates" style="height: 35px; "
+                                            <input type="text" name="select_month_end_date" class="daterange-single form-control pull-right dates" style="height: 35px; "
                                                 value="{{ date('m/d/Y', strtotime(@$end_date))}}">
                                     </div>
                                     <div class="form-group col-2 current_month_field" @if(request()->type == 'Selected Month') hidden @endif>
@@ -83,7 +83,7 @@
                             </form>
                             <div class="row">
                                 <div class="col-md-12 mb-2">
-                                    <a href="{{route('user.debit_credit_account.index')}}" class="btn btn-info btn-sm float-right">Manage Debit Credit Account</a>
+                                    <a href="{{route('user.debit_credit_account.index',['account_category_id'=>$account_category->id])}}" class="btn btn-info btn-sm float-right">Manage Debit Credit Account</a>
                                 </div>
                             </div>
                             @if($sub_account && $active_tab == $account_category->id)

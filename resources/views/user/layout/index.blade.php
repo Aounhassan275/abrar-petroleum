@@ -195,11 +195,17 @@
 							</a>
 						</li>
 						@endif
-						<li class="nav-item">
-							<a href="{{route('user.reports.index')}}" class="nav-link {{Request::is('user/reports') ?'active':''}}">
-								<i class="icon-home4"></i>
-								<span>Reports</span>
-							</a>
+						<li class="nav-item nav-item-submenu {{Request::is('user/reports*')?'nav-item-open':''}}">
+							<a href="#" class="nav-link"><i class="icon-cart-remove"></i> <span>Reports</span></a>
+
+							<ul class="nav nav-group-sub" data-submenu-title="Layouts" style="{{Request::is('user/reports*') ?'display:block':''}}">
+								<li class="nav-item"><a href="{{route('user.reports.product-analysis')}}" class="nav-link {{Request::is('user/reports/product-analysis')?'active':''}}">Product Analysis</a></li>
+								<li class="nav-item"><a href="{{route('user.reports.supply')}}" class="nav-link {{Request::is('user/reports/supply')?'active':''}}">Supply</a></li>
+								<li class="nav-item"><a href="{{route('user.reports.day-night-sale')}}" class="nav-link {{Request::is('user/reports/day-night-sale')?'active':''}}">Day Night Sale</a></li>
+								<li class="nav-item"><a href="{{route('user.reports.excess-analysis')}}" class="nav-link {{Request::is('user/reports/excess-analysis')?'active':''}}">Excess Analysis</a></li>
+								<li class="nav-item"><a href="{{route('user.reports.supplier-analysis')}}" class="nav-link {{Request::is('user/reports/supplier-analysis')?'active':''}}">Supplier Analysis</a></li>
+								<li class="nav-item"><a href="{{route('user.reports.index')}}" class="nav-link {{Request::is('user/reports')?'active':''}}">Other Reports</a></li>
+							</ul>
 						</li>
 						{{-- <li class="nav-item">
 							<a href="{{route('user.vendor.index')}}" class="nav-link {{Request::is('user/vendor') || Request::is('user/vendor/*') ?'active':''}}">

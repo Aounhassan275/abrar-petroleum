@@ -62,6 +62,7 @@
 <body style="background-color:white;">
     <div class="row">
         <div class="col-md-12 text-center">
+            <h1><strong>Site Name :</strong> {{Auth::user()->username}}</h1>
             <h1>TRAIL BALANCE REPORT</h1> 
             <p>From {{$start_date->format('d M,Y')}} to {{$end_date->format('d M,Y')}}</p>
         </div>
