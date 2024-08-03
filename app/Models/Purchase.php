@@ -8,7 +8,8 @@ class Purchase extends Model
 {
     protected $fillable = [
         'price', 'qty','total_amount','status','product_id','vendor_id','supplier_id',
-        'user_id','vendor_terminal_id','access','date','access_total_amount'
+        'user_id','vendor_terminal_id','access','date','access_total_amount','type',
+        'supplier_vehicle_id'
     ];
     protected $casts = [
         'date' => 'date',

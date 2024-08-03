@@ -58,6 +58,15 @@
 	<script src="{{asset('admin/global_assets/js/demo_pages/job_list.js')}}"></script>
 	<!-- /theme JS files -->
 	@yield('css')
+	
+    <style>
+        .response_error{
+            color:red;
+        }
+        .response_success{
+            color:green;
+        }
+    </style>
 </head>
 
 <body>
@@ -185,16 +194,22 @@
 								<span>Vehicle</span>
 							</a>
 						</li>
-						{{-- <li class="nav-item">
+						<li class="nav-item">
 							<a href="{{route('supplier.product.index')}}" class="nav-link {{Request::is('supplier/product') ?'active':''}}">
 								<i class="icon-home4"></i>
 								<span>Product</span>
 							</a>
-						</li> --}}
+						</li>
 						<li class="nav-item">
 							<a href="{{route('supplier.purchase.index')}}" class="nav-link {{Request::is('supplier/purchase') || Request::is('supplier/purchase/*')?'active':''}}">
 								<i class="icon-home4"></i>
 								<span>Purchase</span>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="{{route('supplier.debit_credit_account.index')}}" class="nav-link {{Request::is('supplier/debit_credit_account') || Request::is('supplier/debit_credit_account/*')?'active':''}}">
+								<i class="icon-home4"></i>
+								<span>Manage Accounts</span>
 							</a>
 						</li>
 					</ul>

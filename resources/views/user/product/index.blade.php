@@ -62,7 +62,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (App\Models\Product::whereNull('user_id')->orWhere('user_id',Auth::user()->id)->orderBy('display_order','ASC')->get() as $key => $product)
+            @foreach (App\Models\Product::whereNull('supplier_id')->whereNull('user_id')->orWhere('user_id',Auth::user()->id)->orderBy('display_order','ASC')->get() as $key => $product)
             <tr>
                 <td>{{$key+1}}</td>
                 <td>{{$product->name}}</td>

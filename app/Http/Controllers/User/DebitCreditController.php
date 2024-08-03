@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Helpers\SupplierHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DebitCreditStoreRequest;
 use App\Models\CustomerVehicle;
@@ -30,8 +31,8 @@ class DebitCreditController extends Controller
         }else{
             $date = Carbon::today();
         }
-        $accounts = DebitCreditAccount::where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
-        $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
+        $accounts = DebitCreditAccount::whereNull('supplier_id')->where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
+        $products = Product::whereNull('supplier_id')->where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
         return view('user.debit_credit.index',compact('date','accounts','products'));
     }
 
@@ -90,7 +91,7 @@ class DebitCreditController extends Controller
                                 } else{
                                     $vehicle_id = null;
                                 }
-                                DebitCredit::create([
+                                $debitCredit = DebitCredit::create([
                                     'user_id' => Auth::user()->id,
                                     'product_id' => @$request->product_id[$key],
                                     'qty' => @$request->qty[$key],
@@ -102,6 +103,10 @@ class DebitCreditController extends Controller
                                     'sale_date' => $request->sale_date,
                                     'display_order' => $key + 1,
                                 ]);
+                                if($account_id == 25)
+                                {
+                                    SupplierHelper::storeDebitCredit($debitCredit);
+                                }
                             }else{
                                 $totalEmptyAccount += 1;
                                 $account = DebitCreditAccount::find($account_id);
@@ -203,6 +208,10 @@ class DebitCreditController extends Controller
                             'description' => @$request->description[$key],
                             'sale_date' => $request->sale_date,
                         ]);
+                        if($account_id == 25)
+                        {
+                            SupplierHelper::storeDebitCredit($debitCredit);
+                        }
                     }
                     else
                     {              
@@ -214,7 +223,7 @@ class DebitCreditController extends Controller
                             } else{
                                 $vehicle_id = null;
                             }
-                            DebitCredit::create([
+                            $debitCredit = DebitCredit::create([
                                 'user_id' => Auth::user()->id,
                                 'product_id' => @$request->product_id[$key],
                                 'qty' => @$request->qty[$key],
@@ -226,6 +235,10 @@ class DebitCreditController extends Controller
                                 'sale_date' => $request->sale_date,
                                 'display_order' => $key + 1,
                             ]);
+                            if($account_id == 25)
+                            {
+                                SupplierHelper::storeDebitCredit($debitCredit);
+                            }
                         }      
                     }
 
@@ -282,6 +295,11 @@ class DebitCreditController extends Controller
                             'description' => @$request->description[$key],
                             'sale_date' => $request->sale_date,
                         ]);
+                        
+                        if($account_id == 25)
+                        {
+                            SupplierHelper::storeDebitCredit($debitCredit);
+                        }
                     }
                     else
                     {              
@@ -293,7 +311,7 @@ class DebitCreditController extends Controller
                             } else{
                                 $vehicle_id = null;
                             }
-                            DebitCredit::create([
+                            $debitCredit = DebitCredit::create([
                                 'user_id' => Auth::user()->id,
                                 'product_id' => @$request->product_id[$key],
                                 'qty' => @$request->qty[$key],
@@ -305,6 +323,11 @@ class DebitCreditController extends Controller
                                 'sale_date' => $request->sale_date,
                                 'display_order' => $key + 1,
                             ]);
+                            
+                            if($account_id == 25)
+                            {
+                                SupplierHelper::storeDebitCredit($debitCredit);
+                            }
                         }      
                     }
 
@@ -354,22 +377,33 @@ class DebitCreditController extends Controller
     {
         $debitCredit = DebitCredit::find($id);
         $sale_date = $debitCredit->sale_date;
-        if($debitCredit->purchase_id)
-            Purchase::where('id',$debitCredit->purchase_id)->delete();
-        $debitCredit->delete();
-        toastr()->success('Debit Credit Deleted successfully');
-        return redirect()->to(route('user.sale.index').'?active_tab=debit_credit_missing');
+        if(DebitCredit::where('debit_credit_id',$debitCredit->id)->count() == 0)
+        {
+            if($debitCredit->purchase_id)
+                Purchase::where('id',$debitCredit->purchase_id)->delete();
+            $debitCredit->delete();
+            toastr()->success('Debit Credit Deleted successfully');
+            return redirect()->to(route('user.sale.index').'?active_tab=debit_credit_missing');
+        }else{
+            toastr()->error('There are linked supplier entries');
+            return redirect()->to(route('user.sale.index').'?active_tab=debit_credit_missing');
+        }
     }
     public function delete(Request $request)
     {
         $debitCredit = DebitCredit::find($request->id);
-        $sale_date = $debitCredit->sale_date;
-        if($debitCredit->purchase_id)
-            Purchase::where('id',$debitCredit->purchase_id)->delete();
-        $debitCredit->delete();
-        toastr()->success('Debit Credit Deleted successfully');
-        return redirect()->to(route('user.sale.index').'?active_tab=debit_credit&date='.$sale_date->format('m/d/Y'));
-    }
+        if(DebitCredit::where('debit_credit_id',$debitCredit->id)->count() == 0)
+        {
+            $sale_date = $debitCredit->sale_date;
+            if($debitCredit->purchase_id)
+                Purchase::where('id',$debitCredit->purchase_id)->delete();
+            $debitCredit->delete();
+            toastr()->success('Debit Credit Deleted successfully');
+            return redirect()->to(route('user.sale.index').'?active_tab=debit_credit&date='.$sale_date->format('m/d/Y'));    
+        }else{
+            toastr()->error('There are linked supplier entries');
+            return redirect()->to(route('user.sale.index').'?active_tab=debit_credit&date='.$sale_date->format('m/d/Y'));    
+        } }
     public function getCreditFields(Request $request)
     {
         $key = $request->key;
@@ -380,7 +414,7 @@ class DebitCreditController extends Controller
                 ->groupBy('debit_credit_accounts.id')
                 ->orderBy('accounts', 'DESC')
                 ->get();
-        $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
+        $products = Product::whereNull('supplier_id')->where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
         $html = view('user.sale.partials.debit_credit_fields', compact('key','accounts','products'))->render();
         return response([
             'html' => $html,

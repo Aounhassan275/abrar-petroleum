@@ -27,7 +27,8 @@ class DebitCreditStoreRequest extends FormRequest
             
         $rules = [
             'sale_date' => 'required',
-            'user_id' => 'required|numeric',
+            'user_id' => 'nullable|numeric|required_without:supplier_id',
+            'supplier_id' => 'nullable|numeric|required_without:user_id',
             'account_id.*' => 'required|numeric',
             'product_id.*' => 'nullable|numeric',
             'qty.*' => 'nullable|numeric',

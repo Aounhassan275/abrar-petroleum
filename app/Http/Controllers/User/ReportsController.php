@@ -31,7 +31,7 @@ class ReportsController extends Controller
             $start_date =  $last_debit_credit?Carbon::parse($last_debit_credit->sale_date)->firstOfMonth():Carbon::today()->firstOfMonth();  
             $end_date = $last_debit_credit?Carbon::parse($last_debit_credit->sale_date):Carbon::today();
         } 
-        $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->orderBy('display_order','ASC')->get();
+        $products = Product::whereNull('supplier_id')->where('user_id',Auth::user()->id)->orWhereNull('user_id')->orderBy('display_order','ASC')->get();
         if($request->testing_product)
         {
             $testing_product = Product::where('name',$request->testing_product)->first();
@@ -65,7 +65,7 @@ class ReportsController extends Controller
         }
         $active_tab = $request->active_tab?$request->active_tab:'trail_balance';
         $product_account_category_id = AccountCategory::where('name','Products')->first()->id;
-        $accounts = DebitCreditAccount::where('user_id',Auth::user()->id)->orWhereNull('user_id')
+        $accounts = DebitCreditAccount::whereNull('supplier_id')->where('user_id',Auth::user()->id)->orWhereNull('user_id')
                         ->orderBy('account_category_id', 'ASC')->get();
         $category_id = AccountCategory::where('name','Expenses & Income')->first()->id;
         $cash_account_id = DebitCreditAccount::where('name','Cash in Hand')->first()->id;

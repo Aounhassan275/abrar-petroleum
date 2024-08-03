@@ -27,7 +27,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label>Product Purchasing Price</label>
-                            <input name="price" id="price" type="text" value="{{old('price')}}" class="form-control" placeholder="Enter Product Price" required readonly>
+                            <input name="price" id="price" type="text" value="{{old('price')}}" class="form-control" placeholder="Enter Product Price" required >
                         </div>
                         <div class="form-group col-md-6">
                             <label>Product Qty</label>
@@ -40,6 +40,10 @@
                         <div class="form-group col-md-6">
                             <label>Product Access</label>
                             <input name="access" id="access" value="0" type="text" value="{{old('access')}}" class="form-control" placeholder="Enter Product Access" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Purchase Date</label>
+                            <input name="date" id="date" value="0" type="date" value="{{old('access')}}" class="form-control" placeholder="Enter Product Access" required>
                         </div>
                         <div class="form-group col-md-6">
                             <label>Vehicle</label>
@@ -56,6 +60,15 @@
                                 <option selected disabled>Select Terminal</option>
                                 @foreach(Auth::user()->terminals as $terminal)
                                 <option value="{{$terminal->id}}">{{$terminal->name}}</option>
+                                @endforeach                                
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Vendor Accounts</label>
+                            <select class="form-control select-search" name="debit_credit_account_id" required>
+                                <option value="">Select Account</option>
+                                @foreach($accounts as $account)
+                                <option value="{{$account->id}}">{{$account->name}}</option>
                                 @endforeach                                
                             </select>
                         </div>

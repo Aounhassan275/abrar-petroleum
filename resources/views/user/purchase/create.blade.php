@@ -20,7 +20,7 @@
                             <label>Products</label>
                             <select class="form-control select-search" name="product_id" id="product_id" required data-fouc>
                                 <option value="">Choose Product</option>
-                                @foreach(App\Models\Product::whereNull('user_id')->orWhere('user_id',Auth::user()->id)->get() as $product)    
+                                @foreach(App\Models\Product::whereNull('supplier_id')->whereNull('user_id')->orWhere('user_id',Auth::user()->id)->get() as $product)    
                                 <option value="{{$product->id}}">{{$product->name}}</option>
                                 @endforeach
                             </select>

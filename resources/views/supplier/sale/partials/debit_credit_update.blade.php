@@ -24,14 +24,21 @@
         <div class="form-group col-md-1">
             Qty
         </div>
-        <div class="form-group col-md-2">
-            Debit
+        <div class="col-md-4">
+            <div class="row"> 
+                <div class="form-group col-md-4">
+                    Debit
+                </div>
+                <div class="form-group col-md-4">
+                    Credit
+                </div>
+                <div class="form-group col-md-4">
+                    Description
+                </div>
+            </div>
         </div>
         <div class="form-group col-md-2">
-            Credit
-        </div>
-        <div class="form-group col-md-2">
-            Description
+            Vehicle
         </div>
     </div>      
         
@@ -47,15 +54,24 @@
         <div class="form-group col-md-1">
             <input type="text" class="form-control" readonly >
         </div>
-        <div class="form-group col-md-2">
-            <input type="text"class="form-control" value="" readonly>
+        <div class="col-md-4">
+            <div class="row"> 
+                <div class="form-group col-md-4">
+                    <input type="text"class="form-control" value="" readonly>
 
+                </div>
+                <div class="form-group col-md-4">
+                    <input type="number" name="last_day_cash" class="form-control" readonly value="{{round($lastDayCash->debit)}}">
+                </div>
+                <div class="form-group col-md-4">
+                    <input type="text" class="form-control" readonly value="">
+                </div>
+            </div>
         </div>
         <div class="form-group col-md-2">
-            <input type="text" name="last_day_cash" class="form-control" readonly value="{{round($lastDayCash->debit)}}">
-        </div>
-        <div class="form-group col-md-2">
-            <input type="text" class="form-control" readonly value="">
+            <select class="form-control" readonly>
+                <option value="">Select Vehicle</option>
+            </select>
         </div>
     </div>  
     @endif  
@@ -75,15 +91,24 @@
         <div class="form-group col-md-1">
             <input type="text" name="qty[]" class="form-control" readonly >
         </div>
-        <div class="form-group col-md-2">
-            <input type="text" name="debit[]" class="form-control" value="" readonly>
-
+        
+        <div class="col-md-4">
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <input type="text" name="debit[]" class="form-control" value="" readonly>
+                </div>
+                <div class="form-group col-md-4">
+                    <input type="text" name="credit[]" class="form-control" readonly value="{{round(Auth::user()->todaySaleAmount($date))}}">
+                </div>
+                <div class="form-group col-md-4">
+                    <input type="text" name="description[]" class="form-control" readonly value="">
+                </div>
+            </div>
         </div>
         <div class="form-group col-md-2">
-            <input type="text" name="credit[]" class="form-control" readonly value="{{round(Auth::user()->todaySaleAmount($date))}}">
-        </div>
-        <div class="form-group col-md-2">
-            <input type="text" name="description[]" class="form-control" readonly value="">
+            <select name="vehicle_id[]" class="form-control" readonly>
+                <option value="">Select Vehicle</option>
+            </select>
         </div>
     </div>  
     @endif
@@ -93,8 +118,19 @@
         <div class="form-group col-md-1">
             <button onclick="deleteDebitCredit('{{$debit_credit->id}}')" type="button" class="btn btn-danger btn-sm">Delete</button>
         </div>
-        <div class="form-group col-md-2">
-            <select name="account_id[]" 
+        @php 
+            if(!$debit_credit->site_validation){
+                $colorClass = 'pending_color';
+            }else if(!$debit_credit->supplier_validation)
+            {
+                $colorClass = 'verify_color';
+            }else{
+                $colorClass = 'verified_color';
+            }
+        @endphp
+        <div class="form-group col-md-2 ">
+            <select name="account_id[]" onchange="debitCreditAccount('{{ @$key }}','0')"
+            id="credit_debit_account_id_{{$key}}"
             @if($debit_credit->account_id == null) style="color:red;" @endif
             class="form-control" required @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly @endif>
                 <option >Select Account</option>
@@ -108,6 +144,7 @@
                     @endforeach
                 @endif
             </select>
+            <p id="error-account_id-{{$key}}" class="error-fields" style="color:red;display:none;">Account ID is required.</p> 
         </div>
         <div class="form-group col-md-2">
             @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id)
@@ -125,27 +162,44 @@
             </select>
 
             @endif
+            <p id="error-product_id-{{$key}}" class="error-fields" style="color:red;display:none;">Product ID must be numeric.</p> 
         </div>
         <div class="form-group col-md-1">
-            <input type="text" name="qty[]" 
+            <input type="number" name="qty[]" 
             {{-- style="color:{{$debit_credit->account->accountCategory->color}};"  --}}
             value="{{@$debit_credit->qty}}" class="form-control" id="credit_debit_qty_{{$key}}" onchange="debitQuantity('{{ @$key }}')" @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly @endif>
+            <p id="error-qty-{{$key}}" class="error-fields" style="color:red;display:none;">Qty must be numeric.</p> 
         </div>
-        <div class="form-group col-md-2">
-            <input type="text" name="debit[]" 
-            {{-- style="color:{{$debit_credit->account->accountCategory->color}};"  --}}
-            value="{{round(@$debit_credit->debit,0)}}"  id="credit_debit_debit_{{$key}}" class="form-control {{$debit_credit->account_id == $cash_account_id ? 'cash_debit_values' : ''}}" @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly  @endif>
+        <div class="col-md-4">
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <input type="number" name="debit[]" 
+                    {{-- style="color:{{$debit_credit->account->accountCategory->color}};"  --}}
+                    value="{{round(@$debit_credit->debit,0)}}"  id="credit_debit_debit_{{$key}}" class="form-control {{$debit_credit->account_id == $cash_account_id ? 'cash_debit_values' : ''}}" @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly  @endif>
+                    <p id="error-debit-{{$key}}" class="error-fields" style="color:red;display:none;">Debit must be numeric.</p> 
+                </div>
+                <div class="form-group col-md-4">
+                    <input type="number" name="credit[]" 
+                    {{-- style="color:{{$debit_credit->account->accountCategory->color}};"  --}}
+                    value="{{round(@$debit_credit->credit)}}" id="credit_debit_credit_{{$key}}" class="form-control {{$debit_credit->account_id == $cash_account_id ? 'cash_credit_values' : ''}}"  @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly @endif>
+                    <p id="error-credit-{{$key}}" class="error-fields" style="color:red;display:none;">Credit must be numeric.</p> 
+                </div>
+                <div class="form-group col-md-4">
+                    <input type="text" name="description[]" 
+                    {{-- style="color:{{$debit_credit->account->accountCategory->color}};"  --}}
+                    value="{{@$debit_credit->description}}"  class="form-control" readonly value="">
+                </div>
+
+            </div>
 
         </div>
         <div class="form-group col-md-2">
-            <input type="text" name="credit[]" 
-            {{-- style="color:{{$debit_credit->account->accountCategory->color}};"  --}}
-            value="{{round(@$debit_credit->credit)}}" id="credit_debit_credit_{{$key}}" class="form-control {{$debit_credit->account_id == $cash_account_id ? 'cash_credit_values' : ''}}"  @if($debit_credit->account_id == 42 || $debit_credit->account_id == $cash_account_id) readonly @endif>
-        </div>
-        <div class="form-group col-md-2">
-            <input type="text" name="description[]" 
-            {{-- style="color:{{$debit_credit->account->accountCategory->color}};"  --}}
-            value="{{@$debit_credit->description}}"  class="form-control" readonly value="">
+            <select name="vehicle_id[]" id="credit_debit_vehicle_id_{{$key}}" class="form-control" @if(!$debit_credit->customer_vehicle_id) readonly @endif>
+                <option value="">Select Vehicle</option>
+                @foreach(App\Models\CustomerVehicle::where('debit_credit_account_id',$debit_credit->account_id)->get() as $customer_vehicle)
+                <option {{$customer_vehicle->id == $debit_credit->customer_vehicle_id ? 'selected' : ''}} value="{{$customer_vehicle->id}}">{{$customer_vehicle->name}}</option>
+                @endforeach
+            </select>
         </div>
     </div>  
     @endforeach
@@ -167,14 +221,14 @@
             <input type="text" name="product_id[]" class="form-control" readonly >
         </div>
         <div class="form-group col-md-1">
-            <input type="text" name="qty[]" class="form-control" readonly >
+            <input type="number" name="qty[]" class="form-control" readonly >
         </div>
         <div class="form-group col-md-2">
-            <input type="text" name="debit[]" class="form-control cash_debit_values" id="cash_debit_values" value="" readonly>
+            <input type="number" name="debit[]" class="form-control cash_debit_values" id="cash_debit_values" value="" readonly>
 
         </div>
         <div class="form-group col-md-2">
-            <input type="text" name="credit[]" class="form-control cash_credit_values" id="cash_credit_values"  readonly>
+            <input type="number" name="credit[]" class="form-control cash_credit_values" id="cash_credit_values"  readonly>
         </div>
         <div class="form-group col-md-2">
             <input type="text" name="description[]" class="form-control" readonly value="">
@@ -195,6 +249,11 @@
             <input type="text" value="" id="total_credit_amount" class="form-control total_credit_amount" readonly >
         </div>
     </div> 
+    <div class="row">
+        <div class="col-md-12">
+            <p id="error-message-reponse" style="color:red"></p> 
+        </div>
+    </div>
     <div class="text-right" style="margin-top:10px;"> 
         <button type="button" class="btn btn-success add-more-fields">Add More Fields</button>
         <button type="button" class="btn btn-primary calcluate-debit-credit-values-for-updates">Calcluate</button>

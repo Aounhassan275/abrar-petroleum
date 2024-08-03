@@ -19,6 +19,7 @@ class AccountCategory extends Model
         $userId = Auth::user()->id;
         return DebitCreditAccount::query()->select('debit_credit_accounts.*')
             ->where('account_category_id', $this->id)
+            ->whereNull('supplier_id')
             ->where(function ($query) use ($userId) {
                 $query->where('user_id', $userId)
                     ->orWhereNull('user_id');

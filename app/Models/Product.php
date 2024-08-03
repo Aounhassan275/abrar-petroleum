@@ -244,13 +244,14 @@ class Product extends Model
             $supplier_id = Auth::user()->id;
         $total_stock = $this->supplierPurchases->where('supplier_id',$supplier_id)->sum('qty');
         $total_access_stock = $this->supplierPurchases->where('supplier_id',$supplier_id)->sum('access');
-        return $total_stock + $total_access_stock;
+        $total_shortage_stock = $this->supplierPurchases->where('supplier_id',$supplier_id)->sum('shortage');
+        return $total_stock + $total_access_stock - $total_shortage_stock;
     }
     public function supplierTotalSales($supplier_id = null)
     {
         if(!$supplier_id)
             $supplier_id = Auth::user()->id;
-        $total_sale = Purchase::where('supplier_id',$supplier_id)->sum('qty'); 
+        $total_sale = Purchase::where('supplier_id',$supplier_id)->where('product_id',$this->id)->sum('qty'); 
         return $total_sale;
     }
     public function supplierAvailableStock($supplier_id = null)

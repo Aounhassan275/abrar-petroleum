@@ -8,7 +8,8 @@ class SupplierPurchase extends Model
 {
     protected $fillable = [
         'price', 'qty','total_amount','status','product_id','supplier_id','supplier_vehicle_id',
-        'supplier_terminal_id','access','date'
+        'supplier_terminal_id','access','date','debit_credit_account_id','access_total_amount',
+        'shortage','shortage_total_amount'
     ];
 
     protected $casts = [
@@ -30,5 +31,9 @@ class SupplierPurchase extends Model
     public function vehicle()
     {
         return $this->belongsTo('App\Models\SupplierVehicle','supplier_vehicle_id');
+    }
+    public function debit_credit_account()
+    {
+        return $this->belongsTo('App\Models\DebitCreditAccount','debit_credit_account_id');
     }
 }

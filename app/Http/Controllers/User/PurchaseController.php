@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Helpers\SupplierHelper;
 use App\Http\Controllers\Controller;
 use App\Models\DebitCredit;
 use App\Models\DebitCreditAccount;
@@ -127,8 +128,8 @@ class PurchaseController extends Controller
                 ]);
                 if($request->supplier_id)
                 {
-                    $supplier_account_id  = DebitCreditAccount::where('supplier_id',$request->supplier_id)->first()->id;
-                    DebitCredit::create([
+                    $supplier_account_id  = DebitCreditAccount::where('name','Alitraders')->where('supplier_id',$request->supplier_id)->first()->id;
+                    $debitcredit = DebitCredit::create([
                         'user_id' => Auth::user()->id,
                         'credit' => @$purchase->total_amount,
                         'account_id' => $supplier_account_id,
@@ -136,6 +137,7 @@ class PurchaseController extends Controller
                         'purchase_id' => $purchase->id,
                         'description' => $purchase->qty.' litres '.$purchase->product->name,
                     ]);
+                    SupplierHelper::storeDebitCredit($debitcredit);
                 }
 
             }

@@ -75,7 +75,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (App\Models\DebitCreditAccount::whereNull('user_id')->get() as $key => $debit_credit_account)
+            @foreach (App\Models\DebitCreditAccount::whereNull('supplier_id')->whereNull('user_id')->get() as $key => $debit_credit_account)
             <tr>
                 <td>{{$key+1}}</td>
                 <td colspan="2">{{$debit_credit_account->name}}</td>

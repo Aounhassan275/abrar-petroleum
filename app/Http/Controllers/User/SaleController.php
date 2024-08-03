@@ -58,7 +58,7 @@ class SaleController extends Controller
         $cash_account_id = DebitCreditAccount::where('name','Cash in Hand')->first()->id;
         $lastDayCash = DebitCredit::where('account_id',$cash_account_id)->whereDate('sale_date',$day_before)->where('user_id',Auth::user()->id)->first();
         $missing_debit_credits = DebitCredit::whereNull('account_id')->where('user_id',Auth::user()->id)->get();
-        $products = Product::where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
+        $products = Product::whereNull('supplier_id')->where('user_id',Auth::user()->id)->orWhereNull('user_id')->get();
         return view('user.sale.create',compact(
             'petrol','diesel','date','active_tab',
             'accounts','products','cash_account_id',

@@ -150,6 +150,14 @@ Route::group(['prefix' => 'supplier', 'as'=>'supplier.','namespace' => 'Supplier
     Route::resource('vendor_account', 'VendorAccountController');  
     /******************SALES ROUTES****************/
     Route::resource('sale', 'PurchaseController');  
+    Route::post('sale/delete_sale_for_misc', 'PurchaseController@deleteSaleForMisc')->name('sale.delete_sale_for_misc');  
+    Route::post('sale/delete_sale', 'PurchaseController@deleteSale')->name('sale.delete_sale');  
+    Route::post('sale/update_sale_rate', 'PurchaseController@updateSaleRate')->name('sale.update_sale_rate');  
+    Route::post('sale/get_sale_details', 'PurchaseController@getSaleDetails')->name('sale.getSaleDetails');  
+    Route::post('sale/get_product_fields', 'PurchaseController@getProductFields')->name('sale.get_product_fields');  
+    // Supplier Purchases Route Start
+    Route::post('sale/get_purchases_fields', 'SupplierPurchaseController@getPurchasesFields')->name('sale.get_purchases_fields');  
+    Route::post('purchase/save', 'SupplierPurchaseController@save')->name('purchase.save');  
     /******************PURCHASE PAYMENTS ROUTES****************/
     Route::resource('purchase_payment', 'PurchasePaymentController');  
     /******************Product ROUTES****************/
@@ -161,6 +169,19 @@ Route::group(['prefix' => 'supplier', 'as'=>'supplier.','namespace' => 'Supplier
     Route::resource('vehicle', 'SupplierVehicleController'); 
     /******************SUPPLIER Purchase ROUTES****************/
     Route::resource('purchase', 'SupplierPurchaseController'); 
+    /******************DEBIT CREDIT ROUTES****************/
+    Route::post('debit_credit/update_form', 'DebitCreditController@updateForm')->name('debit_credit.update_form'); 
+    Route::post('debit_credit/get_credit_fields', 'DebitCreditController@getCreditFields')->name('debit_credit.get_credit_fields');  
+    Route::post('debit_credit/calculate_debit_credit_values', 'DebitCreditController@calculateDebitCreditValues')->name('debit_credit.calculate_debit_credit_values');   
+    Route::post('debit_credit/get_color', 'DebitCreditController@getColor')->name('debit_credit.get_color');  
+    Route::post('debit_credit/delete', 'DebitCreditController@delete')->name('debit_credit.delete');  
+    Route::post('debit_credit/get_customer_vehicle', 'DebitCreditController@get_customer_vehicle')->name('debit_credit.get_customer_vehicle');  
+    Route::get('debit_credit/deleted', 'DebitCreditController@deletedValues')->name('debit_credit.deleted');  
+    Route::delete('debit_credit/force_delete/{id}', 'DebitCreditController@forceDelete')->name('debit_credit.force_delete');  
+    Route::get('debit_credit/verify/{id}', 'DebitCreditController@verify')->name('debit_credit.verify');  
+    Route::resource('debit_credit', 'DebitCreditController');  
+    /******************Debit Credit Account ROUTES****************/
+    Route::resource('debit_credit_account', 'DebitCreditAccountController');  
   });
 });
 
@@ -203,6 +224,8 @@ Route::get('/round_figure', function() {
   }
   return 'Sale Done';
 });
+Route::get('move_debit_credit','CronjobController@moveDebitCreditAccounts');
+Route::get('create_site_accounts','CronjobController@createSiteAccounts');
 
 
 

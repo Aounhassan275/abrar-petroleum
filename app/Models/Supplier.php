@@ -55,6 +55,10 @@ class Supplier extends Authenticatable
     {
         return $this->hasMany(Product::class);
     }
+    public function debitCreditAccounts()
+    {
+        return $this->hasMany(DebitCreditAccount::class,'supplier_id');
+    }
     public function employees()
     {
         return $this->hasMany(Employee::class);
@@ -74,16 +78,64 @@ class Supplier extends Authenticatable
         }
         return $sales;
     }
+    public function getSiteSales($date,$product = null)
+    {   
+        if($product == null)
+        {
+            $sales = Purchase::where('supplier_id',$this->id)
+                            ->whereDate('date',$date)
+                            ->get();  
+        }else{
+            $sales = Purchase::where('supplier_id',$this->id)
+                            ->where('product_id',$product->id)
+                            ->where('type','site_sale')
+                            ->whereDate('date',$date)
+                            ->get();  
+        }
+        dd($sales);
+        return $sales;
+    }
+    public function todaySaleAmount($date)
+    {
+        $todaySale = Purchase::where('supplier_id',$this->id)
+                        ->whereDate('date',$date)
+                        ->sum('total_amount');
+        return $todaySale;
+    }
     public function haveDebitCredit($date)
     {   
-        $sales = DebitCredit::query()->select('debit_credits.*')
+        $debit_credits = DebitCredit::query()->select('debit_credits.*')
                             ->join('debit_credit_accounts','debit_credit_accounts.id','debit_credits.account_id')
                             ->where('debit_credits.is_hide',0)
                             ->where('debit_credits.supplier_id',$this->id)
                             ->whereDate('debit_credits.sale_date',$date)
                             ->orderBy('debit_credits.display_order','ASC')
                             ->get();  
-        dd($sales);
-        return $sales;
+        return $debit_credits;
+    }
+    public function sitePendingDebitCredit($date)
+    {   
+        $debit_credits = DebitCredit::query()->select('debit_credits.*','debit_credit_accounts.name as account_name')
+                            ->join('debit_credit_accounts','debit_credit_accounts.id','debit_credits.account_id')
+                            ->where('debit_credits.is_hide',0)
+                            ->where('debit_credits.site_validation',0)
+                            ->where('debit_credits.supplier_id',$this->id)
+                            ->whereDate('debit_credits.sale_date',$date)
+                            ->orderBy('debit_credits.display_order','ASC')
+                            ->get();  
+        return $debit_credits;
+    }
+    public function supplierPendingDebitCredit($date)
+    {   
+        $debit_credits = DebitCredit::query()
+                            ->select('debit_credits.*','debit_credit_accounts.name as account_name')
+                            ->join('debit_credit_accounts','debit_credit_accounts.id','debit_credits.account_id')
+                            ->where('debit_credits.is_hide',0)
+                            ->where('debit_credits.supplier_validation',0)
+                            ->where('debit_credits.supplier_id',$this->id)
+                            ->whereDate('debit_credits.sale_date',$date)
+                            ->orderBy('debit_credits.display_order','ASC')
+                            ->get();  
+        return $debit_credits;
     }
 }
